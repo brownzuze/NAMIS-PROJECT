@@ -97,6 +97,7 @@ export default  function RecipeReviewCard(props) {
         <Button variant="contained" className={classes.button}>dashboardName</Button>
         <Button variant="contained" className={classes.button}>dashboardName</Button>
         <Button variant="contained" className={classes.button}>dashboardName</Button>
+        <Button variant="contained" className={classes.button}>dashboardName</Button>
       </CardContent>
       </Collapse>
     </Card>
