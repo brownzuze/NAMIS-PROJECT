@@ -73,12 +73,13 @@ export default  function RecipeReviewCard(props) {
     )
   }}
 />
-     <Button variant="contained" className={classes.button}>dashboardName</Button>
-     <Button variant="contained"  className={classes.button}>dashboardName</Button>
-     <Button variant="contained" className={classes.button}>dashboardName</Button>
-     <Button variant="contained" className={classes.button}>dashboardName</Button>
-     <Button variant="contained" className={classes.button}>dashboardName</Button>
-     <Button variant="contained" className={classes.button}>dashboardName</Button>
+     <Button variant="contained" className={classes.button}>{props.dashboard1}</Button>
+     <Button variant="contained"  className={classes.button}>{props.dashboard2}</Button>
+     <Button variant="contained" className={classes.button}>{props.dashboard3}</Button>
+     <Button variant="contained" className={classes.button}>{props.dashboard4}</Button>
+     <Button variant="contained" className={classes.button}>{props.dashboard5}</Button>
+     <Button variant="contained" className={classes.button}>{props.dashboard6}</Button>
+     <Button variant="contained" className={classes.button}>{props.dashboard7}</Button>
      
      <IconButton
           className={clsx(classes.expand, {
@@ -93,11 +94,11 @@ export default  function RecipeReviewCard(props) {
    </CardContent>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
-        <Button variant="contained" className={classes.button}>dashboardName</Button>
-        <Button variant="contained" className={classes.button}>dashboardName</Button>
-        <Button variant="contained" className={classes.button}>dashboardName</Button>
-        <Button variant="contained" className={classes.button}>dashboardName</Button>
-        <Button variant="contained" className={classes.button}>dashboardName</Button>
+        <Button variant="contained" className={classes.button}>{props.dashboard8}</Button>
+        <Button variant="contained" className={classes.button}>{props.dashboard9}</Button>
+        <Button variant="contained" className={classes.button}>{props.dashboard10}</Button>
+        <Button variant="contained" className={classes.button}>{props.dashboard11}</Button>
+        <Button variant="contained" className={classes.button}>{props.dashboard12}</Button>
       </CardContent>
       </Collapse>
     </Card>
