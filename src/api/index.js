@@ -27,6 +27,12 @@ export const getDataElements = async () => {
     })
     return elementsData.dataElements;
 }
+export const getIndicators = async () => {
+    const indicatorData = await makeApiRequest({
+        url: ADDRESS_URL + '/indicators'
+    })
+    return indicatorData.indicators;
+}
 export const getOrganisationUnits = async () => {
     const orgData = await makeApiRequest({
         url: ADDRESS_URL + "/organisationUnits?fields=displayName, id&paging=false"
@@ -42,7 +48,7 @@ export const getDashboards = async () => {
 
 export const getAntFirstChart = async () => {
     const firstAntData = await makeApiRequest({
-        url: ADDRESS_URL + '/analytics.json?dimension=dx:sB79w2hiLp8;&dimension=ou:TEQlaapDQoK;Vth0fbpFcsO;bL4ooGhyHRQ;jmIPBj66vD6;qhqAxPSTUXp&dimension=pe:LAST_12_MONTHS'
+        url: ADDRESS_URL + '/38/analytics?dimension=ou%3ATEQlaapDQoK%3BVth0fbpFcsO%3BbL4ooGhyHRQ%3BjmIPBj66vD6%3BqhqAxPSTUXp%3BLEVEL-2,pe%3ALAST_12_MONTHS&filter=dx%3AsB79w2hiLp8'
     })
     return firstAntData;
 }
@@ -96,6 +102,13 @@ export const getAntsixthChart = async () => {
     })
     
     return sixthchart;
+}
+export const getAntseventhChart = async () => {
+    const seventhchart = await makeApiRequest({
+        url:  ADDRESS_URL + '/38/analytics?dimension=dx%3AUvn6LCg7dVU%3BOdiHJayrsKo,pe%3ALAST_4_QUARTERS,ou%3AO6uvpzGd5pu%3Bfdc6uOvgoji%3Blc3eMKXaEfw%3BjUb8gELQApl%3BPMa2VCrupOd'
+    })
+    
+    return seventhchart;
 }
 
 

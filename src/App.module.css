@@ -7,3 +7,6 @@ body {
 .graphbox{
   margin-top: 1%;
 }
+.pieChart{
+  height: 700px;
+}

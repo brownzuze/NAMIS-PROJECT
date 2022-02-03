@@ -1,9 +1,10 @@
 import React from 'react';
 import styles from '../App.module.css';
-import {getAntsixthChart , getDataElements, getfifthAntChart, getorganisationUnitGroups, getAntFourthPieData, getOrganisationUnits, getAntFirstChart, getAntSecondChart, getAntThirdChart, getAntThirdChartData} from '../api';
+import {getAntseventhChart, getAntsixthChart , getIndicators, getfifthAntChart, getorganisationUnitGroups, getAntFourthPieData, getOrganisationUnits, getAntFirstChart, getAntSecondChart, getAntThirdChart, getAntThirdChartData} from '../api';
 import { blue, red } from "@material-ui/core/colors";
 import { Box, Card, Grid, Typography } from "@material-ui/core";
 import { CardContent } from "@material-ui/core";
+import $ from 'jquery';
 import  {Bar, Line, Pie} from 'react-chartjs-2';
 import { Chart, registerables } from 'chart.js';
 import html2canvas from "html2canvas";
@@ -12,6 +13,7 @@ Chart.register(...registerables);
 
 class AntCharts extends React.Component {
     state = {
+      indicators: "",
       organisationUnits: "",
       firstChartAnalytics: {},
       secondChartAnalytics: {},
@@ -20,7 +22,8 @@ class AntCharts extends React.Component {
       pieChartData: {},
       organisationUnitGroups: "",
       fifthChartAnalytics: {},
-      sixthantChart:{}
+      sixthantChart:{},
+      seventhantChart: {}
     }
   
   async  componentDidMount() {
@@ -38,6 +41,8 @@ class AntCharts extends React.Component {
     const antpieData= await getAntFourthPieData();
     this.setState({pieChartData: antpieData});
     console.log(this.state.pieChartData);
+    const indicatorData = await getIndicators()
+    this.setState({indicators: indicatorData})
     const orgUnitGroups= await getorganisationUnitGroups();
     this.setState({organisationUnitGroups: orgUnitGroups});
     console.log(this.state.organisationUnitGroups);
@@ -45,6 +50,10 @@ class AntCharts extends React.Component {
     console.log(sixthantchartdata)
     this.setState({sixthantChart: sixthantchartdata.rows})
     console.log(this.state.sixthantChart)
+    const seventhAntData = await getAntseventhChart()
+    this.setState({seventhantChart: seventhAntData})
+    console.log(this.state.indicators)
+    console.log(this.state.firstChartAnalytics)
     
   
     }
@@ -161,10 +170,10 @@ class AntCharts extends React.Component {
   
       for (let i = 0; i < rowData.length; i++) {
   
-        if (rowData[i][1] === orgIds[0]) {
+        if (rowData[i][0] === orgIds[0]) {
           id = OrgUnitsDispNames[0]
-          value.push(parseFloat(rowData[i][3]))
-          period.push(rowData[i][2])
+          value.push(parseFloat(rowData[i][2]))
+          period.push(rowData[i][1])
   
         }
   
@@ -174,10 +183,10 @@ class AntCharts extends React.Component {
       let id1 = [], value1 = [], period1 = []
   
       for (let i = 0; i < rowData.length; i++) {
-        if (rowData[i][1] === orgIds[1]) {
+        if (rowData[i][0] === orgIds[1]) {
           id1 = OrgUnitsDispNames[1]
-          value1.push(parseFloat(rowData[i][3]))
-          period1.push(rowData[i][2])
+          value1.push(parseFloat(rowData[i][2]))
+          period1.push(rowData[i][1])
         }
       }
       orgData.push({ id1, value1, period1 })
@@ -186,10 +195,10 @@ class AntCharts extends React.Component {
       let id2 = [], value2 = [], period2 = []
   
       for (let i = 0; i < rowData.length; i++) {
-        if (rowData[i][1] === orgIds[2]) {
+        if (rowData[i][0] === orgIds[2]) {
           id2 = OrgUnitsDispNames[3]
-          value2.push(parseFloat(rowData[i][3]))
-          period2.push(rowData[i][2])
+          value2.push(parseFloat(rowData[i][2]))
+          period2.push(rowData[i][1])
         }
       }
       orgData.push({ id2, value2, period2 })
@@ -198,10 +207,10 @@ class AntCharts extends React.Component {
       let id3 = [], value3 = [], period3 = []
   
       for (let i = 0; i < rowData.length; i++) {
-        if (rowData[i][1] === orgIds[3]) {
+        if (rowData[i][0] === orgIds[3]) {
           id3 = OrgUnitsDispNames[2]
-          value3.push(parseFloat(rowData[i][3]))
-          period3.push(rowData[i][2])
+          value3.push(parseFloat(rowData[i][2]))
+          period3.push(rowData[i][1])
         }
       }
       orgData.push({ id3, value3, period3 })
@@ -210,10 +219,10 @@ class AntCharts extends React.Component {
       let id4 = [], value4 = [], period4 = []
   
       for (let i = 0; i < rowData.length; i++) {
-        if (rowData[i][1] === orgIds[4]) {
+        if (rowData[i][0] === orgIds[4]) {
           id4 = OrgUnitsDispNames[4]
-          value4.push(parseFloat(rowData[i][3]))
-          period4.push(rowData[i][2])
+          value4.push(parseFloat(rowData[i][2]))
+          period4.push(rowData[i][1])
         }
       }
       orgData.push({ id4, value4, period4 })
@@ -226,7 +235,7 @@ class AntCharts extends React.Component {
                 data: orgData[1].value,
                 label: orgData[1].id,
                 borderColor: '#3333ff',
-                backgroundColor: 'rgb(255,230,0,0.5)',
+                backgroundColor: 'rgb(154,205,50)',
                 fill: true,
   
               },
@@ -234,31 +243,29 @@ class AntCharts extends React.Component {
                 data: orgData[2].value1,
                 label: orgData[2].id1,
                 fill: true,
-                borderColor: 'red',
-                backgroundColor: 'rgb(255,0,0,0.5)' 
+                borderColor: 'blue',
+                backgroundColor: 'rgb(30,144,255)' 
             },
             {
               data: orgData[3].value2,
               label: orgData[3].id2,
               fill: true,
-              backgroundColor: "rgba(198,40,40,0.6)",
-              borderColor: red["A200"], 
+              backgroundColor: "rgba(178,34,34)",
+              
   
             },
             {
               data: orgData[4].value3,
               label: orgData[4].id3,
-              borderColor: 'blue',
               fill: true,
-              backgroundColor: 'rgb(0,0,255,0.5)' 
+              backgroundColor: 'rgb(255,165,0)' 
   
             },
             {
               data: orgData[5].value4,
               label: orgData[5].id4,
               fill: true,
-              backgroundColor: "rgba(21,101,192,0.6)",
-              borderColor: blue["A200"], 
+              backgroundColor: "rgba(199,136,153)",
   
             },
           ],
@@ -464,6 +471,12 @@ class AntCharts extends React.Component {
       for (let i = 0; i<12; i++){
            XLabels.push(dataItemsArr[i])
       }
+
+      //slicing xlabels
+      const slicedXlabels = []
+      for (let i=0; i<XLabels.length; i++){
+           slicedXlabels.push(XLabels[i].slice(0,8))
+      }
   
       console.log(XLabels);
     //get actaull data
@@ -472,6 +485,7 @@ class AntCharts extends React.Component {
     console.log(actualAddedData)
   
     //create an array of objects that stores the values in order
+    const XlabelsValues= ["January", "February", "March", "April", "May", "June", "July", "August", "September", "November", "December" ]
   
     let period = [], value = []
   
@@ -490,10 +504,11 @@ class AntCharts extends React.Component {
   const lineChartTwo = (
       <Line
         data={{
-          labels:XLabels,
+          labels: XlabelsValues,
           datasets: [
             {
               data: value,
+              label: period[0].slice(0,4),
               borderColor: 'rgb(65,105,225)',
               fill: true,
   
@@ -501,6 +516,7 @@ class AntCharts extends React.Component {
   
             {
               data: value1,
+              label: period1[0].slice(0,4),
               borderColor: 'rgb(107,142,35)',
               fill: true,
   
@@ -573,6 +589,7 @@ class AntCharts extends React.Component {
               data: value1,
               backgroundColor: colorHex,
               fill: true,
+              height: "50%",
   
             }
         ],
@@ -594,6 +611,209 @@ class AntCharts extends React.Component {
 
     
 }
+
+//creating the seventh chart
+
+AntSeventhChart =  () => {
+  const {  organisationUnits, indicators } = this.state
+
+    if ( !organisationUnits || !indicators) {
+      return <div>Loading....</div>
+    }
+
+    var getData = $.ajax({
+      url: `https://play.dhis2.org/dev/api/38/analytics?dimension=dx%3AUvn6LCg7dVU%3BOdiHJayrsKo,pe%3ALAST_4_QUARTERS,ou%3AO6uvpzGd5pu%3Bfdc6uOvgoji%3Blc3eMKXaEfw%3BjUb8gELQApl%3BPMa2VCrupOd`,
+      dataType: "json",
+      headers: { "Authorization": "Basic " + btoa('admin' + ":" + 'district') },
+      success: function (data) { },
+      async: false,
+      error: function (err) {
+        console.log(err);
+      }
+    }).responseJSON;
+
+  
+
+ const orgIds = getData.metaData.dimensions.ou
+ const periodIds = getData.metaData.dimensions.pe
+ const indicatorIds = getData.metaData.dimensions.dx
+ console.log(indicatorIds)
+ 
+ const rowData = getData.rows 
+ //get indicators displayNames
+ const indicatorDispNames = []
+ for (let i = 0; i < indicatorIds.length; i++) {
+  for (let j = 0; j < indicators.length; j++) {
+     
+     if (indicatorIds[i] === indicators[j].id) {
+      indicatorDispNames.push(indicators[j].displayName)
+
+ }
+}
+}
+ console.log(indicatorDispNames);
+
+ //getting the organisationUnit displayName
+
+ const organisationUnitDispNames = []
+ for (let i = 0; i < orgIds.length; i++) {
+  for (let j = 0; j < organisationUnits.length; j++) {
+     
+     if (orgIds[i] ===  organisationUnits[j].id) {
+      organisationUnitDispNames.push( organisationUnits[j].displayName)
+
+ }
+}
+}
+ console.log(organisationUnitDispNames);
+
+
+let value = []
+
+for (let i = 0; i < rowData.length; i++) {
+
+  if (rowData[i][0] === indicatorIds[0] && rowData[i][1] === periodIds[0]) {
+    value.push(parseFloat(rowData[i][3]))
+
+  }
+
+}
+console.log(value)
+
+let value1 = []
+
+for (let i = 0; i < rowData.length; i++) {
+
+  if (rowData[i][0] === indicatorIds[0] && rowData[i][1] === periodIds[1]) {
+    value1.push(parseFloat(rowData[i][3]))
+
+  }
+
+}
+console.log(value1)
+
+let value2 = []
+
+for (let i = 0; i < rowData.length; i++) {
+
+  if (rowData[i][0] === indicatorIds[0] && rowData[i][1] === periodIds[2]) {
+    value2.push(parseFloat(rowData[i][3]))
+
+  }
+
+}
+console.log(value2)
+
+let value3 = []
+
+for (let i = 0; i < rowData.length; i++) {
+
+  if (rowData[i][0] === indicatorIds[0] && rowData[i][1] === periodIds[3]) {
+    value3.push(parseFloat(rowData[i][3]))
+
+  }
+
+}
+console.log(value3)
+
+const totalAnc1CoverageArr = value.concat(value1,value2,value3)
+console.log(totalAnc1CoverageArr)
+
+//getting values for Anc 2 coverage
+let secondvalue = []
+
+for (let i = 0; i < rowData.length; i++) {
+
+  if (rowData[i][0] === indicatorIds[1] && rowData[i][1] === periodIds[0]) {
+    secondvalue.push(parseFloat(rowData[i][3]))
+
+  }
+
+}
+console.log(secondvalue)
+
+let secondvalue1 = []
+
+for (let i = 0; i < rowData.length; i++) {
+
+  if (rowData[i][0] === indicatorIds[1] && rowData[i][1] === periodIds[1]) {
+    secondvalue1.push(parseFloat(rowData[i][3]))
+
+  }
+
+}
+console.log(secondvalue1)
+
+let secondvalue2 = []
+
+for (let i = 0; i < rowData.length; i++) {
+
+  if (rowData[i][0] === indicatorIds[1] && rowData[i][1] === periodIds[2]) {
+    secondvalue2.push(parseFloat(rowData[i][3]))
+
+  }
+
+}
+console.log(secondvalue2)
+
+let secondvalue3 = []
+
+for (let i = 0; i < rowData.length; i++) {
+
+  if (rowData[i][0] === indicatorIds[1] && rowData[i][1] === periodIds[3]) {
+    secondvalue3.push(parseFloat(rowData[i][3]))
+
+  }
+
+}
+console.log(secondvalue3)
+
+const totalAnc2CoverageArr = secondvalue.concat(secondvalue1,secondvalue2,secondvalue3)
+console.log(totalAnc2CoverageArr)
+
+const xlabels = organisationUnitDispNames.concat(organisationUnitDispNames,organisationUnitDispNames,organisationUnitDispNames)
+console.log(xlabels)
+
+//drawing the bargraph from fetched data
+const barChartVisualisation = (
+  <Bar
+    data={{
+      labels: xlabels,
+      datasets: [
+        {
+          data: totalAnc1CoverageArr,
+          label: indicatorDispNames[0],
+          borderColor: '#3333ff',
+          backgroundColor: 'rgb(154,205,50)',
+          fill: true,
+
+        },
+        {
+          data: totalAnc2CoverageArr,
+          label: indicatorDispNames[1],
+          fill: true,
+          borderColor: '#3333ff',
+          backgroundColor: 'rgb(30,144,255)' 
+      },
+    ],
+    }}
+    options = {{
+      plugins: {
+        legend: { position: "bottom" },
+        title: {
+          display: true,
+          text: 'ANC: Coverage by quarter and district (two-category)'
+      }
+      },
+      responsive: true
+    }}
+  />
+)
+// console.log(orgData[1].value)
+return barChartVisualisation
+
+  
+}
   
     //download function
     chart2PDF = e => {
@@ -613,7 +833,7 @@ class AntCharts extends React.Component {
           input.clientWidth,
           input.clientHeight
         );
-        pdf.save("dhishart.pdf");
+        pdf.save("dhischart.pdf");
         but.style.display = "block";
       });
     };
@@ -624,25 +844,25 @@ class AntCharts extends React.Component {
         <div>
           <Box className={styles.graphbox}>
           <Grid container spacing={1}>
-           <Grid item xs={12} sm={7}>
+          <Grid item xs={10} sm={6}>
             <Card>
               <CardContent>
                 <Typography variant='h5' component='h6'>
                 </Typography>
               </CardContent>
               <CardContent className = "chart2PDF">
-                {this.AntchartTwo()}
+              {this.AntSeventhChart()}
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={10} sm={5}>
-            <Card>
+           <Grid item xs={10} sm={6}>
+            <Card >
               <CardContent>
                 <Typography variant='h5' component='h6'>
                 </Typography>
               </CardContent>
-              <CardContent>
-                {this.AntPieChart()}
+              <CardContent className = "chart2PDF">
+                {this.AntchartOne()}
               </CardContent>
             </Card>
           </Grid>
@@ -653,7 +873,18 @@ class AntCharts extends React.Component {
                 </Typography>
               </CardContent>
               <CardContent>
-              {this.AntchartOne()}
+              {this.AntchartChiefdom()}
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs={10} sm={6}>
+            <Card>
+              <CardContent>
+                <Typography variant='h5' component='h6'>
+                </Typography>
+              </CardContent>
+              <CardContent>
+              {this.AntchartTwo()}
               </CardContent>
             </Card>
           </Grid>
@@ -669,15 +900,14 @@ class AntCharts extends React.Component {
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={10} sm={6}>
+          <Grid item xs={10} sm={5}>
             <Card>
               <CardContent>
                 <Typography variant='h5' component='h6'>
                 </Typography>
               </CardContent>
               <CardContent>
-              
-              {this.AntchartChiefdom()}
+               {this.AntPieChart()}
               </CardContent>
             </Card>
           </Grid>
