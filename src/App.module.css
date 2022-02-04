@@ -10,3 +10,13 @@ body {
 .pieChart{
   height: 700px;
 }
+.loader{
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.loadingimg{
+  height: 45%;
+  width: 45%;
+}

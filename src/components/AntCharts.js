@@ -1,12 +1,13 @@
 import React from 'react';
 import styles from '../App.module.css';
 import {getAntseventhChart, getAntsixthChart , getIndicators, getfifthAntChart, getorganisationUnitGroups, getAntFourthPieData, getOrganisationUnits, getAntFirstChart, getAntSecondChart, getAntThirdChart, getAntThirdChartData} from '../api';
-import { blue, red } from "@material-ui/core/colors";
 import { Box, Card, Grid, Typography } from "@material-ui/core";
 import { CardContent } from "@material-ui/core";
 import $ from 'jquery';
 import  {Bar, Line, Pie} from 'react-chartjs-2';
 import { Chart, registerables } from 'chart.js';
+import Dropdown from 'react-bootstrap/Dropdown'
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf"
 Chart.register(...registerables);
@@ -805,7 +806,7 @@ const barChartVisualisation = (
           text: 'ANC: Coverage by quarter and district (two-category)'
       }
       },
-      responsive: true
+      responsive: true,
     }}
   />
 )
@@ -846,9 +847,12 @@ return barChartVisualisation
           <Grid container spacing={1}>
           <Grid item xs={10} sm={6}>
             <Card>
-              <CardContent>
-                <Typography variant='h5' component='h6'>
-                </Typography>
+              <CardContent style = {{paddingBottom: 0, display:'flex', justifyContent: 'flex-end'}}>
+                <Dropdown>
+                 <Dropdown.Toggle variant="success" id="dropdown-basic">
+                  <MoreHorizIcon/>
+                  </Dropdown.Toggle>
+                </Dropdown>
               </CardContent>
               <CardContent className = "chart2PDF">
               {this.AntSeventhChart()}
@@ -857,9 +861,12 @@ return barChartVisualisation
           </Grid>
            <Grid item xs={10} sm={6}>
             <Card >
-              <CardContent>
-                <Typography variant='h5' component='h6'>
-                </Typography>
+              <CardContent style = {{paddingBottom: 0, display:'flex', justifyContent: 'flex-end'}}>
+              <Dropdown>
+                 <Dropdown.Toggle variant="success" id="dropdown-basic">
+                  <MoreHorizIcon/>
+                  </Dropdown.Toggle>
+                </Dropdown>
               </CardContent>
               <CardContent className = "chart2PDF">
                 {this.AntchartOne()}
@@ -868,9 +875,12 @@ return barChartVisualisation
           </Grid>
           <Grid item xs={10} sm={6}>
             <Card>
-              <CardContent>
-                <Typography variant='h5' component='h6'>
-                </Typography>
+              <CardContent style = {{paddingBottom: 0, display:'flex', justifyContent: 'flex-end'}}>
+               <Dropdown>
+                 <Dropdown.Toggle variant="success" id="dropdown-basic">
+                  <MoreHorizIcon/>
+                  </Dropdown.Toggle>
+                </Dropdown>
               </CardContent>
               <CardContent>
               {this.AntchartChiefdom()}
@@ -879,9 +889,12 @@ return barChartVisualisation
           </Grid>
           <Grid item xs={10} sm={6}>
             <Card>
-              <CardContent>
-                <Typography variant='h5' component='h6'>
-                </Typography>
+              <CardContent style = {{paddingBottom: 0, display:'flex', justifyContent: 'flex-end'}}>
+               <Dropdown>
+                 <Dropdown.Toggle variant="success" id="dropdown-basic">
+                  <MoreHorizIcon/>
+                  </Dropdown.Toggle>
+                </Dropdown>
               </CardContent>
               <CardContent>
               {this.AntchartTwo()}
@@ -890,9 +903,12 @@ return barChartVisualisation
           </Grid>
            <Grid item xs={10} sm={6}>
             <Card>
-              <CardContent>
-                <Typography variant='h5' component='h6'>
-                </Typography>
+              <CardContent style = {{paddingBottom: 0, display:'flex', justifyContent: 'flex-end'}}>
+               <Dropdown>
+                 <Dropdown.Toggle variant="success" id="dropdown-basic">
+                  <MoreHorizIcon/>
+                  </Dropdown.Toggle>
+                </Dropdown>
               </CardContent>
               <CardContent>
               
@@ -902,9 +918,12 @@ return barChartVisualisation
           </Grid>
           <Grid item xs={10} sm={5}>
             <Card>
-              <CardContent>
-                <Typography variant='h5' component='h6'>
-                </Typography>
+              <CardContent style = {{paddingBottom: 0, display:'flex', justifyContent: 'flex-end'}}>
+               <Dropdown>
+                 <Dropdown.Toggle variant="success" id="dropdown-basic">
+                  <MoreHorizIcon/>
+                  </Dropdown.Toggle>
+                </Dropdown>
               </CardContent>
               <CardContent>
                {this.AntPieChart()}

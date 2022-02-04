@@ -3,8 +3,8 @@ import styles from './App.module.css';
 import Appbar from './components/Appbar';
 import DashboardLinks from './components/DashBoardLinks'
 import AntCharts from './components/AntCharts';
+import Loading from "./components/Loading";
 import {getDashboards} from './api';
-
 
 
 
@@ -22,7 +22,9 @@ async  componentDidMount() {
     const {  dashboards } = this.state
 
     if (!dashboards) {
-      return <div>Loading....</div>
+      return <div className={styles.loader}>
+               <Loading/>
+              </div>
     }
     return (
       <div className={styles.container}>
