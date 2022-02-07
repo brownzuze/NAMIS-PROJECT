@@ -11,3 +11,14 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.dropdown-toggle::after {
+  display: none !important; 
+}
+.dropdown-toggle{
+  background-color: white !important;
+  border-color: whitesmoke !important;
+  border-width: 2px !important;
+  color: black !important;
+  
+}
+

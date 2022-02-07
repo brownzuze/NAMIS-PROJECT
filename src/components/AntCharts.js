@@ -849,9 +849,14 @@ return barChartVisualisation
             <Card>
               <CardContent style = {{paddingBottom: 0, display:'flex', justifyContent: 'flex-end'}}>
                 <Dropdown>
-                 <Dropdown.Toggle variant="success" id="dropdown-basic">
+                 <Dropdown.Toggle id="dropdown-basic-button" title="Dropdown button">
                   <MoreHorizIcon/>
                   </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <Dropdown.Item onClick={e => this.chart2PDF(e)}>Save as pdf</Dropdown.Item>
+                    <Dropdown.Item href="#/action-2">Export as a csv</Dropdown.Item>
+                    <Dropdown.Item href="#/action-3">View in full screen</Dropdown.Item>
+                  </Dropdown.Menu>
                 </Dropdown>
               </CardContent>
               <CardContent className = "chart2PDF">
@@ -863,9 +868,14 @@ return barChartVisualisation
             <Card >
               <CardContent style = {{paddingBottom: 0, display:'flex', justifyContent: 'flex-end'}}>
               <Dropdown>
-                 <Dropdown.Toggle variant="success" id="dropdown-basic">
+                 <Dropdown.Toggle id="dropdown-basic-button" title="Dropdown button">
                   <MoreHorizIcon/>
                   </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <Dropdown.Item href="#/action-2">Save</Dropdown.Item>
+                    <Dropdown.Item href="#/action-2">View in full screen</Dropdown.Item>
+                    <Dropdown.Item href="#/action-3">View as a table</Dropdown.Item>
+                  </Dropdown.Menu>
                 </Dropdown>
               </CardContent>
               <CardContent className = "chart2PDF">
@@ -877,9 +887,14 @@ return barChartVisualisation
             <Card>
               <CardContent style = {{paddingBottom: 0, display:'flex', justifyContent: 'flex-end'}}>
                <Dropdown>
-                 <Dropdown.Toggle variant="success" id="dropdown-basic">
+                 <Dropdown.Toggle id="dropdown-basic-button" title="Dropdown button">
                   <MoreHorizIcon/>
                   </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <Dropdown.Item href="#/action-2">Save as pdf</Dropdown.Item>
+                    <Dropdown.Item href="#/action-2">Export as a csv</Dropdown.Item>
+                    <Dropdown.Item href="#/action-3">View in full screen</Dropdown.Item>
+                  </Dropdown.Menu>
                 </Dropdown>
               </CardContent>
               <CardContent>
@@ -891,9 +906,14 @@ return barChartVisualisation
             <Card>
               <CardContent style = {{paddingBottom: 0, display:'flex', justifyContent: 'flex-end'}}>
                <Dropdown>
-                 <Dropdown.Toggle variant="success" id="dropdown-basic">
+                 <Dropdown.Toggle id="dropdown-basic-button" title="Dropdown button">
                   <MoreHorizIcon/>
                   </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <Dropdown.Item href="#/action-2">Save as pdf</Dropdown.Item>
+                    <Dropdown.Item href="#/action-2">Export as csv</Dropdown.Item>
+                    <Dropdown.Item href="#/action-3">View in full screen</Dropdown.Item>
+                  </Dropdown.Menu>
                 </Dropdown>
               </CardContent>
               <CardContent>
@@ -905,9 +925,14 @@ return barChartVisualisation
             <Card>
               <CardContent style = {{paddingBottom: 0, display:'flex', justifyContent: 'flex-end'}}>
                <Dropdown>
-                 <Dropdown.Toggle variant="success" id="dropdown-basic">
+                 <Dropdown.Toggle id="dropdown-basic-button" title="Dropdown button">
                   <MoreHorizIcon/>
                   </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <Dropdown.Item href="#/action-2">Save as pdf</Dropdown.Item>
+                    <Dropdown.Item href="#/action-2">Export as a csv</Dropdown.Item>
+                    <Dropdown.Item href="#/action-3">View in full screen</Dropdown.Item>
+                  </Dropdown.Menu>
                 </Dropdown>
               </CardContent>
               <CardContent>
@@ -920,9 +945,14 @@ return barChartVisualisation
             <Card>
               <CardContent style = {{paddingBottom: 0, display:'flex', justifyContent: 'flex-end'}}>
                <Dropdown>
-                 <Dropdown.Toggle variant="success" id="dropdown-basic">
+                 <Dropdown.Toggle id="dropdown-basic-button" title="Dropdown button">
                   <MoreHorizIcon/>
                   </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <Dropdown.Item href="#/action-2">Save as pdf</Dropdown.Item>
+                    <Dropdown.Item href="#/action-2">Export as a csv</Dropdown.Item>
+                    <Dropdown.Item href="#/action-3">View in full screen</Dropdown.Item>
+                  </Dropdown.Menu>
                 </Dropdown>
               </CardContent>
               <CardContent>
