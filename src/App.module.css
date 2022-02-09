@@ -5,7 +5,7 @@ body {
   text-align: center;
 }
 .graphbox{
-  margin-top: 1%;
+  margin-top: 10px;
 }
 .pieChart{
   height: 700px;
@@ -20,3 +20,7 @@ body {
   height: 45%;
   width: 45%;
 }
+.antchart{
+  margin-top: 1px;
+}
+

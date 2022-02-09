@@ -29,7 +29,7 @@ export const getDataElements = async () => {
 }
 export const getIndicators = async () => {
     const indicatorData = await makeApiRequest({
-        url: ADDRESS_URL + '/indicators'
+        url: ADDRESS_URL + '/indicators.json?fields=*&paging=false'
     })
     return indicatorData.indicators;
 }
@@ -109,6 +109,21 @@ export const getAntseventhChart = async () => {
     })
     
     return seventhchart;
+}
+
+export const getDeliveryFirstChart = async () => {
+    const deliveryfirstchart = await makeApiRequest({
+        url:  ADDRESS_URL + '/38/analytics?dimension=dx%3AEoYar8UxddG%3Bn0GE1ISYrdM%3BQ3M7Htpzg1Y,ou%3AbL4ooGhyHRQ%3BTEQlaapDQoK%3Bat6UHUQatSo%3Blc3eMKXaEfw%3BjUb8gELQApl%3BkJq2mPyFEHo%3BjmIPBj66vD6%3BVth0fbpFcsO%3Bfdc6uOvgoji%3BqhqAxPSTUXp%3BO6uvpzGd5pu%3BPMa2VCrupOd%3BeIQbndfxQMb&filter=pe%3ATHIS_YEAR'
+    })
+    
+    return deliveryfirstchart;
+}
+export const getDeliverySecondChart = async () => {
+    const deliverysecondchart = await makeApiRequest({
+        url:  ADDRESS_URL + '/38/analytics?dimension=dx%3AQ3M7Htpzg1Y,ou%3AUSER_ORGUNIT%3BUSER_ORGUNIT_CHILDREN&filter=pe%3ATHIS_YEAR&includeNumDen=false&skipMeta=true&skipData=false'
+    })
+    
+    return deliverysecondchart;
 }
 
 

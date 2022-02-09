@@ -11,10 +11,12 @@ import IconButton from "@material-ui/core/IconButton";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import SearchIcon from "@material-ui/icons/Search";
 import { TextField } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: '100%',
+    marginTop: '55px',
   },
   media: {
     height: 0,
@@ -24,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
      marginLeft: 0,
   },
   button: {
-   borderRadius:'50% !important',
+   borderRadius:'15% !important',
    marginLeft: '10px',
    textTransform: 'none'
    
@@ -59,6 +61,7 @@ export default  function RecipeReviewCard(props) {
   };
 
   return (
+    
     <Card className={classes.root}>
     <CardContent className = {classes.cardcontent}>
      <TextField className = {classes.search}
@@ -73,9 +76,13 @@ export default  function RecipeReviewCard(props) {
     )
   }}
 />
+     <Link to="/">
      <Button variant="contained" className={classes.button}>{props.dashboard1}</Button>
+     </Link>
      <Button variant="contained"  className={classes.button}>{props.dashboard2}</Button>
+     <Link to="/delivery">
      <Button variant="contained" className={classes.button}>{props.dashboard3}</Button>
+     </Link>
      <Button variant="contained" className={classes.button}>{props.dashboard4}</Button>
      <Button variant="contained" className={classes.button}>{props.dashboard5}</Button>
      <Button variant="contained" className={classes.button}>{props.dashboard6}</Button>

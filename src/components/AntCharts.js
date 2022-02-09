@@ -842,7 +842,7 @@ return barChartVisualisation
     render(){
 
       return (
-        <div>
+        <>
           <Box className={styles.graphbox}>
           <Grid container spacing={1}>
           <Grid item xs={10} sm={6}>
@@ -967,7 +967,7 @@ return barChartVisualisation
           </div> 
           {this.AntchartChiefdom()}
              
-      </div>
+      </>
      );
     }
   }

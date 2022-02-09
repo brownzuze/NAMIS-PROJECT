@@ -5,6 +5,8 @@ import DashboardLinks from './components/DashBoardLinks'
 import AntCharts from './components/AntCharts';
 import Loading from "./components/Loading";
 import {getDashboards} from './api';
+import DeliveryCharts from './components/DeliveryCharts';
+import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 
 
 
@@ -27,6 +29,7 @@ async  componentDidMount() {
               </div>
     }
     return (
+      <Router>
       <div className={styles.container}>
         <Appbar />
         <DashboardLinks 
@@ -43,8 +46,13 @@ async  componentDidMount() {
          dashboard11={dashboards[10].displayName}
          dashboard12={dashboards[11].displayName}
         />
-         <AntCharts/>
+        
+         <Routes>
+           <Route path="/" element={<AntCharts/>}/>
+           <Route path="delivery" element={<DeliveryCharts/>}/>
+         </Routes>
     </div>
+    </Router>
    );
   }
 }
