@@ -623,7 +623,7 @@ AntSeventhChart =  () => {
     }
 
     var getData = $.ajax({
-      url: `https://play.dhis2.org/dev/api/38/analytics?dimension=dx%3AUvn6LCg7dVU%3BOdiHJayrsKo,pe%3ALAST_4_QUARTERS,ou%3AO6uvpzGd5pu%3Bfdc6uOvgoji%3Blc3eMKXaEfw%3BjUb8gELQApl%3BPMa2VCrupOd`,
+      url: `https://play.dhis2.org/2.37.2/api/38/analytics?dimension=dx%3AUvn6LCg7dVU%3BOdiHJayrsKo,pe%3ALAST_4_QUARTERS,ou%3AO6uvpzGd5pu%3Bfdc6uOvgoji%3Blc3eMKXaEfw%3BjUb8gELQApl%3BPMa2VCrupOd`,
       dataType: "json",
       headers: { "Authorization": "Basic " + btoa('admin' + ":" + 'district') },
       success: function (data) { },

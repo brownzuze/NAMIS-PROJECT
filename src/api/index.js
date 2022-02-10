@@ -1,5 +1,5 @@
 import axios from "axios";
-const ADDRESS_URL = 'https://play.dhis2.org/dev/api';
+const ADDRESS_URL = 'https://play.dhis2.org/2.37.2/api';
 const OAuth2 = 'Basic '+btoa('admin:district');
 export const makeApiRequest = async (apiUrl) => {
 

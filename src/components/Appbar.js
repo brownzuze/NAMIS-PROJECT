@@ -22,7 +22,7 @@ export default function Appbar() {
 
   return (
     <div className={classes.root}>
-      <AppBar position="fixed" style = {{backgroundColor: "#368BC1"}}>
+      <AppBar position="static" style = {{backgroundColor: "#368BC1"}}>
         <Toolbar variant="dense">
           <img src= {logo}  className = {classes.logo}/>
           <Typography variant="h6" color="inherit">
