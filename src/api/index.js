@@ -45,7 +45,18 @@ export const getDashboards = async () => {
     })
     return dashData.dashboards;
 }
-
+export const getVisualizations = async () => {
+    const dashData = await makeApiRequest({
+        url: ADDRESS_URL + '/visualizations.json?fields=*&paging=false'
+    })
+    return dashData.visualizations;
+}
+export const getMaps = async () => {
+    const dashData = await makeApiRequest({
+        url: ADDRESS_URL + '/maps.json?fields=*&paging=false'
+    })
+    return dashData.maps;
+}
 export const getAntFirstChart = async () => {
     const firstAntData = await makeApiRequest({
         url: ADDRESS_URL + '/38/analytics?dimension=ou%3ATEQlaapDQoK%3BVth0fbpFcsO%3BbL4ooGhyHRQ%3BjmIPBj66vD6%3BqhqAxPSTUXp%3BLEVEL-2,pe%3ALAST_12_MONTHS&filter=dx%3AsB79w2hiLp8'

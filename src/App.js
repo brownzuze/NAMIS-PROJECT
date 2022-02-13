@@ -18,6 +18,7 @@ class App extends React.Component {
 async  componentDidMount() {
   const fetchedData = await getDashboards();
   this.setState({dashboards: fetchedData});
+  console.log(this.state.dashboards)
 }
 
   render(){
@@ -32,20 +33,7 @@ async  componentDidMount() {
       <Router>
       <div className={styles.container}>
         <Appbar />
-        <DashboardLinks 
-         dashboard1={dashboards[0].displayName}
-         dashboard2={dashboards[1].displayName} 
-         dashboard3={dashboards[2].displayName} 
-         dashboard4={dashboards[3].displayName}  
-         dashboard5={dashboards[4].displayName}  
-         dashboard6={dashboards[5].displayName} 
-         dashboard7={dashboards[6].displayName}
-         dashboard8={dashboards[7].displayName}
-         dashboard9={dashboards[8].displayName}
-         dashboard10={dashboards[9].displayName}
-         dashboard11={dashboards[10].displayName}
-         dashboard12={dashboards[11].displayName}
-        />
+        <DashboardLinks/>
         
          <Routes>
            <Route path="/" element={<AntCharts/>}/>

@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from '../App.module.css';
-import {getAntseventhChart, getAntsixthChart , getIndicators, getfifthAntChart, getorganisationUnitGroups, getAntFourthPieData, getOrganisationUnits, getAntFirstChart, getAntSecondChart, getAntThirdChart, getAntThirdChartData} from '../api';
+import { RenderGraph } from './RenderGraph';
+import {getDashboards, getVisualizations, getMaps, getAntseventhChart, getAntsixthChart , getIndicators, getfifthAntChart, getorganisationUnitGroups, getAntFourthPieData, getOrganisationUnits, getAntFirstChart, getAntSecondChart, getAntThirdChart, getAntThirdChartData} from '../api';
 import { Box, Card, Grid, Typography } from "@material-ui/core";
 import { CardContent } from "@material-ui/core";
 import $ from 'jquery';
@@ -14,8 +15,11 @@ Chart.register(...registerables);
 
 class AntCharts extends React.Component {
     state = {
+      dashboards: "",
       indicators: "",
       organisationUnits: "",
+      visualizations: "",
+      maps: "",
       firstChartAnalytics: {},
       secondChartAnalytics: {},
       thirdChartAnalytics: {},
@@ -28,33 +32,32 @@ class AntCharts extends React.Component {
     }
   
   async  componentDidMount() {
+    const antdashboards = await getDashboards()
+    this.setState({dashboards: antdashboards})
     const firstAntChart = await getAntFirstChart();
     this.setState({firstChartAnalytics: firstAntChart});
+    const antVisualizations = await getVisualizations()
+    this.setState({ visualizations: antVisualizations})
+    const antMaps = await getMaps()
+    this.setState({maps: antMaps})
     const secondAntChart = await getAntSecondChart();
     this.setState({secondChartAnalytics: secondAntChart})
     const thirdAntChart = await getAntThirdChart();
     this.setState({thirdChartAnalytics: thirdAntChart});
     const thirdAntData = await getAntThirdChartData();
     this.setState({thirdAddData: thirdAntData});
-    console.log(this.state.thirdAddData.rows)
     const orgUnitsData= await  getOrganisationUnits();
     this.setState({organisationUnits: orgUnitsData});
     const antpieData= await getAntFourthPieData();
     this.setState({pieChartData: antpieData});
-    console.log(this.state.pieChartData);
     const indicatorData = await getIndicators()
     this.setState({indicators: indicatorData})
     const orgUnitGroups= await getorganisationUnitGroups();
     this.setState({organisationUnitGroups: orgUnitGroups});
-    console.log(this.state.organisationUnitGroups);
     const sixthantchartdata = await getAntsixthChart()
-    console.log(sixthantchartdata)
     this.setState({sixthantChart: sixthantchartdata.rows})
-    console.log(this.state.sixthantChart)
     const seventhAntData = await getAntseventhChart()
     this.setState({seventhantChart: seventhAntData})
-    console.log(this.state.indicators)
-    console.log(this.state.firstChartAnalytics)
     
   
     }
@@ -119,9 +122,113 @@ class AntCharts extends React.Component {
   
     //creating first antchart 
     AntchartOne = () => {
-      const { organisationUnits, firstChartAnalytics  } = this.state
+      const { visualizations, dashboards, organisationUnits, firstChartAnalytics} = this.state
+
+    if (!visualizations || !dashboards || !organisationUnits || !firstChartAnalytics) {
+      return <div>Loading....</div>
+    }
+
+
+    const firstDashboardItems = dashboards[0].dashboardItems;
+    const visualizationIds = [];
+
+    for (let i = 0; i < firstDashboardItems.length; i++) {
+      if (firstDashboardItems[i].visualization) {
+        visualizationIds.push(firstDashboardItems[i].visualization);
+      }
+    }
+    console.log(visualizationIds)
+
+    let requiredVisaulizations = [];
+
+    for (let i = 0; i < visualizationIds.length; i++) {
+       for (let j = 0; j < visualizations.length; j++ ){
+      if (( visualizationIds[i].id === visualizations[j].id)) {
+        requiredVisaulizations.push(visualizations[j]);
+      }
+    }
+  }
+    console.log(requiredVisaulizations)
+    console.log(visualizations)
+
+    const visualisationMetadata = requiredVisaulizations[1];
+
+    const visualisationName = visualisationMetadata.displayName
+    const period = visualisationMetadata.relativePeriods
+    const periods = 'LAST_12_MONTHS'
+    const dataDimension = visualisationMetadata.dataDimensionItems[0].indicator.id
+    const orgUnits = visualisationMetadata.organisationUnits.map(ids => ids.id)
+    console.log(orgUnits)
+    console.log(dataDimension)
+    console.log(period)
   
-      if (!organisationUnits || !firstChartAnalytics ) {
+    var text = ""
+    for (var key in period) {
+    if (period[key] == true) {
+        text = key
+    }
+  }
+var newString = "";
+var wasUpper = false;
+for (var i = 0; i < text.length; i++)
+{
+    if (!wasUpper && text[i] == text.toUpperCase()[i])
+    {
+        newString = newString + "_";
+        wasUpper = true;
+    }
+    else
+    {
+        wasUpper = false;
+    }
+    newString = newString + text[i];
+}
+
+ const periodFormat = newString.toUpperCase()
+ console.log(periodFormat)
+
+    const array = []
+
+    for(var i = 0; i < orgUnits.length; i++){
+      array.push(orgUnits[i]+";")
+    }
+    const orgUnitsString = array.join('')
+
+   var dataValues = $.ajax({
+    url: 'https://play.dhis2.org/2.37.2/api/38' + `/analytics.json?dimension=dx:${dataDimension};&dimension=ou:${orgUnitsString}&dimension=pe:${periodFormat}`,
+    dataType: "json",
+    headers: { "Authorization": "Basic " + btoa("admin" + ":" + "district") },
+    success: function (data) { },
+    async: false,
+    error: function (err) {
+      console.log(err);
+    }
+  }).responseJSON;
+
+  console.log(dataValues.rows)
+
+  return RenderGraph(organisationUnits, dataValues, visualisationName)
+
+ /* const orgIds = dataValues.metaData.dimensions.ou
+
+  //get org display names
+  const OrgUnitsDispNames = []
+  organisationUnits.forEach(org => {
+    orgIds.forEach(id => {
+      if (org.id === id) {
+        OrgUnitsDispNames.push(org.displayName)
+      }
+    })
+  })
+
+  //get actaull data
+  const actualData = dataValues.rows
+
+
+
+
+  
+      /*if (!organisationUnits || !firstChartAnalytics ) {
         return <div>Loading....</div>
       }
   
@@ -284,7 +391,7 @@ class AntCharts extends React.Component {
         />
       )
      // console.log(orgData[1].value)
-      return barChart
+      return barChart*/
   }
   AntchartTwo = () => {
     const { organisationUnits, secondChartAnalytics  } = this.state

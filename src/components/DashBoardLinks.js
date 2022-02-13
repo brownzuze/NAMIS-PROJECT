@@ -12,6 +12,8 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import SearchIcon from "@material-ui/icons/Search";
 import { TextField } from '@material-ui/core';
 import { Link } from 'react-router-dom';
+import {useState, useEffect} from 'react'
+import {getDashboards} from '../api';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,14 +28,23 @@ const useStyles = makeStyles((theme) => ({
   },
   button: {
    borderRadius:'15% !important',
+   
    marginLeft: '10px',
    textTransform: 'none'
+   
    
   },
   cardcontent: {
     padding: 0,
     "&:last-child": {
       paddingBottom: 2
+    }
+  },
+  more: {
+    padding: 5,
+    "&:last-child": {
+      paddingBottom: 20,
+
     }
   },
   expand: {
@@ -54,10 +65,45 @@ const useStyles = makeStyles((theme) => ({
 export default  function RecipeReviewCard(props) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
+  const [dashboards, setDashboards] = useState([]);
+  const [fetched, setFetched] =useState(false)
+   
+  useEffect(() => {
+    const fetchDashboards = async () => {
+      setDashboards(await getDashboards());
+      setFetched(true)
+    }
+    fetchDashboards();
+  }, [fetched])
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+  const getButtonsUsingForLoop = () => {
+    if(!dashboards){
+      return <div>Loading</div>
+    }
+    const array = []
+
+    for(var i = 0; i < dashboards.length && i<7; i++){
+      array.push(<Button variant="contained"  className={classes.button}>{dashboards[i].displayName}</Button>)
+    }
+
+    return array
+  }
+
+  const getMoreButtonsUsingForLoop = () => {
+    if(!dashboards){
+      return <div>Loading</div>
+    }
+    const array = []
+
+    for(var i = 7; i < dashboards.length; i++){
+      array.push(<Button variant="contained"  className={classes.button}>{dashboards[i].displayName}</Button>)
+    }
+
+    return array
+  }
 
   return (
     
@@ -75,17 +121,7 @@ export default  function RecipeReviewCard(props) {
     )
   }}
 />
-     <Link to="/">
-     <Button variant="contained" className={classes.button}>{props.dashboard1}</Button>
-     </Link>
-     <Button variant="contained"  className={classes.button}>{props.dashboard2}</Button>
-     <Link to="/delivery">
-     <Button variant="contained" className={classes.button}>{props.dashboard3}</Button>
-     </Link>
-     <Button variant="contained" className={classes.button}>{props.dashboard4}</Button>
-     <Button variant="contained" className={classes.button}>{props.dashboard5}</Button>
-     <Button variant="contained" className={classes.button}>{props.dashboard6}</Button>
-     <Button variant="contained" className={classes.button}>{props.dashboard7}</Button>
+     {getButtonsUsingForLoop()}
      
      <IconButton
           className={clsx(classes.expand, {
@@ -99,12 +135,8 @@ export default  function RecipeReviewCard(props) {
         </IconButton>
    </CardContent>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <CardContent>
-        <Button variant="contained" className={classes.button}>{props.dashboard8}</Button>
-        <Button variant="contained" className={classes.button}>{props.dashboard9}</Button>
-        <Button variant="contained" className={classes.button}>{props.dashboard10}</Button>
-        <Button variant="contained" className={classes.button}>{props.dashboard11}</Button>
-        <Button variant="contained" className={classes.button}>{props.dashboard12}</Button>
+      <CardContent className = {classes.more}>
+       {getMoreButtonsUsingForLoop()}
       </CardContent>
       </Collapse>
     </Card>
