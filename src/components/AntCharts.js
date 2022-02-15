@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from '../App.module.css';
-import { RenderGraph } from './RenderGraph';
+import { ChartWithPeRow, ChartWithPeOuRow, LineChart, BarChartsWithOuRow } from './RenderGraph';
 import {getDashboards, getVisualizations, getMaps, getAntseventhChart, getAntsixthChart , getIndicators, getfifthAntChart, getorganisationUnitGroups, getAntFourthPieData, getOrganisationUnits, getAntFirstChart, getAntSecondChart, getAntThirdChart, getAntThirdChartData} from '../api';
 import { Box, Card, Grid, Typography } from "@material-ui/core";
 import { CardContent } from "@material-ui/core";
@@ -122,9 +122,9 @@ class AntCharts extends React.Component {
   
     //creating first antchart 
     AntchartOne = () => {
-      const { visualizations, dashboards, organisationUnits, firstChartAnalytics} = this.state
+      const { visualizations, dashboards, organisationUnits, indicators} = this.state
 
-    if (!visualizations || !dashboards || !organisationUnits || !firstChartAnalytics) {
+    if (!visualizations || !dashboards || !organisationUnits || !indicators) {
       return <div>Loading....</div>
     }
 
@@ -155,14 +155,16 @@ class AntCharts extends React.Component {
 
     const visualisationName = visualisationMetadata.displayName
     const period = visualisationMetadata.relativePeriods
-    const periods = 'LAST_12_MONTHS'
-    const dataDimension = visualisationMetadata.dataDimensionItems[0].indicator.id
+    //const orgUnitGroups = visualisationMetadata.organisationUnitGroupSetDimensions[0].organisationUnitGroups.map(ids => ids.id)
+    const dataDimension = visualisationMetadata.dataDimensionItems.map(ids => ids.indicator.id)
+    //const dataDimension = visualisationMetadata.dataDimensionItems.map(ids => ids.indicator.id)
+    //const dataDimension = visualisationMetadata.dataDimensionItems.map(ids => ids.dataElement.id)
     const orgUnits = visualisationMetadata.organisationUnits.map(ids => ids.id)
     console.log(orgUnits)
     console.log(dataDimension)
     console.log(period)
   
-    var text = ""
+    var text = "";
     for (var key in period) {
     if (period[key] == true) {
         text = key
@@ -172,11 +174,13 @@ var newString = "";
 var wasUpper = false;
 for (var i = 0; i < text.length; i++)
 {
-    if (!wasUpper && text[i] == text.toUpperCase()[i])
+    if (!wasUpper && text[i] == text.toUpperCase()[i] && isNaN(text[i]))
     {
+      
         newString = newString + "_";
         wasUpper = true;
     }
+    
     else
     {
         wasUpper = false;
@@ -185,17 +189,62 @@ for (var i = 0; i < text.length; i++)
 }
 
  const periodFormat = newString.toUpperCase()
- console.log(periodFormat)
+ console.log(newString)
+ 
+ var textdigit = "";
+ var firstDigit = false;
+ 
+ for (var i = 0; i < newString.length; i++)
+{
+    if (!firstDigit && !isNaN(newString[i]))
+    {
+      
+        textdigit = textdigit + "_";
+        firstDigit = true;
+    }
+    
+    else
+    {
+        firstDigit = false;
+    }
+    textdigit = textdigit + newString[i];
+}
+const newPeFormat = textdigit.toUpperCase()
+console.log(newPeFormat)
 
+
+ //appending the data Dimension with ;
+ const dxArray = []
+    for(var i = 0; i < dataDimension.length; i++){
+      dxArray.push(dataDimension[i]+";")
+    }
+    const dataDimensionString = dxArray.join('')
+    console.log(dataDimensionString)
+
+  
+ //appending the organisation unit dimension with ; 
     const array = []
-
     for(var i = 0; i < orgUnits.length; i++){
       array.push(orgUnits[i]+";")
     }
     const orgUnitsString = array.join('')
+    console.log(orgUnitsString)
+
+    /*var dataValues = $.ajax({
+      url: 'https://play.dhis2.org/dev/api/38' + `/analytics.json?dimension=${orgUnitsString}&dimension=dx:${dataDimensionString}&dimension=pe:${newPeFormat}`,
+      dataType: "json",
+      headers: { "Authorization": "Basic " + btoa("admin" + ":" + "district") },
+      success: function (data) { },
+      async: false,
+      error: function (err) {
+        console.log(err);
+      }
+    }).responseJSON;
+  
+    console.log(dataValues.rows)*/
 
    var dataValues = $.ajax({
-    url: 'https://play.dhis2.org/2.37.2/api/38' + `/analytics.json?dimension=dx:${dataDimension};&dimension=ou:${orgUnitsString}&dimension=pe:${periodFormat}`,
+    url: 'https://play.dhis2.org/dev/api/38' + `/analytics.json?dimension=dx:${dataDimensionString}&dimension=ou:${orgUnitsString}&dimension=pe:${newPeFormat}`,
     dataType: "json",
     headers: { "Authorization": "Basic " + btoa("admin" + ":" + "district") },
     success: function (data) { },
@@ -207,192 +256,273 @@ for (var i = 0; i < text.length; i++)
 
   console.log(dataValues.rows)
 
-  return RenderGraph(organisationUnits, dataValues, visualisationName)
+  return ChartWithPeRow(organisationUnits, dataValues, visualisationName)
+  
+  //ChartWithPeOuRow(organisationUnits,indicators, dataValues, visualisationName)
+  //LineChart(organisationUnits, dataValues, visualisationName)
+  //ChartWithPeRow(organisationUnits, dataValues, visualisationName)
 
- /* const orgIds = dataValues.metaData.dimensions.ou
-
-  //get org display names
-  const OrgUnitsDispNames = []
-  organisationUnits.forEach(org => {
-    orgIds.forEach(id => {
-      if (org.id === id) {
-        OrgUnitsDispNames.push(org.displayName)
-      }
-    })
-  })
-
-  //get actaull data
-  const actualData = dataValues.rows
-
-
-
-
-  
-      /*if (!organisationUnits || !firstChartAnalytics ) {
-        return <div>Loading....</div>
-      }
-  
-      const orgIds = firstChartAnalytics.metaData.dimensions.ou
-      const dataItems = firstChartAnalytics.metaData.items;
-      console.log(dataItems);
-  
-      const dataItemsArr = []
-      for (var items in dataItems) {
-        var name = dataItems[items].name;
-        dataItemsArr.push(name);
-      }
-      console.log(dataItemsArr);
-      
-      //creating actual xAxisLabels
-      const XLabels = []
-      for (let i = 0; i<12; i++){
-           XLabels.push(dataItemsArr[i])
-      }
-  
-      console.log(XLabels);
-  
-      //get organisation displayNames
-      const OrgUnitsDispNames = []
-      organisationUnits.forEach(org => {
-        orgIds.forEach(id => {
-          if (org.id === id) {
-            OrgUnitsDispNames.push(org.displayName)
-          }
-        })
-      })
-      console.log(OrgUnitsDispNames);
-      console.log(orgIds);
-  
-  
-      //get the rows aggregated data
-      const rowData = firstChartAnalytics.rows
-  
-      //create an array of objects that stores the values in order
-      let orgData = [{
-        id: '',
-        values: [],
-        periods: []
-      }]
-  
-      let id = [], value = [], period = []
-  
-      for (let i = 0; i < rowData.length; i++) {
-  
-        if (rowData[i][0] === orgIds[0]) {
-          id = OrgUnitsDispNames[0]
-          value.push(parseFloat(rowData[i][2]))
-          period.push(rowData[i][1])
-  
-        }
-  
-      }
-      orgData.push({ id, value, period })
-  
-      let id1 = [], value1 = [], period1 = []
-  
-      for (let i = 0; i < rowData.length; i++) {
-        if (rowData[i][0] === orgIds[1]) {
-          id1 = OrgUnitsDispNames[1]
-          value1.push(parseFloat(rowData[i][2]))
-          period1.push(rowData[i][1])
-        }
-      }
-      orgData.push({ id1, value1, period1 })
-  
-  
-      let id2 = [], value2 = [], period2 = []
-  
-      for (let i = 0; i < rowData.length; i++) {
-        if (rowData[i][0] === orgIds[2]) {
-          id2 = OrgUnitsDispNames[3]
-          value2.push(parseFloat(rowData[i][2]))
-          period2.push(rowData[i][1])
-        }
-      }
-      orgData.push({ id2, value2, period2 })
-  
-  
-      let id3 = [], value3 = [], period3 = []
-  
-      for (let i = 0; i < rowData.length; i++) {
-        if (rowData[i][0] === orgIds[3]) {
-          id3 = OrgUnitsDispNames[2]
-          value3.push(parseFloat(rowData[i][2]))
-          period3.push(rowData[i][1])
-        }
-      }
-      orgData.push({ id3, value3, period3 })
-  
-  
-      let id4 = [], value4 = [], period4 = []
-  
-      for (let i = 0; i < rowData.length; i++) {
-        if (rowData[i][0] === orgIds[4]) {
-          id4 = OrgUnitsDispNames[4]
-          value4.push(parseFloat(rowData[i][2]))
-          period4.push(rowData[i][1])
-        }
-      }
-      orgData.push({ id4, value4, period4 })
-      const barChart = (
-        <Bar
-          data={{
-            labels: XLabels,
-            datasets: [
-              {
-                data: orgData[1].value,
-                label: orgData[1].id,
-                borderColor: '#3333ff',
-                backgroundColor: 'rgb(154,205,50)',
-                fill: true,
-  
-              },
-              {
-                data: orgData[2].value1,
-                label: orgData[2].id1,
-                fill: true,
-                borderColor: 'blue',
-                backgroundColor: 'rgb(30,144,255)' 
-            },
-            {
-              data: orgData[3].value2,
-              label: orgData[3].id2,
-              fill: true,
-              backgroundColor: "rgba(178,34,34)",
-              
-  
-            },
-            {
-              data: orgData[4].value3,
-              label: orgData[4].id3,
-              fill: true,
-              backgroundColor: 'rgb(255,165,0)' 
-  
-            },
-            {
-              data: orgData[5].value4,
-              label: orgData[5].id4,
-              fill: true,
-              backgroundColor: "rgba(199,136,153)",
-  
-            },
-          ],
-          }}
-          options = {{
-            plugins: {
-              legend: { position: "bottom" },
-              title: {
-                display: true,
-                text: 'ANC: ANC 3 coverage by districts last 12 months'
-            }
-            },
-            responsive: true
-          }}
-        />
-      )
-     // console.log(orgData[1].value)
-      return barChart*/
+ 
   }
+
+  CumulativeChart = () => {
+    const { visualizations, dashboards, organisationUnits, indicators} = this.state
+
+  if (!visualizations || !dashboards || !organisationUnits || !indicators) {
+    return <div>Loading....</div>
+  }
+
+
+  const firstDashboardItems = dashboards[0].dashboardItems;
+  const visualizationIds = [];
+
+  for (let i = 0; i < firstDashboardItems.length; i++) {
+    if (firstDashboardItems[i].visualization) {
+      visualizationIds.push(firstDashboardItems[i].visualization);
+    }
+  }
+  console.log(visualizationIds)
+
+  let requiredVisaulizations = [];
+
+  for (let i = 0; i < visualizationIds.length; i++) {
+     for (let j = 0; j < visualizations.length; j++ ){
+    if (( visualizationIds[i].id === visualizations[j].id)) {
+      requiredVisaulizations.push(visualizations[j]);
+    }
+  }
+}
+  console.log(requiredVisaulizations)
+  console.log(visualizations)
+
+  const visualisationMetadata = requiredVisaulizations[3];
+
+  const visualisationName = visualisationMetadata.displayName
+  const period = visualisationMetadata.relativePeriods
+  //const dataDimension = visualisationMetadata.dataDimensionItems.map(ids => ids.indicator.id)
+  //const dataDimension = visualisationMetadata.dataDimensionItems.map(ids => ids.indicator.id)
+  const dataDimension = visualisationMetadata.dataDimensionItems.map(ids => ids.dataElement.id)
+  const orgUnits = visualisationMetadata.organisationUnits.map(ids => ids.id)
+  console.log(orgUnits)
+  console.log(dataDimension)
+  console.log(period)
+
+  var text = "";
+  for (var key in period) {
+  if (period[key] == true) {
+      text = key
+  }
+}
+var newString = "";
+var wasUpper = false;
+for (var i = 0; i < text.length; i++)
+{
+  if (!wasUpper && text[i] == text.toUpperCase()[i] && isNaN(text[i]))
+  {
+    
+      newString = newString + "_";
+      wasUpper = true;
+  }
+  
+  else
+  {
+      wasUpper = false;
+  }
+  newString = newString + text[i];
+}
+
+const periodFormat = newString.toUpperCase()
+console.log(newString)
+
+var textdigit = "";
+var firstDigit = false;
+
+for (var i = 0; i < newString.length; i++)
+{
+  if (!firstDigit && !isNaN(newString[i]))
+  {
+    
+      textdigit = textdigit + "_";
+      firstDigit = true;
+  }
+  
+  else
+  {
+      firstDigit = false;
+  }
+  textdigit = textdigit + newString[i];
+}
+const newPeFormat = textdigit.toUpperCase()
+console.log(newPeFormat)
+
+
+//appending the data Dimension with ;
+const dxArray = []
+  for(var i = 0; i < dataDimension.length; i++){
+    dxArray.push(dataDimension[i]+";")
+  }
+  const dataDimensionString = dxArray.join('')
+  console.log(dataDimensionString)
+
+
+//appending the organisation unit dimension with ; 
+  const array = []
+  for(var i = 0; i < orgUnits.length; i++){
+    array.push(orgUnits[i]+";")
+  }
+  const orgUnitsString = array.join('')
+  console.log(orgUnitsString)
+
+ var dataValues = $.ajax({
+  url: 'https://play.dhis2.org/dev/api/38' + `/analytics.json?dimension=dx:${dataDimensionString}&dimension=ou:${orgUnitsString}&dimension=pe:${newPeFormat}`,
+  dataType: "json",
+  headers: { "Authorization": "Basic " + btoa("admin" + ":" + "district") },
+  success: function (data) { },
+  async: false,
+  error: function (err) {
+    console.log(err);
+  }
+}).responseJSON;
+
+console.log(dataValues.rows)
+
+return LineChart(organisationUnits, dataValues, visualisationName)
+
+
+}
+
+ChiefdomChart = () => {
+  const { visualizations, dashboards, organisationUnits, indicators} = this.state
+
+if (!visualizations || !dashboards || !organisationUnits || !indicators) {
+  return <div>Loading....</div>
+}
+
+
+const firstDashboardItems = dashboards[0].dashboardItems;
+const visualizationIds = [];
+
+for (let i = 0; i < firstDashboardItems.length; i++) {
+  if (firstDashboardItems[i].visualization) {
+    visualizationIds.push(firstDashboardItems[i].visualization);
+  }
+}
+console.log(visualizationIds)
+
+let requiredVisaulizations = [];
+
+for (let i = 0; i < visualizationIds.length; i++) {
+   for (let j = 0; j < visualizations.length; j++ ){
+  if (( visualizationIds[i].id === visualizations[j].id)) {
+    requiredVisaulizations.push(visualizations[j]);
+  }
+}
+}
+console.log(requiredVisaulizations)
+console.log(visualizations)
+
+const visualisationMetadata = requiredVisaulizations[2];
+
+const visualisationName = visualisationMetadata.displayName
+const period = visualisationMetadata.relativePeriods
+//const orgUnitGroups = visualisationMetadata.organisationUnitGroupSetDimensions[0].organisationUnitGroups.map(ids => ids.id)
+const dataDimension = visualisationMetadata.dataDimensionItems.map(ids => ids.indicator.id)
+//const dataDimension = visualisationMetadata.dataDimensionItems.map(ids => ids.indicator.id)
+//const dataDimension = visualisationMetadata.dataDimensionItems.map(ids => ids.dataElement.id)
+const orgUnits = visualisationMetadata.organisationUnits.map(ids => ids.id)
+console.log(orgUnits)
+console.log(dataDimension)
+console.log(period)
+
+var text = "";
+for (var key in period) {
+if (period[key] == true) {
+    text = key
+}
+}
+var newString = "";
+var wasUpper = false;
+for (var i = 0; i < text.length; i++)
+{
+if (!wasUpper && text[i] == text.toUpperCase()[i] && isNaN(text[i]))
+{
+  
+    newString = newString + "_";
+    wasUpper = true;
+}
+
+else
+{
+    wasUpper = false;
+}
+newString = newString + text[i];
+}
+
+const periodFormat = newString.toUpperCase()
+console.log(newString)
+
+var textdigit = "";
+var firstDigit = false;
+
+for (var i = 0; i < newString.length; i++)
+{
+if (!firstDigit && !isNaN(newString[i]))
+{
+  
+    textdigit = textdigit + "_";
+    firstDigit = true;
+}
+
+else
+{
+    firstDigit = false;
+}
+textdigit = textdigit + newString[i];
+}
+const newPeFormat = textdigit.toUpperCase()
+console.log(newPeFormat)
+
+
+//appending the data Dimension with ;
+const dxArray = []
+for(var i = 0; i < dataDimension.length; i++){
+  dxArray.push(dataDimension[i]+";")
+}
+const dataDimensionString = dxArray.join('')
+console.log(dataDimensionString)
+
+
+//appending the organisation unit dimension with ; 
+const array = []
+for(var i = 0; i < orgUnits.length; i++){
+  array.push(orgUnits[i]+";")
+}
+const orgUnitsString = array.join('')
+console.log(orgUnitsString)
+
+var dataValues = $.ajax({
+url: 'https://play.dhis2.org/2.37.2/api/38' + `/analytics.json?dimension=dx:${dataDimensionString}&dimension=ou:${orgUnitsString}&dimension=pe:${newPeFormat}`,
+dataType: "json",
+headers: { "Authorization": "Basic " + btoa("admin" + ":" + "district") },
+success: function (data) { },
+async: false,
+error: function (err) {
+  console.log(err);
+}
+}).responseJSON;
+
+console.log(dataValues.rows)
+
+return BarChartsWithOuRow(organisationUnits, dataValues, visualisationName)
+
+//ChartWithPeOuRow(organisationUnits,indicators, dataValues, visualisationName)
+//LineChart(organisationUnits, dataValues, visualisationName)
+//ChartWithPeRow(organisationUnits, dataValues, visualisationName)
+
+
+}
+
+
   AntchartTwo = () => {
     const { organisationUnits, secondChartAnalytics  } = this.state
   
@@ -616,7 +746,7 @@ for (var i = 0; i < text.length; i++)
           datasets: [
             {
               data: value,
-              label: period[0].slice(0,4),
+              label: '2021', //period[0].slice(0,4),
               borderColor: 'rgb(65,105,225)',
               fill: true,
   
@@ -624,7 +754,7 @@ for (var i = 0; i < text.length; i++)
   
             {
               data: value1,
-              label: period1[0].slice(0,4),
+              label:  '2022', //period1[0].slice(0,4),
               borderColor: 'rgb(107,142,35)',
               fill: true,
   
@@ -1005,7 +1135,8 @@ return barChartVisualisation
                 </Dropdown>
               </CardContent>
               <CardContent>
-              {this.AntchartChiefdom()}
+              {this.ChiefdomChart()}
+              
               </CardContent>
             </Card>
           </Grid>
@@ -1024,7 +1155,8 @@ return barChartVisualisation
                 </Dropdown>
               </CardContent>
               <CardContent>
-              {this.AntchartTwo()}
+              {/*this.AntchartTwo()*/}
+              {this.CumulativeChart()}
               </CardContent>
             </Card>
           </Grid>
@@ -1072,8 +1204,8 @@ return barChartVisualisation
           <div>
             <button onClick={e => this.chart2PDF(e)}>Export 2 PDF</button>
           </div> 
-          {this.AntchartChiefdom()}
-             
+          
+          {this.AntchartChiefdom()}   
       </>
      );
     }

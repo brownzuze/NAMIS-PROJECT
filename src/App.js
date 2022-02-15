@@ -37,7 +37,7 @@ async  componentDidMount() {
         
          <Routes>
            <Route path="/" element={<AntCharts/>}/>
-           <Route path="delivery" element={<DeliveryCharts/>}/>
+           <Route path="dashboard2" element={<DeliveryCharts/>}/>
          </Routes>
     </div>
     </Router>

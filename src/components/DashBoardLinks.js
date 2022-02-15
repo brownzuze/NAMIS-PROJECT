@@ -86,7 +86,18 @@ export default  function RecipeReviewCard(props) {
     const array = []
 
     for(var i = 0; i < dashboards.length && i<7; i++){
-      array.push(<Button variant="contained"  className={classes.button}>{dashboards[i].displayName}</Button>)
+      let linkId ="";
+      if (i == 0){
+        linkId = "/"
+      }
+      else{
+        linkId = "/dashboard" + i
+      }
+      console.log(linkId)
+      array.push(<Link to = {linkId} style={{textDecoration: 'none'}}>
+                 <Button variant="contained"  className={classes.button}>{dashboards[i].displayName}</Button>
+                 </Link>
+                 )
     }
 
     return array
