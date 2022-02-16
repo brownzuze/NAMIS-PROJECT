@@ -33,7 +33,7 @@ async  componentDidMount() {
       <Router>
       <div className={styles.container}>
         <Appbar />
-        <DashboardLinks/>
+        {/*<DashboardLinks/>*/}
         
          <Routes>
            <Route path="/" element={<AntCharts/>}/>

@@ -1,5 +1,5 @@
 import axios from "axios";
-const ADDRESS_URL = 'https://play.dhis2.org/2.37.2/api';
+export const ADDRESS_URL = 'https://play.dhis2.org/2.37.2/api/38';
 const OAuth2 = 'Basic '+btoa('admin:district');
 export const makeApiRequest = async (apiUrl) => {
 
@@ -9,7 +9,7 @@ try{
         {'Authorization': OAuth2,
         'Access-Control-Allow-Origin':'*',
         'Content-type': 'application/json',  
-         'Allow-Cross-Origin-Access': 'https://play.dhis2.org/dev',
+         'Allow-Cross-Origin-Access': 'https://play.dhis2.org/2.37.2',
          "Access-Control-Allow-Credentials" : true,
          'Access-Control-Allow-Headers': 'application/json' }});
 
@@ -46,10 +46,10 @@ export const getDashboards = async () => {
     return dashData.dashboards;
 }
 export const getVisualizations = async () => {
-    const dashData = await makeApiRequest({
+    const visualData = await makeApiRequest({
         url: ADDRESS_URL + '/visualizations.json?fields=*&paging=false'
     })
-    return dashData.visualizations;
+    return visualData.visualizations;
 }
 export const getMaps = async () => {
     const dashData = await makeApiRequest({
@@ -124,14 +124,14 @@ export const getAntseventhChart = async () => {
 
 export const getDeliveryFirstChart = async () => {
     const deliveryfirstchart = await makeApiRequest({
-        url:  ADDRESS_URL + '/38/analytics?dimension=dx%3AEoYar8UxddG%3Bn0GE1ISYrdM%3BQ3M7Htpzg1Y,ou%3AbL4ooGhyHRQ%3BTEQlaapDQoK%3Bat6UHUQatSo%3Blc3eMKXaEfw%3BjUb8gELQApl%3BkJq2mPyFEHo%3BjmIPBj66vD6%3BVth0fbpFcsO%3Bfdc6uOvgoji%3BqhqAxPSTUXp%3BO6uvpzGd5pu%3BPMa2VCrupOd%3BeIQbndfxQMb&filter=pe%3ATHIS_YEAR'
+        url:  ADDRESS_URL + '/analytics?dimension=dx%3AEoYar8UxddG%3Bn0GE1ISYrdM%3BQ3M7Htpzg1Y,ou%3AbL4ooGhyHRQ%3BTEQlaapDQoK%3Bat6UHUQatSo%3Blc3eMKXaEfw%3BjUb8gELQApl%3BkJq2mPyFEHo%3BjmIPBj66vD6%3BVth0fbpFcsO%3Bfdc6uOvgoji%3BqhqAxPSTUXp%3BO6uvpzGd5pu%3BPMa2VCrupOd%3BeIQbndfxQMb&filter=pe%3ATHIS_YEAR'
     })
     
     return deliveryfirstchart;
 }
 export const getDeliverySecondChart = async () => {
     const deliverysecondchart = await makeApiRequest({
-        url:  ADDRESS_URL + '/38/analytics?dimension=dx%3AQ3M7Htpzg1Y,ou%3AUSER_ORGUNIT%3BUSER_ORGUNIT_CHILDREN&filter=pe%3ATHIS_YEAR&includeNumDen=false&skipMeta=true&skipData=false'
+        url:  ADDRESS_URL + '/analytics?dimension=dx%3AQ3M7Htpzg1Y,ou%3AUSER_ORGUNIT%3BUSER_ORGUNIT_CHILDREN&filter=pe%3ATHIS_YEAR&includeNumDen=false&skipMeta=true&skipData=false'
     })
     
     return deliverysecondchart;

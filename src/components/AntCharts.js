@@ -2,6 +2,7 @@ import React from 'react';
 import styles from '../App.module.css';
 import { ChartWithPeRow, ChartWithPeOuRow, LineChart, BarChartsWithOuRow, PieChart} from './RenderGraph';
 import {getDashboards, getVisualizations, getMaps, getAntseventhChart, getAntsixthChart , getIndicators, getfifthAntChart, getorganisationUnitGroups, getAntFourthPieData, getOrganisationUnits, getAntFirstChart, getAntSecondChart, getAntThirdChart, getAntThirdChartData} from '../api';
+import {ADDRESS_URL} from '../api';
 import { Box, Card, Grid, Typography } from "@material-ui/core";
 import { CardContent } from "@material-ui/core";
 import $ from 'jquery';
@@ -38,6 +39,7 @@ class AntCharts extends React.Component {
     this.setState({firstChartAnalytics: firstAntChart});
     const antVisualizations = await getVisualizations()
     this.setState({ visualizations: antVisualizations})
+    console.log(antVisualizations)
     const antMaps = await getMaps()
     this.setState({maps: antMaps})
     const secondAntChart = await getAntSecondChart();
@@ -244,7 +246,7 @@ console.log(newPeFormat)
     console.log(dataValues.rows)*/
 
    var dataValues = $.ajax({
-    url: 'https://play.dhis2.org/dev/api/38' + `/analytics.json?dimension=dx:${dataDimensionString}&dimension=ou:${orgUnitsString}&dimension=pe:${newPeFormat}`,
+    url: ADDRESS_URL + `/analytics.json?dimension=dx:${dataDimensionString}&dimension=ou:${orgUnitsString}&dimension=pe:${newPeFormat}`,
     dataType: "json",
     headers: { "Authorization": "Basic " + btoa("admin" + ":" + "district") },
     success: function (data) { },
@@ -374,7 +376,7 @@ const dxArray = []
   console.log(orgUnitsString)
 
  var dataValues = $.ajax({
-  url: 'https://play.dhis2.org/dev/api/38' + `/analytics.json?dimension=dx:${dataDimensionString}&dimension=ou:${orgUnitsString}&dimension=pe:${newPeFormat}`,
+  url: ADDRESS_URL + `/analytics.json?dimension=dx:${dataDimensionString}&dimension=ou:${orgUnitsString}&dimension=pe:${newPeFormat}`,
   dataType: "json",
   headers: { "Authorization": "Basic " + btoa("admin" + ":" + "district") },
   success: function (data) { },
@@ -500,7 +502,7 @@ const dxArray = []
   console.log(orgUnitsString)
 
  var dataValues = $.ajax({
-  url: 'https://play.dhis2.org/dev/api/38' + `/analytics.json?dimension=dx:${dataDimensionString}&dimension=ou:${orgUnitsString}&dimension=pe:${newPeFormat}`,
+  url: ADDRESS_URL + `/analytics.json?dimension=dx:${dataDimensionString}&dimension=ou:${orgUnitsString}&dimension=pe:${newPeFormat}`,
   dataType: "json",
   headers: { "Authorization": "Basic " + btoa("admin" + ":" + "district") },
   success: function (data) { },
@@ -627,7 +629,7 @@ const orgUnitsString = array.join('')
 console.log(orgUnitsString)
 
 var dataValues = $.ajax({
-url: 'https://play.dhis2.org/2.37.2/api/38' + `/analytics.json?dimension=dx:${dataDimensionString}&dimension=ou:${orgUnitsString}&dimension=pe:${newPeFormat}`,
+url: ADDRESS_URL + `/analytics.json?dimension=dx:${dataDimensionString}&dimension=ou:${orgUnitsString}&dimension=pe:${newPeFormat}`,
 dataType: "json",
 headers: { "Authorization": "Basic " + btoa("admin" + ":" + "district") },
 success: function (data) { },
@@ -770,7 +772,7 @@ const orgUnitGroupDx = ChartIndicatorString + orgUnitsString
 console.log(orgUnitGroupDx) 
 
 var dataValues = $.ajax({
-  url: 'https://play.dhis2.org/dev/api/38' + `/analytics.json?dimension=${orgUnitGroupDx}&filter=pe:${newPeFormat}&filter=dx:${dataDimensionString}&filter=ou:USER_ORGUNIT&includeNumDen=false&skipMeta=true&skipData=false`,
+  url: ADDRESS_URL + `/analytics.json?dimension=${orgUnitGroupDx}&filter=pe:${newPeFormat}&filter=dx:${dataDimensionString}&filter=ou:USER_ORGUNIT&includeNumDen=false&skipMeta=true&skipData=false`,
   dataType: "json",
   headers: { "Authorization": "Basic " + btoa("admin" + ":" + "district") },
   success: function (data) { },
@@ -917,7 +919,7 @@ console.log(orgUnitGroupDx)
  console.log(orgUnitsString)
 
 var dataValues = $.ajax({
-  url: 'https://play.dhis2.org/dev/api/38' + `/analytics.json?dimension=${orgUnitGroupDx}&filter=pe:${newPeFormat}&filter=dx:${dataDimensionString}&filter=ou:${actualOrgUnitsString}`,
+  url: ADDRESS_URL + `/analytics.json?dimension=${orgUnitGroupDx}&filter=pe:${newPeFormat}&filter=dx:${dataDimensionString}&filter=ou:${actualOrgUnitsString}`,
   dataType: "json",
   headers: { "Authorization": "Basic " + btoa("admin" + ":" + "district") },
   success: function (data) { },
@@ -1270,7 +1272,7 @@ AntSeventhChart =  () => {
     }
 
     var getData = $.ajax({
-      url: `https://play.dhis2.org/2.37.2/api/38/analytics?dimension=dx%3AUvn6LCg7dVU%3BOdiHJayrsKo,pe%3ALAST_4_QUARTERS,ou%3AO6uvpzGd5pu%3Bfdc6uOvgoji%3Blc3eMKXaEfw%3BjUb8gELQApl%3BPMa2VCrupOd`,
+      url: ADDRESS_URL + `/analytics?dimension=dx%3AUvn6LCg7dVU%3BOdiHJayrsKo,pe%3ALAST_4_QUARTERS,ou%3AO6uvpzGd5pu%3Bfdc6uOvgoji%3Blc3eMKXaEfw%3BjUb8gELQApl%3BPMa2VCrupOd`,
       dataType: "json",
       headers: { "Authorization": "Basic " + btoa('admin' + ":" + 'district') },
       success: function (data) { },
