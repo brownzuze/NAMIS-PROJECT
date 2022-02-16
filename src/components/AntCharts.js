@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from '../App.module.css';
-import { ChartWithPeRow, ChartWithPeOuRow, LineChart, BarChartsWithOuRow } from './RenderGraph';
+import { ChartWithPeRow, ChartWithPeOuRow, LineChart, BarChartsWithOuRow, PieChart} from './RenderGraph';
 import {getDashboards, getVisualizations, getMaps, getAntseventhChart, getAntsixthChart , getIndicators, getfifthAntChart, getorganisationUnitGroups, getAntFourthPieData, getOrganisationUnits, getAntFirstChart, getAntSecondChart, getAntThirdChart, getAntThirdChartData} from '../api';
 import { Box, Card, Grid, Typography } from "@material-ui/core";
 import { CardContent } from "@material-ui/core";
@@ -120,7 +120,7 @@ class AntCharts extends React.Component {
   
 }
   
-    //creating first antchart 
+    //creating first antchart with dynamic ids
     AntchartOne = () => {
       const { visualizations, dashboards, organisationUnits, indicators} = this.state
 
@@ -151,7 +151,7 @@ class AntCharts extends React.Component {
     console.log(requiredVisaulizations)
     console.log(visualizations)
 
-    const visualisationMetadata = requiredVisaulizations[1];
+    const visualisationMetadata = requiredVisaulizations[2];
 
     const visualisationName = visualisationMetadata.displayName
     const period = visualisationMetadata.relativePeriods
@@ -264,6 +264,132 @@ console.log(newPeFormat)
 
  
   }
+  //Coverage by quarter and district
+  AntchartCQDistrct = () => {
+    const { visualizations, dashboards, organisationUnits, indicators} = this.state
+
+  if (!visualizations || !dashboards || !organisationUnits || !indicators) {
+    return <div>Loading....</div>
+  }
+
+
+  const firstDashboardItems = dashboards[0].dashboardItems;
+  const visualizationIds = [];
+
+  for (let i = 0; i < firstDashboardItems.length; i++) {
+    if (firstDashboardItems[i].visualization) {
+      visualizationIds.push(firstDashboardItems[i].visualization);
+    }
+  }
+  console.log(visualizationIds)
+
+  let requiredVisaulizations = [];
+
+  for (let i = 0; i < visualizationIds.length; i++) {
+     for (let j = 0; j < visualizations.length; j++ ){
+    if (( visualizationIds[i].id === visualizations[j].id)) {
+      requiredVisaulizations.push(visualizations[j]);
+    }
+  }
+}
+  console.log(requiredVisaulizations)
+  console.log(visualizations)
+
+  const visualisationMetadata = requiredVisaulizations[0];
+
+  const visualisationName = visualisationMetadata.displayName
+  const period = visualisationMetadata.relativePeriods
+  const dataDimension = visualisationMetadata.dataDimensionItems.map(ids => ids.indicator.id)
+  //const dataDimension = visualisationMetadata.dataDimensionItems.map(ids => ids.indicator.id)
+  //const dataDimension = visualisationMetadata.dataDimensionItems.map(ids => ids.dataElement.id)
+  const orgUnits = visualisationMetadata.organisationUnits.map(ids => ids.id)
+  console.log(orgUnits)
+  console.log(dataDimension)
+  console.log(period)
+
+  var text = "";
+  for (var key in period) {
+  if (period[key] == true) {
+      text = key
+  }
+}
+var newString = "";
+var wasUpper = false;
+for (var i = 0; i < text.length; i++)
+{
+  if (!wasUpper && text[i] == text.toUpperCase()[i] && isNaN(text[i]))
+  {
+    
+      newString = newString + "_";
+      wasUpper = true;
+  }
+  
+  else
+  {
+      wasUpper = false;
+  }
+  newString = newString + text[i];
+}
+
+const periodFormat = newString.toUpperCase()
+console.log(newString)
+
+var textdigit = "";
+var firstDigit = false;
+
+for (var i = 0; i < newString.length; i++)
+{
+  if (!firstDigit && !isNaN(newString[i]))
+  {
+    
+      textdigit = textdigit + "_";
+      firstDigit = true;
+  }
+  
+  else
+  {
+      firstDigit = false;
+  }
+  textdigit = textdigit + newString[i];
+}
+const newPeFormat = textdigit.toUpperCase()
+console.log(newPeFormat)
+
+
+//appending the data Dimension with ;
+const dxArray = []
+  for(var i = 0; i < dataDimension.length; i++){
+    dxArray.push(dataDimension[i]+";")
+  }
+  const dataDimensionString = dxArray.join('')
+  console.log(dataDimensionString)
+
+
+//appending the organisation unit dimension with ; 
+  const array = []
+  for(var i = 0; i < orgUnits.length; i++){
+    array.push(orgUnits[i]+";")
+  }
+  const orgUnitsString = array.join('')
+  console.log(orgUnitsString)
+
+ var dataValues = $.ajax({
+  url: 'https://play.dhis2.org/dev/api/38' + `/analytics.json?dimension=dx:${dataDimensionString}&dimension=ou:${orgUnitsString}&dimension=pe:${newPeFormat}`,
+  dataType: "json",
+  headers: { "Authorization": "Basic " + btoa("admin" + ":" + "district") },
+  success: function (data) { },
+  async: false,
+  error: function (err) {
+    console.log(err);
+  }
+}).responseJSON;
+
+console.log(dataValues.rows)
+
+return  ChartWithPeOuRow(organisationUnits,indicators, dataValues, visualisationName)
+
+
+}
 
   CumulativeChart = () => {
     const { visualizations, dashboards, organisationUnits, indicators} = this.state
@@ -295,7 +421,7 @@ console.log(newPeFormat)
   console.log(requiredVisaulizations)
   console.log(visualizations)
 
-  const visualisationMetadata = requiredVisaulizations[3];
+  const visualisationMetadata = requiredVisaulizations[4];
 
   const visualisationName = visualisationMetadata.displayName
   const period = visualisationMetadata.relativePeriods
@@ -421,7 +547,7 @@ for (let i = 0; i < visualizationIds.length; i++) {
 console.log(requiredVisaulizations)
 console.log(visualizations)
 
-const visualisationMetadata = requiredVisaulizations[2];
+const visualisationMetadata = requiredVisaulizations[3];
 
 const visualisationName = visualisationMetadata.displayName
 const period = visualisationMetadata.relativePeriods
@@ -521,6 +647,290 @@ return BarChartsWithOuRow(organisationUnits, dataValues, visualisationName)
 
 
 }
+
+//Pie Chart
+PieChart = () => {
+  const { visualizations, dashboards, organisationUnitGroups, indicators} = this.state
+
+if (!visualizations || !dashboards || !organisationUnitGroups || !indicators) {
+  return <div>Loading....</div>
+}
+
+
+const firstDashboardItems = dashboards[0].dashboardItems;
+const visualizationIds = [];
+
+for (let i = 0; i < firstDashboardItems.length; i++) {
+  if (firstDashboardItems[i].visualization) {
+    visualizationIds.push(firstDashboardItems[i].visualization);
+  }
+}
+console.log(visualizationIds)
+
+let requiredVisaulizations = [];
+
+for (let i = 0; i < visualizationIds.length; i++) {
+   for (let j = 0; j < visualizations.length; j++ ){
+  if (( visualizationIds[i].id === visualizations[j].id)) {
+    requiredVisaulizations.push(visualizations[j]);
+  }
+}
+}
+console.log(requiredVisaulizations)
+console.log(visualizations)
+
+const visualisationMetadata = requiredVisaulizations[5];
+
+const visualisationName = visualisationMetadata.displayName
+const period = visualisationMetadata.relativePeriods
+const chartIndicator = visualisationMetadata.organisationUnitGroupSetDimensions.map(ids =>ids.organisationUnitGroupSet.id)
+const orgUnitGroups = visualisationMetadata.organisationUnitGroupSetDimensions.map(orgids => orgids.organisationUnitGroups.map(ids => ids.id))
+const dataDimension = visualisationMetadata.dataDimensionItems.map(ids => ids.dataElement.id)
+console.log(orgUnitGroups)
+console.log(chartIndicator)
+console.log(dataDimension)
+console.log(period)
+
+var text = "";
+for (var key in period) {
+if (period[key] == true) {
+    text = key
+}
+}
+var newString = "";
+var wasUpper = false;
+for (var i = 0; i < text.length; i++)
+{
+if (!wasUpper && text[i] == text.toUpperCase()[i] && isNaN(text[i]))
+{
+  
+    newString = newString + "_";
+    wasUpper = true;
+}
+
+else
+{
+    wasUpper = false;
+}
+newString = newString + text[i];
+}
+
+const periodFormat = newString.toUpperCase()
+console.log(newString)
+
+var textdigit = "";
+var firstDigit = false;
+
+for (var i = 0; i < newString.length; i++)
+{
+if (!firstDigit && !isNaN(newString[i]))
+{
+  
+    textdigit = textdigit + "_";
+    firstDigit = true;
+}
+
+else
+{
+    firstDigit = false;
+}
+textdigit = textdigit + newString[i];
+}
+const newPeFormat = textdigit.toUpperCase()
+console.log(newPeFormat)
+
+
+//appending the data Dimension with ;
+const dxArray = []
+for(var i = 0; i < dataDimension.length; i++){
+  dxArray.push(dataDimension[i]+";")
+}
+const dataDimensionString = dxArray.join('')
+console.log(dataDimensionString)
+
+console.log(orgUnitGroups)
+
+//adding pending indicator with ;
+const InArray = []
+for(var i = 0; i < chartIndicator.length; i++){
+  InArray.push(chartIndicator[i]+":")
+}
+const ChartIndicatorString = InArray.join('')
+console.log(ChartIndicatorString)
+
+//appending the organisation unit dimension with ; 
+var array = []
+for(var i = 0; i < orgUnitGroups[0].length; i++){
+  array.push(orgUnitGroups[0][i]+";")
+}
+const orgUnitsString = array.join('')
+console.log(orgUnitsString)
+//concatinating the actual dataDimension
+const orgUnitGroupDx = ChartIndicatorString + orgUnitsString
+console.log(orgUnitGroupDx) 
+
+var dataValues = $.ajax({
+  url: 'https://play.dhis2.org/dev/api/38' + `/analytics.json?dimension=${orgUnitGroupDx}&filter=pe:${newPeFormat}&filter=dx:${dataDimensionString}&filter=ou:USER_ORGUNIT&includeNumDen=false&skipMeta=true&skipData=false`,
+  dataType: "json",
+  headers: { "Authorization": "Basic " + btoa("admin" + ":" + "district") },
+  success: function (data) { },
+  async: false,
+  error: function (err) {
+    console.log(err);
+  }
+}).responseJSON;
+
+console.log(dataValues.rows)
+
+return PieChart(organisationUnitGroups, dataValues, visualisationName) 
+
+}
+
+//stacked Chart
+StackedChart = () => {
+  const { visualizations, dashboards, organisationUnitGroups, indicators} = this.state
+
+if (!visualizations || !dashboards || !organisationUnitGroups || !indicators) {
+  return <div>Loading....</div>
+}
+
+
+const firstDashboardItems = dashboards[0].dashboardItems;
+const visualizationIds = [];
+
+for (let i = 0; i < firstDashboardItems.length; i++) {
+  if (firstDashboardItems[i].visualization) {
+    visualizationIds.push(firstDashboardItems[i].visualization);
+  }
+}
+console.log(visualizationIds)
+
+let requiredVisaulizations = [];
+
+for (let i = 0; i < visualizationIds.length; i++) {
+   for (let j = 0; j < visualizations.length; j++ ){
+  if (( visualizationIds[i].id === visualizations[j].id)) {
+    requiredVisaulizations.push(visualizations[j]);
+  }
+}
+}
+console.log(requiredVisaulizations)
+console.log(visualizations)
+
+const visualisationMetadata = requiredVisaulizations[6];
+
+const visualisationName = visualisationMetadata.displayName
+const period = visualisationMetadata.relativePeriods
+const chartIndicator = visualisationMetadata.organisationUnitGroupSetDimensions.map(ids =>ids.organisationUnitGroupSet.id)
+const orgUnitGroups = visualisationMetadata.organisationUnitGroupSetDimensions.map(orgids => orgids.organisationUnitGroups.map(ids => ids.id))
+const dataDimension = visualisationMetadata.dataDimensionItems.map(ids => ids.dataElement.id)
+const orgUnits = visualisationMetadata.organisationUnits.map(ids => ids.id)
+console.log(orgUnitGroups)
+console.log(chartIndicator)
+console.log(dataDimension)
+console.log(period)
+
+var text = "";
+for (var key in period) {
+if (period[key] == true) {
+    text = key
+}
+}
+var newString = "";
+var wasUpper = false;
+for (var i = 0; i < text.length; i++)
+{
+if (!wasUpper && text[i] == text.toUpperCase()[i] && isNaN(text[i]))
+{
+  
+    newString = newString + "_";
+    wasUpper = true;
+}
+
+else
+{
+    wasUpper = false;
+}
+newString = newString + text[i];
+}
+
+const periodFormat = newString.toUpperCase()
+console.log(newString)
+
+var textdigit = "";
+var firstDigit = false;
+
+for (var i = 0; i < newString.length; i++)
+{
+if (!firstDigit && !isNaN(newString[i]))
+{
+  
+    textdigit = textdigit + "_";
+    firstDigit = true;
+}
+
+else
+{
+    firstDigit = false;
+}
+textdigit = textdigit + newString[i];
+}
+const newPeFormat = textdigit.toUpperCase()
+console.log(newPeFormat)
+
+
+//appending the data Dimension with ;
+const dxArray = []
+for(var i = 0; i < dataDimension.length; i++){
+  dxArray.push(dataDimension[i]+";")
+}
+const dataDimensionString = dxArray.join('')
+console.log(dataDimensionString)
+
+console.log(orgUnitGroups)
+
+//adding pending indicator with ;
+const InArray = []
+for(var i = 0; i < chartIndicator.length; i++){
+  InArray.push(chartIndicator[i]+":")
+}
+const ChartIndicatorString = InArray.join('')
+console.log(ChartIndicatorString)
+
+//appending the organisation unit dimension with ; 
+var array = []
+for(var i = 0; i < orgUnitGroups[0].length; i++){
+  array.push(orgUnitGroups[0][i]+";")
+}
+const orgUnitsString = array.join('')
+console.log(orgUnitsString)
+//concatinating the actual dataDimension
+const orgUnitGroupDx = ChartIndicatorString + orgUnitsString
+console.log(orgUnitGroupDx) 
+
+ //appending the organisation unit dimension with ; 
+ const orgarray = []
+ for(var i = 0; i < orgUnits.length; i++){
+   orgarray.push(orgUnits[i]+";")
+ }
+ const actualOrgUnitsString = orgarray.join('')
+ console.log(orgUnitsString)
+
+var dataValues = $.ajax({
+  url: 'https://play.dhis2.org/dev/api/38' + `/analytics.json?dimension=${orgUnitGroupDx}&filter=pe:${newPeFormat}&filter=dx:${dataDimensionString}&filter=ou:${actualOrgUnitsString}`,
+  dataType: "json",
+  headers: { "Authorization": "Basic " + btoa("admin" + ":" + "district") },
+  success: function (data) { },
+  async: false,
+  error: function (err) {
+    console.log(err);
+  }
+}).responseJSON;
+
+console.log(dataValues.rows)
+
+}
+
 
 
   AntchartTwo = () => {
@@ -1097,7 +1507,8 @@ return barChartVisualisation
                 </Dropdown>
               </CardContent>
               <CardContent className = "chart2PDF">
-              {this.AntSeventhChart()}
+              {/*this.AntSeventhChart()*/}
+              {this.AntchartCQDistrct()}
               </CardContent>
             </Card>
           </Grid>
@@ -1195,7 +1606,8 @@ return barChartVisualisation
                 </Dropdown>
               </CardContent>
               <CardContent>
-               {this.AntPieChart()}
+               {/*this.AntPieChart()*/}
+               {this.PieChart()}
               </CardContent>
             </Card>
           </Grid>
@@ -1205,7 +1617,9 @@ return barChartVisualisation
             <button onClick={e => this.chart2PDF(e)}>Export 2 PDF</button>
           </div> 
           
-          {this.AntchartChiefdom()}   
+          {this.AntchartChiefdom()}
+          {this.AntchartCQDistrct()}   
+
       </>
      );
     }
