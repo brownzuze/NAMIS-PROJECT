@@ -93,17 +93,25 @@ export default  function RecipeReviewCard(props) {
       else{
         linkId = "/dashboard" + i
       }
-      console.log(linkId)
-      array.push(<Link to = {linkId} style={{textDecoration: 'none'}}>
-                 <Button variant="contained"  className={classes.button}>{dashboards[i].displayName}</Button>
-                 </Link>
+      var dashId = dashboards[i].id
+
+
+      array.push( 
+                 <Button  variant="contained" onClick={(e)=>alartAbc(e)} id={dashId}className={classes.button}>{dashboards[i].displayName}</Button>
+                
                  )
+                 
     }
 
+    
     return array
   }
 
-  const getMoreButtonsUsingForLoop = () => {
+  const alartAbc = (e)=>{
+      console.log(e.target)
+  }
+
+  const getMoreButtonsUsingForLoop = (props) => {
     if(!dashboards){
       return <div>Loading</div>
     }
@@ -115,7 +123,9 @@ export default  function RecipeReviewCard(props) {
 
     return array
   }
-
+  if(!dashboards){
+    return <div>Loading</div>
+  }
   return (
     
     <Card className={classes.root}>
@@ -132,8 +142,12 @@ export default  function RecipeReviewCard(props) {
     )
   }}
 />
-     {getButtonsUsingForLoop()}
-     
+     {/*getButtonsUsingForLoop()*/}
+ {dashboards.map(r=>{
+   return(
+   <Button variant="contained" id = "misheck" className={classes.button} onClick={props.handleClick}>{r.displayName}</Button>
+   )
+ })}    
      <IconButton
           className={clsx(classes.expand, {
             [classes.expandOpen]: expanded,

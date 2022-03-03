@@ -4,6 +4,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import logo from '../logo.png';
+import DashBoardLinks from './DashBoardLinks'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,13 +23,14 @@ export default function Appbar() {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static" style = {{backgroundColor: "#368BC1"}}>
+      <AppBar position="fixed" style = {{backgroundColor: "#368BC1"}}>
         <Toolbar variant="dense">
           <img src= {logo}  className = {classes.logo}/>
           <Typography variant="h6" color="inherit">
             NAMIS DASHBOARDS
           </Typography>
         </Toolbar>
+        <DashBoardLinks/>
       </AppBar>
     </div>
   );
