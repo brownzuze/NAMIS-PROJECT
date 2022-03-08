@@ -27,7 +27,7 @@ export default function Appbar() {
         <Toolbar variant="dense">
           <img src= {logo}  className = {classes.logo}/>
           <Typography variant="h6" color="inherit">
-            NAMIS DASHBOARDS
+            NAMIS Web Portal
           </Typography>
         </Toolbar>
         <DashBoardLinks/>

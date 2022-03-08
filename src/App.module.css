@@ -4,7 +4,7 @@ body {
 .container{
   text-align: center;
 }
-.graphboxs{
+.graphbox{
   margin-top: 115px;
 }
 .pieChart{
@@ -22,5 +22,21 @@ body {
 }
 .antchart{
   margin-top: 1px;
+}
+.itemcontainer{
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2em
+}
+.card{
+  text-align: center;
+  padding: 10px;
+  width: 650px;
+  height: 400px;
+  border-radius: 5px;
+  padding: lem;
+  box-shadow: rgba(99,99,99,02) 0px 1px 5px 0px;
+  border: 1px solid #ddd;
 }
 

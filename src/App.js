@@ -3,6 +3,7 @@ import styles from './App.module.css';
 import Appbar from './components/Appbar';
 import DashboardLinks from './components/DashBoardLinks'
 import AntCharts from './components/AntCharts';
+import Dashboards from './components/Dashboards'
 import Loading from "./components/Loading";
 import {getDashboards} from './api';
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
@@ -31,11 +32,11 @@ async  componentDidMount() {
     return (
       <Router>
       <div className={styles.container}>
-        {/*<Appbar />*/}
-        {/*<DashboardLinks/>*/}
+        <Appbar />
         
          <Routes>
            <Route path="/" element={<AntCharts/>}/>
+           <Route exact path='/dashboards/:id' element={<Dashboards/>}/>
          </Routes>
     </div>
     </Router>

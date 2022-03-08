@@ -12,6 +12,7 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import SearchIcon from "@material-ui/icons/Search";
 import { TextField } from '@material-ui/core';
 import { Link } from 'react-router-dom';
+import $ from 'jquery';
 import {useState, useEffect} from 'react'
 import {getDashboards} from '../api';
 
@@ -126,6 +127,7 @@ export default  function RecipeReviewCard(props) {
   if(!dashboards){
     return <div>Loading</div>
   }
+  const moreBtn = dashboards.slice(7, dashboards.length)
   return (
     
     <Card className={classes.root}>
@@ -143,9 +145,10 @@ export default  function RecipeReviewCard(props) {
   }}
 />
      {/*getButtonsUsingForLoop()*/}
- {dashboards.map(r=>{
+ {
+  dashboards.filter((item, index) => index<7).map(r=>{
    return(
-   <Button variant="contained" id = "misheck" className={classes.button} onClick={props.handleClick}>{r.displayName}</Button>
+   <Link to={`/dashboards/${r.id}`}  style={{textDecoration: 'none'}}><Button variant="contained" id = {r.id} className={classes.button} onClick={props.handleClick}>{r.displayName}</Button></Link>
    )
  })}    
      <IconButton
@@ -161,7 +164,12 @@ export default  function RecipeReviewCard(props) {
    </CardContent>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
       <CardContent className = {classes.more}>
-       {getMoreButtonsUsingForLoop()}
+       {/*getMoreButtonsUsingForLoop()*/}
+       {moreBtn.map(r=>{
+        return(
+       <Link to={`/dashboards/${r.id}`}  style={{textDecoration: 'none'}}><Button variant="contained" id = {r.id} className={classes.button} onClick={props.handleClick}>{r.displayName}</Button></Link>
+       )
+      })}    
       </CardContent>
       </Collapse>
     </Card>
