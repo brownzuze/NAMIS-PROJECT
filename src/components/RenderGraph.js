@@ -876,5 +876,132 @@ console.log(OrgUnitsDispNames);
     return lineChartTwo
   }
 
+  export const OuRowCharts = (organisationUnits,indicators, dataValues, visualisationName) => {
+
+    const indicatorIds = dataValues.metaData.dimensions.dx
+    const orgIds = dataValues.metaData.dimensions.ou
+    console.log(indicatorIds)
+
+   //get the rows aggregated data
+    const rowData = dataValues.rows
+    console.log(rowData)
+
+  //get indicators displayNames
+
+  const indicatorDispNames = []
+  for (let i = 0; i < indicatorIds.length; i++) {
+   for (let j = 0; j < indicators.length; j++) {
+   
+   if (indicatorIds[i] === indicators[j].id) {
+    indicatorDispNames.push(indicators[j].displayName)
+
+}
+}
+}
+console.log(indicatorDispNames);
+
+//get Orgunitsnames
+const organisationUnitDispNames = []
+for (let i = 0; i < orgIds.length; i++) {
+for (let j = 0; j < organisationUnits.length; j++) {
+   
+   if (orgIds[i] ===  organisationUnits[j].id) {
+    organisationUnitDispNames.push( organisationUnits[j].displayName)
+
+}
+}
+}
+console.log(organisationUnitDispNames);
+
+    //create an array of objects that stores the values in order
+    let orgData = [{
+      id: '',
+      values: []
+    }]
+
+    let id = [], value = []
+
+    for (let i = 0; i < rowData.length; i++) {
+
+      if (rowData[i][0] === indicatorIds[0]) {
+        id =indicatorDispNames[0]
+        value.push(parseFloat(rowData[i][3]))
+
+      }
+
+    }
+    orgData.push({ id, value })
+
+    let id1 = [], value1 = []
+
+    for (let i = 0; i < rowData.length; i++) {
+
+      if (rowData[i][0] === indicatorIds[1]) {
+        id1 = indicatorDispNames[1]
+        value1.push(parseFloat(rowData[i][3]))
+
+      }
+
+    }
+    orgData.push({ id1, value1})
+
+
+    let id2 = [], value2 = []
+
+    for (let i = 0; i < rowData.length; i++) {
+
+      if (rowData[i][0] === indicatorIds[2]) {
+        id2 = indicatorDispNames[2]
+        value2.push(parseFloat(rowData[i][3]))
+
+      }
+
+    }
+    orgData.push({ id2, value2})
+    const barChart = (
+      <Bar
+        data={{
+          labels: organisationUnitDispNames,
+          datasets: [
+            {
+              data: orgData[1].value,
+              label: orgData[1].id,
+              borderColor: '#3333ff',
+              backgroundColor: 'rgb(154,205,50)',
+              fill: true,
+
+            },
+            {
+              data: orgData[2].value1,
+              label: orgData[2].id1,
+              fill: true,
+              borderColor: 'blue',
+              backgroundColor: 'rgb(30,144,255)' 
+          },
+          {
+            data: orgData[3].value2,
+            label: orgData[3].id2,
+            fill: true,
+            backgroundColor: "rgba(178,34,34)",
+            
+
+          },
+        ],
+        }}
+        options = {{
+          plugins: {
+            legend: { position: "bottom" },
+            title: {
+              display: true,
+              text: visualisationName
+          }
+          },
+          responsive: true
+        }}
+      />
+    )
+   
+    return barChart
+}
 
   

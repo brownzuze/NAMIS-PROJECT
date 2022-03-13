@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from '../App.module.css';
-import { LineChartWithpeLabel, ChartWithPeRow, StackedChartWithPeRow, ChartWithPeOuRow, LineChart, BarChartsWithOuRow, PieChart} from './RenderGraph';
+import { OuRowCharts, LineChartWithpeLabel, ChartWithPeRow, StackedChartWithPeRow, ChartWithPeOuRow, LineChart, BarChartsWithOuRow, PieChart} from './RenderGraph';
 import {getDashboards, getIndicators, getorganisationUnitGroups, getOrganisationUnits} from '../api';
 import {ADDRESS_URL} from '../api';
 import { Box, Card, Grid, Typography } from "@material-ui/core";
@@ -34,291 +34,121 @@ class AntCharts extends React.Component {
         return <div>Loading....</div>
       }
 
-            const dashIds = dashboards.map(ids => ids.id)
+        const dashIds = dashboards.map(ids => ids.id)
     
-            var dataValues = $.ajax({
-             url: ADDRESS_URL + `/37/dashboards/${dashIds[0]}.json?fields=id,displayName,displayDescription,favorite~rename(starred),access,restrictFilters,allowedFilters,layout,itemConfig,dashboardItems%5Bid%2Ctype%2Cshape%2Cx%2Cy%2Cwidth~rename(w)%2Cheight~rename(h)%2Cmessages%2Ctext%2CappKey%2Creports%5Btype%2Cid%2CdisplayName~rename(name)%5D%2Cresources%5Bid%2CdisplayName~rename(name)%5D%2Cusers%5Bid%2CdisplayName~rename(name)%5D%2Cvisualization%5Bid%2CdisplayName~rename(name)%2Ctype%2CdisplayDescription~rename(description)%5D%2Cmap%5Bid%2CdisplayName~rename(name)%2Ctype%2CdisplayDescription~rename(description)%5D%2CeventReport%5Bid%2CdisplayName~rename(name)%2Ctype%2CdisplayDescription~rename(description)%5D%2CeventChart%5Bid%2CdisplayName~rename(name)%2Ctype%2CdisplayDescription~rename(description)%5D%5D`,
-              dataType: "json",
-              headers: { "Authorization": "Basic " + btoa("admin" + ":" + "district") },
-              success: function (data) { },
-              async: false,
-              error: function (err) {
-                console.log(err);
-              }
-              }).responseJSON;
+        var dataValues = $.ajax({
+        url: ADDRESS_URL + `/37/dashboards/${dashIds[0]}.json?fields=id,displayName,displayDescription,favorite~rename(starred),access,restrictFilters,allowedFilters,layout,itemConfig,dashboardItems%5Bid%2Ctype%2Cshape%2Cx%2Cy%2Cwidth~rename(w)%2Cheight~rename(h)%2Cmessages%2Ctext%2CappKey%2Creports%5Btype%2Cid%2CdisplayName~rename(name)%5D%2Cresources%5Bid%2CdisplayName~rename(name)%5D%2Cusers%5Bid%2CdisplayName~rename(name)%5D%2Cvisualization%5Bid%2CdisplayName~rename(name)%2Ctype%2CdisplayDescription~rename(description)%5D%2Cmap%5Bid%2CdisplayName~rename(name)%2Ctype%2CdisplayDescription~rename(description)%5D%2CeventReport%5Bid%2CdisplayName~rename(name)%2Ctype%2CdisplayDescription~rename(description)%5D%2CeventChart%5Bid%2CdisplayName~rename(name)%2Ctype%2CdisplayDescription~rename(description)%5D%5D`,
+        dataType: "json",
+        headers: { "Authorization": "Basic " + btoa("admin" + ":" + "district") },
+        success: function (data) { },
+        async: false,
+        error: function (err) {
+          console.log(err);
+         }
+        }).responseJSON;
               
-               const dashboardItemsData = dataValues.dashboardItems
-               console.log(dashboardItemsData)
+        const dashboardItemsData = dataValues.dashboardItems
+        console.log(dashboardItemsData)
                
-               //looping dashboardItems
-              let dashboardItemArray = []
-               for (let i=0; i < dashboardItemsData.length; i++ ) {
-                if (dashboardItemsData[i].visualization) {
-                  var visualizationId = dashboardItemsData[i].visualization.id
+        //looping dashboardItems
+         let dashboardItemArray = []
+         for (let i=0; i < dashboardItemsData.length; i++ ) {
+         if (dashboardItemsData[i].visualization) {
+         var visualizationId = dashboardItemsData[i].visualization.id
 
-                  var actualVitualization = $.ajax({
-                    url: ADDRESS_URL + `/visualizations/${visualizationId}.json?fields=*`,
-                    dataType: "json",
-                    headers: { "Authorization": "Basic " + btoa("admin" + ":" + "district") },
-                    success: function (data) { },
-                    async: false,
-                    error: function (err) {
-                    console.log(err);
-                   }
-                  }).responseJSON;
+         var actualVitualization = $.ajax({
+         url: ADDRESS_URL + `/37/visualizations/${visualizationId}.json?fields=id%2CdisplayName~rename(name)%2Ctype%2CdisplayDescription~rename(description)%2Ccolumns%5Bdimension%2ClegendSet%5Bid%5D%2Cfilter%2CprogramStage%2Citems%5BdimensionItem~rename(id)%2CdisplayName~rename(name)%2CdimensionItemType%5D%5D%2Crows%5Bdimension%2ClegendSet%5Bid%5D%2Cfilter%2CprogramStage%2Citems%5BdimensionItem~rename(id)%2CdisplayName~rename(name)%2CdimensionItemType%5D%5D%2Cfilters%5Bdimension%2ClegendSet%5Bid%5D%2Cfilter%2CprogramStage%2Citems%5BdimensionItem~rename(id)%2CdisplayName~rename(name)%2CdimensionItemType%5D%5D%2C*%2C!attributeDimensions%2C!attributeValues%2C!category%2C!categoryDimensions%2C!categoryOptionGroupSetDimensions%2C!columnDimensions%2C!dataDimensionItems%2C!dataElementDimensions%2C!dataElementGroupSetDimensions%2C!filterDimensions%2C!itemOrganisationUnitGroups%2C!lastUpdatedBy%2C!organisationUnitGroupSetDimensions%2C!organisationUnitLevels%2C!organisationUnits%2C!programIndicatorDimensions%2C!relativePeriods%2C!reportParams%2C!rowDimensions%2C!translations%2C!userOrganisationUnit%2C!userOrganisationUnitChildren%2C!userOrganisationUnitGrandChildren`,
+         dataType: "json",
+         headers: { "Authorization": "Basic " + btoa("admin" + ":" + "district") },
+         success: function (data) { },
+         async: false,
+         error: function (err) {
+          console.log(err);
+          }
+         }).responseJSON;
                   
-                   console.log(actualVitualization)
-                   if (actualVitualization.type==="COLUMN" && actualVitualization.rowDimensions[0]==="pe" && actualVitualization.rowDimensions[1] === "ou"){
-                      console.log("data")
-                      const visualisationName = actualVitualization.displayName
-                      const period = actualVitualization.relativePeriods
-                      const dataDimension = actualVitualization.dataDimensionItems.map(ids => ids.indicator.id)
-                      //const dataDimension = visualisationMetadata.dataDimensionItems.map(ids => ids.indicator.id)
-                      //const dataDimension = visualisationMetadata.dataDimensionItems.map(ids => ids.dataElement.id)
-                     const orgUnits = actualVitualization.organisationUnits.map(ids => ids.id)
-                     console.log(orgUnits)
-                     console.log(dataDimension)
-                     console.log(period)
+         console.log(actualVitualization)
+                   
+      if (actualVitualization.type==="COLUMN" && actualVitualization.rows[0].dimension ==="ou" && actualVitualization.filters[0].dimension ==="pe" ){
 
-  var text = "";
-  for (var key in period) {
-  if (period[key] == true) {
-      text = key
-  }
+        const OuItems = actualVitualization.rows[0].items
+        console.log()
+        const orgUnits =  OuItems.map(ids => ids.id)
+        console.log( orgUnits)
+        const peItem= actualVitualization.filters[0].items
+        const period = peItem[0].name
+        console.log( period)
+        const dimensionItems = actualVitualization.columns[0].items
+        console.log(dimensionItems)
+        const dataDimension = dimensionItems.map(ids => ids.id)
+        console.log(dataDimension)
+        const visualisationName = actualVitualization.name
+        console.log(visualisationName)
+
+      //appending the organisation unit dimension with ; 
+ 
+        const dxArray = []
+         for(var k = 0; k < dataDimension.length; k++){
+         dxArray.push(dataDimension[k]+";")
+        }
+        const dataDimensionString = dxArray.join('')
+        console.log(dataDimensionString)
+
+
+       //appending the organisation unit dimension with ; 
+       const array = []
+       for(var r = 0; r < orgUnits.length; r++){
+       array.push(orgUnits[r]+";")
+       }
+       const orgUnitsString = array.join('')
+       console.log(orgUnitsString)
+
+       var dataValues = $.ajax({
+       url: ADDRESS_URL + `/analytics.json?dimension=dx:${dataDimensionString}&dimension=ou:${orgUnitsString}&dimension=pe:${period}`,
+       dataType: "json",
+       headers: { "Authorization": "Basic " + btoa("admin" + ":" + "district") },
+       success: function (data) { },
+       async: false,
+       error: function (err) {
+       console.log(err);
+     }
+    }).responseJSON;
+
+    console.log(dataValues.rows)
+
+    dashboardItemArray.push( <div className={styles.card}>{OuRowCharts(organisationUnits,indicators, dataValues, visualisationName)}</div>)
+
 }
-var newString = "";
-var wasUpper = false;
-for (var q = 0; q < text.length; q++)
-{
-  if (!wasUpper && text[q] == text.toUpperCase()[q] && isNaN(text[q]))
-  {
-    
-      newString = newString + "_";
-      wasUpper = true;
-  }
+
+if (actualVitualization.type==="STACKED_COLUMN" && actualVitualization.filters.length == 2  && actualVitualization.rows[0].dimension ==="pe" ){
+
+  const chartIndicator = actualVitualization.columns[0].dimension
+  console.log( chartIndicator)
+  const orgUnitGroups = actualVitualization.columns[0].items.map(ids => ids.id)
+  console.log(orgUnitGroups)
+  const dataDimension = actualVitualization.filters[1].items.map(ids => ids.id)
+  console.log(dataDimension)
+  const orgUnits = actualVitualization.filters[0].items.map(ids => ids.id)
+  console.log(orgUnits)
+  const period = actualVitualization.rows[0].items[0].name
+  console.log( period)
+  const visualisationName = actualVitualization.name
+  console.log(visualisationName)
   
-  else
-  {
-      wasUpper = false;
-  }
-  newString = newString + text[q];
-}
-
-const periodFormat = newString.toUpperCase()
-console.log(newString)
-
-var textdigit = "";
-var firstDigit = false;
-
-for (var j = 0; j < newString.length; j++)
-{
-  if (!firstDigit && !isNaN(newString[j]))
-  {
-    
-      textdigit = textdigit + "_";
-      firstDigit = true;
-  }
-  
-  else
-  {
-      firstDigit = false;
-  }
-  textdigit = textdigit + newString[j];
-}
-const newPeFormat = textdigit.toUpperCase()
-console.log(newPeFormat)
-
-
-//appending the data Dimension with ;
-const dxArray = []
-  for(var k = 0; k < dataDimension.length; k++){
-    dxArray.push(dataDimension[k]+";")
-  }
-  const dataDimensionString = dxArray.join('')
-  console.log(dataDimensionString)
-
+  //adding pending indicator with ;
+const ChartIndicatorString = chartIndicator + ":"
+console.log(ChartIndicatorString)
 
 //appending the organisation unit dimension with ; 
-  const array = []
-  for(var r = 0; r < orgUnits.length; r++){
-    array.push(orgUnits[r]+";")
-  }
-  const orgUnitsString = array.join('')
-  console.log(orgUnitsString)
-
- var dataValues = $.ajax({
-  url: ADDRESS_URL + `/analytics.json?dimension=dx:${dataDimensionString}&dimension=ou:${orgUnitsString}&dimension=pe:${newPeFormat}`,
-  dataType: "json",
-  headers: { "Authorization": "Basic " + btoa("admin" + ":" + "district") },
-  success: function (data) { },
-  async: false,
-  error: function (err) {
-    console.log(err);
-  }
-}).responseJSON;
-
-console.log(dataValues.rows)
-
-dashboardItemArray.push( <div className={styles.card}>{ChartWithPeOuRow(organisationUnits,indicators, dataValues, visualisationName)}</div>)
-
-
-                   }
-                   if (actualVitualization.type==="COLUMN" && actualVitualization.rowDimensions[0]==="pe" && actualVitualization.rowDimensions[1] == null){
-                    console.log("got it")
-                    const visualisationName = actualVitualization.displayName
-    const period = actualVitualization.relativePeriods
-    //const orgUnitGroups = visualisationMetadata.organisationUnitGroupSetDimensions[0].organisationUnitGroups.map(ids => ids.id)
-    const dataDimension = actualVitualization.dataDimensionItems.map(ids => ids.indicator.id)
-    //const dataDimension = visualisationMetadata.dataDimensionItems.map(ids => ids.indicator.id)
-    //const dataDimension = visualisationMetadata.dataDimensionItems.map(ids => ids.dataElement.id)
-    const orgUnits = actualVitualization.organisationUnits.map(ids => ids.id)
-    console.log(orgUnits)
-    console.log(dataDimension)
-    console.log(period)
-  
-    var text = "";
-    for (var key in period) {
-    if (period[key] == true) {
-        text = key
-    }
-  }
-var newString = "";
-var wasUpper = false;
-for (var u = 0; u < text.length; u++)
-{
-    if (!wasUpper && text[u] == text.toUpperCase()[u] && isNaN(text[u]))
-    {
-      
-        newString = newString + "_";
-        wasUpper = true;
-    }
-    
-    else
-    {
-        wasUpper = false;
-    }
-    newString = newString + text[u];
+var array = []
+for(var j = 0; j < orgUnitGroups.length; j++){
+  array.push(orgUnitGroups[j]+";")
 }
-
- const periodFormat = newString.toUpperCase()
- console.log(newString)
- 
- var textdigit = "";
- var firstDigit = false;
- 
- for (var t = 0; t < newString.length; t++)
-{
-    if (!firstDigit && !isNaN(newString[t]))
-    {
-      
-        textdigit = textdigit + "_";
-        firstDigit = true;
-    }
-    
-    else
-    {
-        firstDigit = false;
-    }
-    textdigit = textdigit + newString[t];
-}
-const newPeFormat = textdigit.toUpperCase()
-console.log(newPeFormat)
-
-
- //appending the data Dimension with ;
- const dxArray = []
-    for(var t = 0; t < dataDimension.length; t++){
-      dxArray.push(dataDimension[t]+";")
-    }
-    const dataDimensionString = dxArray.join('')
-    console.log(dataDimensionString)
-
-  
- //appending the organisation unit dimension with ; 
-    const array = []
-    for(var t = 0; t < orgUnits.length; t++){
-      array.push(orgUnits[t]+";")
-    }
-    const orgUnitsString = array.join('')
-    console.log(orgUnitsString)
-
-
-   var dataValues = $.ajax({
-    url: ADDRESS_URL + `/analytics.json?dimension=dx:${dataDimensionString}&dimension=ou:${orgUnitsString}&dimension=pe:${newPeFormat}`,
-    dataType: "json",
-    headers: { "Authorization": "Basic " + btoa("admin" + ":" + "district") },
-    success: function (data) { },
-    async: false,
-    error: function (err) {
-      console.log(err);
-    }
-  }).responseJSON;
-
-  console.log(dataValues.rows)
-
-  dashboardItemArray.push( <div className={styles.card}>{ChartWithPeRow(organisationUnits, dataValues, visualisationName)}</div>)
-                   }
-                   if (actualVitualization.type==="STACKED_COLUMN" && actualVitualization.rowDimensions[0]==="pe"){
-                       console.log("stacked")
-                       const visualisationName = actualVitualization.displayName
-const period = actualVitualization.relativePeriods
-const chartIndicator = actualVitualization.organisationUnitGroupSetDimensions.map(ids =>ids.organisationUnitGroupSet.id)
-const orgUnitGroups = actualVitualization.organisationUnitGroupSetDimensions.map(orgids => orgids.organisationUnitGroups.map(ids => ids.id))
-const dataDimension = actualVitualization.dataDimensionItems.map(ids => ids.dataElement.id)
-const orgUnits = actualVitualization.organisationUnits.map(ids => ids.id)
-console.log(orgUnitGroups)
-console.log(chartIndicator)
-console.log(dataDimension)
-console.log(period)
-
-var text = "";
-for (var key in period) {
-if (period[key] == true) {
-    text = key
-}
-}
-var newString = "";
-var wasUpper = false;
-for (var j = 0; j < text.length; j++)
-{
-if (!wasUpper && text[j] == text.toUpperCase()[j] && isNaN(text[j]))
-{
-  
-    newString = newString + "_";
-    wasUpper = true;
-}
-
-else
-{
-    wasUpper = false;
-}
-newString = newString + text[j];
-}
-
-const periodFormat = newString.toUpperCase()
-console.log(newString)
-
-var textdigit = "";
-var firstDigit = false;
-
-for (var j = 0; j < newString.length; j++)
-{
-if (!firstDigit && !isNaN(newString[j]))
-{
-  
-    textdigit = textdigit + "_";
-    firstDigit = true;
-}
-
-else
-{
-    firstDigit = false;
-}
-textdigit = textdigit + newString[j];
-}
-const newPeFormat = textdigit.toUpperCase()
-console.log(newPeFormat)
-
+const orgUnitsString = array.join('')
+console.log(orgUnitsString)
+//concatinating the actual dataDimension
+const orgUnitGroupDx = ChartIndicatorString + orgUnitsString
+console.log(orgUnitGroupDx) 
 
 //appending the data Dimension with ;
 const dxArray = []
@@ -330,24 +160,6 @@ console.log(dataDimensionString)
 
 console.log(orgUnitGroups)
 
-//adding pending indicator with ;
-const InArray = []
-for(var j = 0; j < chartIndicator.length; j++){
-  InArray.push(chartIndicator[j]+":")
-}
-const ChartIndicatorString = InArray.join('')
-console.log(ChartIndicatorString)
-
-//appending the organisation unit dimension with ; 
-var array = []
-for(var j = 0; j < orgUnitGroups[0].length; j++){
-  array.push(orgUnitGroups[0][j]+";")
-}
-const orgUnitsString = array.join('')
-console.log(orgUnitsString)
-//concatinating the actual dataDimension
-const orgUnitGroupDx = ChartIndicatorString + orgUnitsString
-console.log(orgUnitGroupDx) 
 
  //appending the organisation unit dimension with ; 
  const orgarray = []
@@ -358,7 +170,7 @@ console.log(orgUnitGroupDx)
  console.log(orgUnitsString)
 
 var dataValues = $.ajax({
-  url: ADDRESS_URL + `/analytics.json?dimension=${orgUnitGroupDx}&dimension=dx:${dataDimensionString}&dimension=pe:${newPeFormat}&filter=ou:${actualOrgUnitsString}`,
+  url: ADDRESS_URL + `/analytics.json?dimension=${orgUnitGroupDx}&dimension=dx:${dataDimensionString}&dimension=pe:${period}&filter=ou:${actualOrgUnitsString}`,
   dataType: "json",
   headers: { "Authorization": "Basic " + btoa("admin" + ":" + "district") },
   success: function (data) { },
@@ -373,353 +185,127 @@ console.log()
 console.log(dataValues.rows)
 
 dashboardItemArray.push(<div className={styles.card}>{StackedChartWithPeRow(organisationUnitGroups, dataValues, visualisationName)}</div>)
-                   }
-                   if (actualVitualization.type==="LINE" && actualVitualization.rowDimensions[0]==="pe" && actualVitualization.yearlySeries[0]==null){
-                    console.log("line")
-                    const visualisationName = actualVitualization.displayName
-  const period =actualVitualization.relativePeriods
-  //const dataDimension = visualisationMetadata.dataDimensionItems.map(ids => ids.indicator.id)
-  //const dataDimension = visualisationMetadata.dataDimensionItems.map(ids => ids.indicator.id)
-  const dataDimension = actualVitualization.dataDimensionItems.map(ids => ids.dataElement.id)
-  const orgUnits = actualVitualization.organisationUnits.map(ids => ids.id)
-  console.log(orgUnits)
+ 
+ 
+}
+
+if (actualVitualization.type==="COLUMN"  && actualVitualization.rows.length == 2 && actualVitualization.rows[0].dimension ==="pe" && actualVitualization.rows[1].dimension ==="ou"){
+
+  const OuItems = actualVitualization.rows[1].items
+   console.log()
+  const orgUnits =  OuItems.map(ids => ids.id)
+  console.log( orgUnits)
+  const peItem=  actualVitualization.rows[0].items
+  const period = peItem[0].name
+  console.log( period)
+  const dimensionItems = actualVitualization.columns[0].items
+  console.log(dimensionItems)
+  const dataDimension = dimensionItems.map(ids => ids.id)
   console.log(dataDimension)
-  console.log(period)
+  const visualisationName = actualVitualization.name
+  console.log(visualisationName)
+ 
+ 
+ 
+ 
+ 
+ const dxArray = []
+   for(var k = 0; k < dataDimension.length; k++){
+     dxArray.push(dataDimension[k]+";")
+   }
+   const dataDimensionString = dxArray.join('')
+   console.log(dataDimensionString)
+ 
+ 
+ //appending the organisation unit dimension with ; 
+   const array = []
+   for(var r = 0; r < orgUnits.length; r++){
+     array.push(orgUnits[r]+";")
+   }
+   const orgUnitsString = array.join('')
+   console.log(orgUnitsString)
+ 
+  var dataValues = $.ajax({
+   url: ADDRESS_URL + `/analytics.json?dimension=dx:${dataDimensionString}&dimension=ou:${orgUnitsString}&dimension=pe:${period}`,
+   dataType: "json",
+   headers: { "Authorization": "Basic " + btoa("admin" + ":" + "district") },
+   success: function (data) { },
+   async: false,
+   error: function (err) {
+     console.log(err);
+   }
+ }).responseJSON;
+ 
+ console.log(dataValues.rows)
+ 
+ dashboardItemArray.push( <div className={styles.card}>{ChartWithPeOuRow(organisationUnits,indicators, dataValues, visualisationName)}</div>)
+ 
+ }
 
-  var text = "";
-  for (var key in period) {
-  if (period[key] == true) {
-      text = key
-  }
-}
-var newString = "";
-var wasUpper = false;
-for (var j = 0; j < text.length; j++)
-{
-  if (!wasUpper && text[j] == text.toUpperCase()[j] && isNaN(text[j]))
-  {
-    
-      newString = newString + "_";
-      wasUpper = true;
-  }
-  
-  else
-  {
-      wasUpper = false;
-  }
-  newString = newString + text[j];
-}
+ if (actualVitualization.type==="COLUMN"  && actualVitualization.rows.length == 1 && actualVitualization.rows[0].dimension ==="pe" && actualVitualization.columns[0].dimension ==="ou"){
 
-const periodFormat = newString.toUpperCase()
-console.log(newString)
-
-var textdigit = "";
-var firstDigit = false;
-
-for (var j = 0; j < newString.length; j++)
-{
-  if (!firstDigit && !isNaN(newString[j]))
-  {
-    
-      textdigit = textdigit + "_";
-      firstDigit = true;
-  }
-  
-  else
-  {
-      firstDigit = false;
-  }
-  textdigit = textdigit + newString[j];
-}
-const newPeFormat = textdigit.toUpperCase()
-console.log(newPeFormat)
-
-
-//appending the data Dimension with ;
-const dxArray = []
-  for(var j = 0; j < dataDimension.length; j++){
-    dxArray.push(dataDimension[j]+";")
-  }
-  const dataDimensionString = dxArray.join('')
-  console.log(dataDimensionString)
-
-
-//appending the organisation unit dimension with ; 
-  const array = []
-  for(var j = 0; j < orgUnits.length; j++){
-    array.push(orgUnits[j]+";")
-  }
-  const orgUnitsString = array.join('')
-  console.log(orgUnitsString)
-
- var dataValues = $.ajax({
-  url: ADDRESS_URL + `/analytics.json?dimension=dx:${dataDimensionString}&dimension=ou:${orgUnitsString}&dimension=pe:${newPeFormat}`,
-  dataType: "json",
-  headers: { "Authorization": "Basic " + btoa("admin" + ":" + "district") },
-  success: function (data) { },
-  async: false,
-  error: function (err) {
-    console.log(err);
-  }
-}).responseJSON;
-
-console.log(dataValues.rows)
-
-dashboardItemArray.push(<div className={styles.card}>{LineChart(organisationUnits, dataValues, visualisationName)}</div>)
-
-                   }
-                   if (actualVitualization.type==="YEAR_OVER_YEAR_LINE" ){
-                    console.log("found")
-                    const visualisationName = actualVitualization.displayName
-  const period = actualVitualization.relativePeriods
-  //const dataDimension = visualisationMetadata.dataDimensionItems.map(ids => ids.indicator.id)
-  //const dataDimension = visualisationMetadata.dataDimensionItems.map(ids => ids.indicator.id)
-  const dataDimension = actualVitualization.dataDimensionItems.map(ids => ids.indicator.id)
-  const orgUnits = actualVitualization.organisationUnits.map(ids => ids.id)
-  console.log(orgUnits)
+  const dataDimension = actualVitualization.filters[0].items.map(ids => ids.id)
+  const peItem=  actualVitualization.rows[0].items
+  const period = peItem[0].name
+  console.log( period)
+  const OuItems = actualVitualization.columns[0].items
+  const orgUnits =  OuItems.map(ids => ids.id)
   console.log(dataDimension)
-  console.log(period)
+  const visualisationName = actualVitualization.name
+  console.log(visualisationName)
+ 
+ 
+ 
+ 
+ 
+ const dxArray = []
+   for(var k = 0; k < dataDimension.length; k++){
+     dxArray.push(dataDimension[k]+";")
+   }
+   const dataDimensionString = dxArray.join('')
+   console.log(dataDimensionString)
+ 
+ 
+ //appending the organisation unit dimension with ; 
+   const array = []
+   for(var r = 0; r < orgUnits.length; r++){
+     array.push(orgUnits[r]+";")
+   }
+   const orgUnitsString = array.join('')
+   console.log(orgUnitsString)
+ 
+  var dataValues = $.ajax({
+   url: ADDRESS_URL + `/analytics.json?dimension=dx:${dataDimensionString}&dimension=ou:${orgUnitsString}&dimension=pe:${period}`,
+   dataType: "json",
+   headers: { "Authorization": "Basic " + btoa("admin" + ":" + "district") },
+   success: function (data) { },
+   async: false,
+   error: function (err) {
+     console.log(err);
+   }
+ }).responseJSON;
+ 
+ console.log(dataValues.rows)
+ 
+ dashboardItemArray.push( <div className={styles.card}>{ChartWithPeRow(organisationUnits, dataValues, visualisationName)}</div>)
+ 
+ }
 
-  var text = "";
-  for (var key in period) {
-  if (period[key] == true) {
-      text = key
-  }
-}
-var newString = "";
-var wasUpper = false;
-for (var j = 0; j < text.length; j++)
-{
-  if (!wasUpper && text[j] == text.toUpperCase()[j] && isNaN(text[j]))
-  {
-    
-      newString = newString + "_";
-      wasUpper = true;
-  }
-  
-  else
-  {
-      wasUpper = false;
-  }
-  newString = newString + text[j];
-}
+ if (actualVitualization.type==="PIE" && actualVitualization.filters[0].dimension==="pe" && actualVitualization.filters.length==3){
 
-const periodFormat = newString.toUpperCase()
-console.log(newString)
+  const chartIndicator = actualVitualization.columns.map(ids =>ids.dimension)
+  const dataDimension = actualVitualization.filters[1].items.map(ids => ids.id)
+  const orgUnitGroups =actualVitualization.columns[0].items.map(ids => ids.id)
 
-var textdigit = "";
-var firstDigit = false;
-
-for (var j = 0; j < newString.length; j++)
-{
-  if (!firstDigit && !isNaN(newString[j]))
-  {
-    
-      textdigit = textdigit + "_";
-      firstDigit = true;
-  }
-  
-  else
-  {
-      firstDigit = false;
-  }
-  textdigit = textdigit + newString[j];
-}
-const newPeFormat = textdigit.toUpperCase()
-console.log(newPeFormat)
-
-
-//appending the data Dimension with ;
-const dxArray = []
-  for(var j = 0; j < dataDimension.length; j++){
-    dxArray.push(dataDimension[j]+";")
-  }
-  const dataDimensionString = dxArray.join('')
-  console.log(dataDimensionString)
-
-
-//appending the organisation unit dimension with ; 
-  const array = []
-  for(var j = 0; j < orgUnits.length; j++){
-    array.push(orgUnits[j]+";")
-  }
-  const orgUnitsString = array.join('')
-  console.log(orgUnitsString)
-
- var dataValues = $.ajax({
-  url: ADDRESS_URL + `/analytics.json?dimension=pe:${newPeFormat}&dimension=ou:${orgUnitsString}&dimension=dx:${dataDimensionString}`,
-  dataType: "json",
-  headers: { "Authorization": "Basic " + btoa("admin" + ":" + "district") },
-  success: function (data) { },
-  async: false,
-  error: function (err) {
-    console.log(err);
-  }
-}).responseJSON;
-
-console.log(dataValues.rows)
-
-dashboardItemArray.push(<div className={styles.card}>{LineChartWithpeLabel(dataValues, visualisationName)}</div>)
-
-
-                   }
-
-                   if (actualVitualization.type==="COLUMN" && actualVitualization.rowDimensions[0]==="ou" ){
-                    console.log("ourow")
-                    const visualisationName = actualVitualization.displayName
-const period = actualVitualization.relativePeriods
-//const orgUnitGroups = visualisationMetadata.organisationUnitGroupSetDimensions[0].organisationUnitGroups.map(ids => ids.id)
-const dataDimension = actualVitualization.dataDimensionItems.map(ids => ids.indicator.id)
-//const dataDimension = visualisationMetadata.dataDimensionItems.map(ids => ids.indicator.id)
-//const dataDimension = visualisationMetadata.dataDimensionItems.map(ids => ids.dataElement.id)
-const orgUnits =actualVitualization.organisationUnits.map(ids => ids.id)
-console.log(orgUnits)
-console.log(dataDimension)
-console.log(period)
-
-var text = "";
-for (var key in period) {
-if (period[key] == true) {
-    text = key
-}
-}
-var newString = "";
-var wasUpper = false;
-for (var j = 0; j < text.length; j++)
-{
-if (!wasUpper && text[j] == text.toUpperCase()[j] && isNaN(text[j]))
-{
-  
-    newString = newString + "_";
-    wasUpper = true;
-}
-
-else
-{
-    wasUpper = false;
-}
-newString = newString + text[j];
-}
-
-const periodFormat = newString.toUpperCase()
-console.log(newString)
-
-var textdigit = "";
-var firstDigit = false;
-
-for (var j = 0; j < newString.length; j++)
-{
-if (!firstDigit && !isNaN(newString[j]))
-{
-  
-    textdigit = textdigit + "_";
-    firstDigit = true;
-}
-
-else
-{
-    firstDigit = false;
-}
-textdigit = textdigit + newString[j];
-}
-const newPeFormat = textdigit.toUpperCase()
-console.log(newPeFormat)
-
-
-//appending the data Dimension with ;
-const dxArray = []
-for(var j = 0; j < dataDimension.length; j++){
-  dxArray.push(dataDimension[j]+";")
-}
-const dataDimensionString = dxArray.join('')
-console.log(dataDimensionString)
-
-
-//appending the organisation unit dimension with ; 
-const array = []
-for(var j = 0; j < orgUnits.length; j++){
-  array.push(orgUnits[j]+";")
-}
-const orgUnitsString = array.join('')
-console.log(orgUnitsString)
-
-var dataValues = $.ajax({
-url: ADDRESS_URL + `/analytics.json?dimension=dx:${dataDimensionString}&dimension=ou:${orgUnitsString}&dimension=pe:${newPeFormat}`,
-dataType: "json",
-headers: { "Authorization": "Basic " + btoa("admin" + ":" + "district") },
-success: function (data) { },
-async: false,
-error: function (err) {
-  console.log(err);
-}
-}).responseJSON;
-
-console.log(dataValues.rows)
-
-dashboardItemArray.push(<div className={styles.card}>{BarChartsWithOuRow(organisationUnits, dataValues, visualisationName)}</div>)
-
-                   }
-                   if (actualVitualization.type==="PIE"){
-                     console.log("pie")
-                     const visualisationName = actualVitualization.displayName
-const period = actualVitualization.relativePeriods
-const chartIndicator = actualVitualization.organisationUnitGroupSetDimensions.map(ids =>ids.organisationUnitGroupSet.id)
-const orgUnitGroups =actualVitualization.organisationUnitGroupSetDimensions.map(orgids => orgids.organisationUnitGroups.map(ids => ids.id))
-const dataDimension = actualVitualization.dataDimensionItems.map(ids => ids.dataElement.id)
-console.log(orgUnitGroups)
-console.log(chartIndicator)
-console.log(dataDimension)
-console.log(period)
-
-var text = "";
-for (var key in period) {
-if (period[key] == true) {
-    text = key
-}
-}
-var newString = "";
-var wasUpper = false;
-for (var j = 0; j < text.length; j++)
-{
-if (!wasUpper && text[j] == text.toUpperCase()[j] && isNaN(text[j]))
-{
-  
-    newString = newString + "_";
-    wasUpper = true;
-}
-
-else
-{
-    wasUpper = false;
-}
-newString = newString + text[j];
-}
-
-const periodFormat = newString.toUpperCase()
-console.log(newString)
-
-var textdigit = "";
-var firstDigit = false;
-
-for (var j = 0; j < newString.length; j++)
-{
-if (!firstDigit && !isNaN(newString[j]))
-{
-  
-    textdigit = textdigit + "_";
-    firstDigit = true;
-}
-
-else
-{
-    firstDigit = false;
-}
-textdigit = textdigit + newString[j];
-}
-const newPeFormat = textdigit.toUpperCase()
-console.log(newPeFormat)
-
-
+  const peItem=  actualVitualization.filters[0].items
+  const period = peItem[0].id
+  console.log( period)
+  const OuItems = actualVitualization.filters[2].items
+  const orgUnits =  OuItems.map(ids => ids.id)
+  console.log(dataDimension)
+  const visualisationName = actualVitualization.name
+  console.log(visualisationName)
+ 
 //appending the data Dimension with ;
 const dxArray = []
 for(var j = 0; j < dataDimension.length; j++){
@@ -740,8 +326,8 @@ console.log(ChartIndicatorString)
 
 //appending the organisation unit dimension with ; 
 var array = []
-for(var j = 0; j < orgUnitGroups[0].length; j++){
-  array.push(orgUnitGroups[0][j]+";")
+for(var j = 0; j < orgUnitGroups.length; j++){
+  array.push(orgUnitGroups[j]+";")
 }
 const orgUnitsString = array.join('')
 console.log(orgUnitsString)
@@ -750,7 +336,7 @@ const orgUnitGroupDx = ChartIndicatorString + orgUnitsString
 console.log(orgUnitGroupDx) 
 
 var dataValues = $.ajax({
-  url: ADDRESS_URL + `/analytics.json?dimension=${orgUnitGroupDx}&filter=pe:${newPeFormat}&filter=dx:${dataDimensionString}&filter=ou:USER_ORGUNIT&includeNumDen=false&skipMeta=true&skipData=false`,
+  url: ADDRESS_URL + `/analytics.json?dimension=${orgUnitGroupDx}&filter=pe:${period}&filter=dx:${dataDimensionString}&filter=ou:${orgUnits}&includeNumDen=false&skipMeta=true&skipData=false`,
   dataType: "json",
   headers: { "Authorization": "Basic " + btoa("admin" + ":" + "district") },
   success: function (data) { },
@@ -763,24 +349,108 @@ var dataValues = $.ajax({
 console.log(dataValues.rows)
 
 dashboardItemArray.push(<div className={styles.card}>{PieChart(organisationUnitGroups, dataValues, visualisationName)}</div>)
+}
+ 
+if (actualVitualization.type==="LINE" && actualVitualization.rows[0].dimension==="pe" && actualVitualization.columns[0].dimension==="ou"){
+  console.log("line")
+  const visualisationName = actualVitualization.name
+  const period =actualVitualization.rows[0].items[0].id
+  const dataDimension = actualVitualization.filters[0].items.map(ids => ids.id)
+  const orgUnits = actualVitualization.columns[0].items.map(ids => ids.id)
+  console.log(orgUnits)
+  console.log(dataDimension)
+  console.log(period)
 
 
-                       
-                   }
 
-                   else {
-                    console.log("no data")
+  //appending the data Dimension with ;
+  const dxArray = []
+  for(var j = 0; j < dataDimension.length; j++){
+  dxArray.push(dataDimension[j]+";")
+}
+const dataDimensionString = dxArray.join('')
+console.log(dataDimensionString)
 
-                  } 
+
+//appending the organisation unit dimension with ; 
+const array = []
+for(var j = 0; j < orgUnits.length; j++){
+array.push(orgUnits[j]+";")
+}
+const orgUnitsString = array.join('')
+console.log(orgUnitsString)
+
+var dataValues = $.ajax({
+url: ADDRESS_URL + `/analytics.json?dimension=dx:${dataDimensionString}&dimension=ou:${orgUnitsString}&dimension=pe:${period}`,
+dataType: "json",
+headers: { "Authorization": "Basic " + btoa("admin" + ":" + "district") },
+success: function (data) { },
+async: false,
+error: function (err) {
+console.log(err);
+}
+}).responseJSON;
+
+console.log(dataValues.rows)
+
+dashboardItemArray.push(<div className={styles.card}>{LineChart(organisationUnits, dataValues, visualisationName)}</div>)
+
+}
+
+if (actualVitualization.type==="YEAR_OVER_YEAR_LINE" ){
+  const visualisationName = actualVitualization.name
+  const period = actualVitualization.rows[0].items.map(ids => ids.id)
+  const dataDimension = actualVitualization.filters[1].items.map(ids => ids.id)
+  const orgUnits = actualVitualization.filters[0].items.map(ids => ids.id)
+  console.log(orgUnits)
+  console.log(dataDimension)
+  console.log(period)
+
+//appending the data Dimension with ;
+const dxArray = []
+for(var j = 0; j < dataDimension.length; j++){
+dxArray.push(dataDimension[j]+";")
+}
+const dataDimensionString = dxArray.join('')
+console.log(dataDimensionString)
+
+
+//appending the organisation unit dimension with ; 
+const array = []
+for(var j = 0; j < orgUnits.length; j++){
+array.push(orgUnits[j]+";")
+}
+const orgUnitsString = array.join('')
+console.log(orgUnitsString)
+
+var dataValues = $.ajax({
+url: ADDRESS_URL + `/analytics.json?dimension=pe:${period}&dimension=ou:${orgUnitsString}&dimension=dx:${dataDimensionString}`,
+dataType: "json",
+headers: { "Authorization": "Basic " + btoa("admin" + ":" + "district") },
+success: function (data) { },
+async: false,
+error: function (err) {
+console.log(err);
+}
+}).responseJSON;
+
+console.log(dataValues.rows)
+
+dashboardItemArray.push(<div className={styles.card}>{LineChartWithpeLabel(dataValues, visualisationName)}</div>)
+
+}
+
+else {
+    console.log("no data")
+
+  } 
                   
-                }
-              }
+ }
+}
 
-              
-                
-                return <div className={styles.itemcontainer}>
-                       {dashboardItemArray}
-                       </div>
+    return <div className={styles.itemcontainer}>
+             {dashboardItemArray}
+            </div>
                    
 } 
     render(){
