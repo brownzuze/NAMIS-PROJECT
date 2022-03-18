@@ -1,5 +1,5 @@
 import axios from "axios";
-export const ADDRESS_URL = 'https://play.dhis2.org/2.37.4/api';
+export const ADDRESS_URL = 'https://play.dhis2.org/dev/api';
 const OAuth2 = 'Basic '+btoa('admin:district');
 export const makeApiRequest = async (apiUrl) => {
 
@@ -9,7 +9,7 @@ try{
         {'Authorization': OAuth2,
         'Access-Control-Allow-Origin':'*',
         'Content-type': 'application/json',  
-         'Allow-Cross-Origin-Access': 'https://play.dhis2.org/2.37.4',
+         'Allow-Cross-Origin-Access': 'https://play.dhis2.org/dev',
          "Access-Control-Allow-Credentials" : true,
          'Access-Control-Allow-Headers': 'application/json' }});
 

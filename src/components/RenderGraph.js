@@ -1,12 +1,15 @@
 import  {Bar, Line, Pie} from 'react-chartjs-2';
+import Table from 'react-bootstrap/Table';
 import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
 
 export const ChartWithPeRow = (organisationUnits, dataValues, visualisationName) => {
   const orgIds = dataValues.metaData.dimensions.ou
       const dataItems = dataValues.metaData.items;
+      const peId = dataValues.metaData.dimensions.pe
+
   
-      const dataItemsArr = []
+      /*const dataItemsArr = []
       for (var items in dataItems) {
         var name = dataItems[items].name;
         dataItemsArr.push(name);
@@ -19,7 +22,19 @@ export const ChartWithPeRow = (organisationUnits, dataValues, visualisationName)
            XLabels.push(dataItemsArr[i])
       }
   
+      console.log(XLabels);*/
+
+      const XLabels = []
+      for (var i=0; i<peId.length; i++){
+      for (var items in dataItems) {
+        if(peId[i]===items){
+        var name = dataItems[items].name;
+        XLabels.push(name);
+        }
+      }
+    }
       console.log(XLabels);
+      
   
       //get organisation displayNames
       const OrgUnitsDispNames = []
@@ -836,7 +851,7 @@ console.log(OrgUnitsDispNames);
     console.log(actualData)
   
     //create an array of objects that stores the values in order
-    const XlabelsValues= ["January", "February", "March", "April", "May", "June", "July", "August", "September", "November", "December" ]
+    const XlabelsValues= ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ]
   
     let period = [], value = []
   
@@ -1003,5 +1018,274 @@ console.log(organisationUnitDispNames);
    
     return barChart
 }
+
+export const PivotTable = (organisationUnits, dataValues) => {
+  const orgIds = dataValues.metaData.dimensions.ou
+  const dataItems = dataValues.metaData.items;
+  const rowData = dataValues.rows;
+  const peId = dataValues.metaData.dimensions.pe
+
+  console.log(orgIds)
+  console.log(rowData)
+  console.log(dataItems)
+  console.log(peId)
+
+
+
+  const periodArr = []
+  for (var i=0; i<peId.length; i++){
+  for (var items in dataItems) {
+    if(peId[i]===items){
+    var name = dataItems[items].name;
+    periodArr.push(name);
+    }
+  }
+}
+  console.log(periodArr);
+  
+
+
+  //get organisation displayNames
+  const OrgUnitsDispNames = []
+  organisationUnits.forEach(org => {
+    orgIds.forEach(id => {
+      if (org.id === id) {
+        OrgUnitsDispNames.push(org.displayName)
+      }
+    })
+  })
+  console.log(OrgUnitsDispNames);
+  console.log(orgIds);
+
+  var sortedArr = []
+
+  for (var i=0; i<peId.length; i++){
+    for(var j=0; j<rowData.length; j++){
+      if(peId[i]===rowData[j][1]){
+        sortedArr.push(rowData[j])
+      }
+    }
+  }
+  console.log(sortedArr)
+let orgData = [{
+    id: '',
+    values: [],
+    periods: []
+  }]
+
+  let id = "", value = [], period = []
+
+  for (let i = 0; i < sortedArr.length; i++) {
+      
+    if ( orgIds[0]===sortedArr[i][2]) {
+      id = OrgUnitsDispNames[0]
+      value.push(parseFloat(sortedArr[i][3]))
+      period.push(sortedArr[i][1])
+
+    }
+
+  }
+  orgData.push({ id, value, period })
+
+  let id1 = "", value1 = [], period1 = []
+
+  for (let i = 0; i < sortedArr.length; i++) {
+      
+    if ( orgIds[1]===sortedArr[i][2]) {
+      id1 = OrgUnitsDispNames[1]
+      value1.push(parseFloat(sortedArr[i][3]))
+      period1.push(sortedArr[i][1])
+
+    }
+
+  }
+  orgData.push({ id1, value1, period1 })
+
+  let id2 = "", value2 = [], period2 = []
+
+  for (let i = 0; i < sortedArr.length; i++) {
+      
+    if ( orgIds[2]===sortedArr[i][2]) {
+      id2 = OrgUnitsDispNames[1]
+      value2.push(parseFloat(sortedArr[i][3]))
+      period2.push(sortedArr[i][1])
+
+    }
+
+  }
+  orgData.push({ id2, value2, period2 })
+
+  let id3 = "", value3 = [], period3 = []
+
+  for (let i = 0; i < sortedArr.length; i++) {
+      
+    if ( orgIds[3]===sortedArr[i][2]) {
+      id3 = OrgUnitsDispNames[1]
+      value3.push(parseFloat(sortedArr[i][3]))
+      period3.push(sortedArr[i][1])
+
+    }
+
+  }
+  orgData.push({ id3, value3, period3 })
+
+  let id4 = "", value4 = [], period4 = []
+
+  for (let i = 0; i < sortedArr.length; i++) {
+      
+    if ( orgIds[4]===sortedArr[i][2]) {
+      id4 = OrgUnitsDispNames[1]
+      value4.push(parseFloat(sortedArr[i][3]))
+      period4.push(sortedArr[i][1])
+
+    }
+
+  }
+  orgData.push({ id4, value4, period4 })
+
+  let id5 = "", value5 = [], period5 = []
+
+  for (let i = 0; i < sortedArr.length; i++) {
+      
+    if ( orgIds[5]===sortedArr[i][2]) {
+      id5 = OrgUnitsDispNames[1]
+      value5.push(parseFloat(sortedArr[i][3]))
+      period5.push(sortedArr[i][1])
+
+    }
+
+  }
+  orgData.push({ id5, value5, period5 })
+
+  let id6 = "", value6 = [], period6 = []
+
+  for (let i = 0; i < sortedArr.length; i++) {
+      
+    if ( orgIds[6]===sortedArr[i][2]) {
+      id6 = OrgUnitsDispNames[1]
+      value6.push(parseFloat(sortedArr[i][3]))
+      period6.push(sortedArr[i][1])
+
+    }
+
+  }
+  orgData.push({ id6, value6, period6 })
+
+  let id7 = "", value7 = [], period7 = []
+
+  for (let i = 0; i < sortedArr.length; i++) {
+      
+    if ( orgIds[7]===sortedArr[i][2]) {
+      id7 = OrgUnitsDispNames[1]
+      value7.push(parseFloat(sortedArr[i][3]))
+      period7.push(sortedArr[i][1])
+
+    }
+
+  }
+  orgData.push({ id7, value7, period7 })
+console.log(orgData)
+  const PivotChart = (
+    <Table striped border hover responsive>
+    <thead>
+      <tr>
+        <th>organisationUnit</th>
+         {periodArr.map(name => (
+            <th>{name}</th>
+         ))}
+     </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{OrgUnitsDispNames[0]}</td>
+        {
+          orgData[1].value.map(items =>(
+            
+            <td>{items}</td>
+           
+          ))
+        }
+        </tr>
+        <tr>
+        <td>{OrgUnitsDispNames[1]}</td>
+        {
+          orgData[2].value1.map(items =>(
+            
+            <td>{items}</td>
+           
+          ))
+        }
+        </tr>
+        <tr>
+        <td>{OrgUnitsDispNames[2]}</td>
+        {
+          orgData[3].value2.map(items =>(
+            
+            <td>{items}</td>
+           
+          ))
+        }
+        </tr>
+        <tr>
+        <td>{OrgUnitsDispNames[3]}</td>
+        {
+          orgData[4].value3.map(items =>(
+            
+            <td>{items}</td>
+           
+          ))
+        }
+        </tr>
+        <tr>
+        <td>{OrgUnitsDispNames[4]}</td>
+        {
+          orgData[5].value4.map(items =>(
+            
+            <td>{items}</td>
+           
+          ))
+        }
+        </tr>
+
+        <tr>
+        <td>{OrgUnitsDispNames[5]}</td>
+        {
+          orgData[6].value5.map(items =>(
+            
+            <td>{items}</td>
+           
+          ))
+        }
+        </tr>
+
+        <tr>
+        <td>{OrgUnitsDispNames[6]}</td>
+        {
+          orgData[7].value6.map(items =>(
+            
+            <td>{items}</td>
+           
+          ))
+        }
+        </tr>
+
+        <tr>
+        <td>{OrgUnitsDispNames[7]}</td>
+        {
+          orgData[8].value7.map(items =>(
+            
+            <td>{items}</td>
+           
+          ))
+        }
+        </tr>
+    </tbody>
+  </Table>
+  )
+ // console.log(orgData[1].value)
+  return PivotChart
+   
+ }
+
 
   

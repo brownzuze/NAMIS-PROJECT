@@ -11,6 +11,7 @@ import IconButton from "@material-ui/core/IconButton";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import SearchIcon from "@material-ui/icons/Search";
 import { TextField } from '@material-ui/core';
+import styles from '../App.module.css';
 import { Link } from 'react-router-dom';
 import $ from 'jquery';
 import {useState, useEffect} from 'react'
@@ -28,12 +29,10 @@ const useStyles = makeStyles((theme) => ({
      marginLeft: 0,
   },
   button: {
-   borderRadius:'15% !important',
-   
-   marginLeft: '10px',
-   textTransform: 'none'
-   
-   
+   marginLeft: '15px',
+   textTransform: 'none',
+   borderRadius: 15,
+
   },
   cardcontent: {
     padding: 0,
@@ -67,7 +66,9 @@ export default  function RecipeReviewCard(props) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const [dashboards, setDashboards] = useState([]);
-  const [fetched, setFetched] =useState(false)
+  const [fetched, setFetched] =useState(false);
+  const [barId, setBarId] = useState();
+
    
   useEffect(() => {
     const fetchDashboards = async () => {
@@ -75,11 +76,20 @@ export default  function RecipeReviewCard(props) {
       setFetched(true)
     }
     fetchDashboards();
+
+    if(dashboards.length !=0){
+      setBarId(dashboards[0].id)
+    }
   }, [fetched])
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+
+  const handleClick = (e) => {
+     setBarId(e.target.id);
+  }
+
   const getButtonsUsingForLoop = () => {
     if(!dashboards){
       return <div>Loading</div>
@@ -145,12 +155,21 @@ export default  function RecipeReviewCard(props) {
   }}
 />
      {/*getButtonsUsingForLoop()*/}
- {
+ {/*
   dashboards.filter((item, index) => index<7).map(r=>{
    return(
-   <Link to={`/dashboards/${r.id}`}  style={{textDecoration: 'none'}}><Button variant="contained" id = {r.id} className={classes.button} onClick={props.handleClick}>{r.displayName}</Button></Link>
+   <Link to={`/dashboards/${r.id}`}  style={{textDecoration: 'none'}}><Button variant="contained" className={classes.button} id = {r.id} style= {barId===r.id ? {backgroundColor:"#387C44", color:"#FFFFFF", fontWeight:"bold"} : {backgroundColor:"#E5E4E2"}} onClick={(e)=>handleClick(e)}>{r.displayName}</Button></Link>
    )
- })}    
+ })*/} 
+ {
+  dashboards.filter((item, index) => index<7).map(r=>{
+    return(
+      <Link to={`/dashboards/${r.id}`} className={styles.btnprimary}
+        id = {r.id} style= {barId===r.id ? {backgroundColor:"#387C44", 
+        color:"#FFFFFF", fontWeight:"bold"} : {backgroundColor:"#E5E4E2"}} 
+        onClick={(e)=>handleClick(e)}> {r.displayName}</Link>
+      )
+ })}       
      <IconButton
           className={clsx(classes.expand, {
             [classes.expandOpen]: expanded,
@@ -165,11 +184,17 @@ export default  function RecipeReviewCard(props) {
       <Collapse in={expanded} timeout="auto" unmountOnExit>
       <CardContent className = {classes.more}>
        {/*getMoreButtonsUsingForLoop()*/}
-       {moreBtn.map(r=>{
+       {/*moreBtn.map(r=>{
         return(
-       <Link to={`/dashboards/${r.id}`}  style={{textDecoration: 'none'}}><Button variant="contained" id = {r.id} className={classes.button} onClick={props.handleClick}>{r.displayName}</Button></Link>
+       <Link to={`/dashboards/${r.id}`}  style={{textDecoration: 'none'}}><Button variant="contained" id = {r.id} className={classes.button} style= {barId===r.id ? {backgroundColor:"green"} : {backgroundColor:"#E5E4E2"}} onClick={(e)=>handleClick(e)}>{r.displayName}</Button></Link>
        )
-      })}    
+      })*/}  
+      {
+      moreBtn.map(r=>{
+       return(
+        <Link to={`/dashboards/${r.id}`} className={styles.btnprimary}  id = {r.id} style= {barId===r.id ? {backgroundColor:"#387C44", color:"#FFFFFF", fontWeight:"bold", outline: "2px solid #387C44"} : {backgroundColor:"#E5E4E2"}} onClick={(e)=>handleClick(e)}> {r.displayName}</Link>
+       )
+ })}         
       </CardContent>
       </Collapse>
     </Card>

@@ -4,7 +4,6 @@ import { OuRowCharts, LineChartWithpeLabel, ChartWithPeRow, StackedChartWithPeRo
 import {getDashboards, getIndicators, getorganisationUnitGroups, getOrganisationUnits} from '../api';
 import {ADDRESS_URL} from '../api';
 import { Box, Card, Grid, Typography } from "@material-ui/core";
-import DisplayDashboardItems  from './DisplayDashboardItems';
 import $ from 'jquery';
 
 class AntCharts extends React.Component {
@@ -445,6 +444,9 @@ else {
 
   } 
                   
+ }
+ if(dashboardItemsData[i].map){
+  dashboardItemArray.push(<div className={styles.card}>{dashboardItemsData[i].map.name}<div className={styles.content}>No data</div></div>) 
  }
 }
 

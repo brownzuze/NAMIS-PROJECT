@@ -39,4 +39,29 @@ body {
   box-shadow: rgba(99,99,99,02) 0px 1px 5px 0px;
   border: 1px solid #ddd;
 }
+.content{
+  text-align: center;
+  margin-top: 150px;
+}
+.btnprimary{
+  padding: 0.4rem 0.5rem;
+  background: #E5E4E2;
+  color:#222;
+  display: inline;
+  letter-spacing: 0.09rem;
+  border-radius: 15px;
+  outline-offset: 4px;
+  border: none;
+  margin-left: 10px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btnprimary:hover {
+  background: #cccccc;
+  text-decoration: none;
+  transition: all 0.3s ease-in-out;
+  color:#222;
+}
+
 

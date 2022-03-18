@@ -3,8 +3,7 @@ import { useParams } from 'react-router-dom';
 import $ from 'jquery';
 import {ADDRESS_URL} from '../api';
 import {getDashboards, getIndicators, getorganisationUnitGroups, getOrganisationUnits} from '../api';
-import { OuRowCharts, LineChartWithpeLabel, ChartWithPeRow, StackedChartWithPeRow, ChartWithPeOuRow, LineChart, BarChartsWithOuRow, PieChart} from './RenderGraph';
-import DisplayDashboardItems  from './DisplayDashboardItems';
+import {PivotTable, OuRowCharts, LineChartWithpeLabel, ChartWithPeRow, StackedChartWithPeRow, ChartWithPeOuRow, LineChart, BarChartsWithOuRow, PieChart} from './RenderGraph';
 import styles from '../App.module.css';
 
 const Dashboards = () => {
@@ -27,28 +26,7 @@ const Dashboards = () => {
       fetchDashboards();
     }, [fetched])
 
-/*const fetchDashboard = () => {
 
-    var dataValues = $.ajax({
-        url: ADDRESS_URL + `/37/dashboards/${id}.json?fields=id,displayName,displayDescription,favorite~rename(starred),access,restrictFilters,allowedFilters,layout,itemConfig,dashboardItems%5Bid%2Ctype%2Cshape%2Cx%2Cy%2Cwidth~rename(w)%2Cheight~rename(h)%2Cmessages%2Ctext%2CappKey%2Creports%5Btype%2Cid%2CdisplayName~rename(name)%5D%2Cresources%5Bid%2CdisplayName~rename(name)%5D%2Cusers%5Bid%2CdisplayName~rename(name)%5D%2Cvisualization%5Bid%2CdisplayName~rename(name)%2Ctype%2CdisplayDescription~rename(description)%5D%2Cmap%5Bid%2CdisplayName~rename(name)%2Ctype%2CdisplayDescription~rename(description)%5D%2CeventReport%5Bid%2CdisplayName~rename(name)%2Ctype%2CdisplayDescription~rename(description)%5D%2CeventChart%5Bid%2CdisplayName~rename(name)%2Ctype%2CdisplayDescription~rename(description)%5D%5D`,
-         dataType: "json",
-         headers: { "Authorization": "Basic " + btoa("admin" + ":" + "district") },
-         success: function (data) { },
-         async: false,
-         error: function (err) {
-           console.log(err);
-         }
-         }).responseJSON;
-
-         console.log(dataValues)
-         const dashboardItemsData = dataValues.dashboardItems
-               console.log(dashboardItemsData)
-
-               return <div>
-                 <DisplayDashboardItems dashboardItemsData={dashboardItemsData} />
-               </div>
-         
-}*/
 const fetchAndRenderDashboardItems = () => {
 
     if (!dashboards || !organisationUnits || !indicators || !organisationUnitGroups) {
@@ -458,13 +436,64 @@ console.log(dataValues.rows)
 dashboardItemArray.push(<div className={styles.card}>{LineChartWithpeLabel(dataValues, visualisationName)}</div>)
 
 }
+if (actualVitualization.type==="PIVOT_TABLE"){
+
+  const dataDimension = actualVitualization.columns[0].items.map(ids => ids.id)
+  const peItem=  actualVitualization.columns[1].items
+  const period = peItem[0].name
+  console.log( period)
+  const OuItems = actualVitualization.rows[0].items
+  const orgUnits =  OuItems.map(ids => ids.id)
+  console.log(dataDimension)
+  const visualisationName = actualVitualization.name
+  console.log(visualisationName)
+  
+  
+  
+  
+  
+  const dxArray = []
+   for(var k = 0; k < dataDimension.length; k++){
+     dxArray.push(dataDimension[k]+";")
+   }
+   const dataDimensionString = dxArray.join('')
+   console.log(dataDimensionString)
+  
+  
+  //appending the organisation unit dimension with ; 
+   const array = []
+   for(var r = 0; r < orgUnits.length; r++){
+     array.push(orgUnits[r]+";")
+   }
+   const orgUnitsString = array.join('')
+   console.log(orgUnitsString)
+  
+  var dataValues = $.ajax({
+   url: ADDRESS_URL + `/analytics.json?dimension=dx:${dataDimensionString}&dimension=pe:${period}&dimension=ou:${orgUnitsString}`,
+   dataType: "json",
+   headers: { "Authorization": "Basic " + btoa("admin" + ":" + "district") },
+   success: function (data) { },
+   async: false,
+   error: function (err) {
+     console.log(err);
+   }
+  }).responseJSON;
+  
+  console.log(dataValues)
+
+  dashboardItemArray.push(<div className={styles.card}>{PivotTable(organisationUnits, dataValues)}</div>)
+  
+  
+  }
 
 else {
   console.log("no data")
 
-} 
-                
-}
+  } 
+ }
+ if(dashboardItemsData[i].map){
+  dashboardItemArray.push(<div className={styles.card}>{dashboardItemsData[i].map.name}<div className={styles.content}>No data</div></div>) 
+ }
 }
 
   return <div className={styles.itemcontainer}>
