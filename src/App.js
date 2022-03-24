@@ -4,6 +4,7 @@ import Appbar from './components/Appbar';
 import DashboardLinks from './components/DashBoardLinks'
 import AntCharts from './components/AntCharts';
 import Dashboards from './components/Dashboards'
+import TestDashboard from './components/TestDashboard'
 import Loading from "./components/Loading";
 import {getDashboards} from './api';
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
@@ -25,7 +26,7 @@ async  componentDidMount() {
     const {  dashboards } = this.state
 
     if (!dashboards) {
-      return <div className={styles.loader}>
+      return <div>
                <Loading/>
               </div>
     }

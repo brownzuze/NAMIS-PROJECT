@@ -17,8 +17,10 @@ body {
   align-items: center;
 }
 .loadingimg{
-  height: 45%;
-  width: 45%;
+  height: 5%;
+  width: 5%;
+  padding-top: 50px;
+  
 }
 .antchart{
   margin-top: 1px;
@@ -63,5 +65,42 @@ body {
   transition: all 0.3s ease-in-out;
   color:#222;
 }
+.landingpage{
+  padding-top: 20px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2em
+  
+}
+.info{
+  text-align: center;
+  padding: 10px;
+  width: 250px;
+  height: 180px;
+  border-radius: 5px;
+  padding: lem;
+  border: 1px solid #ddd;
+}
+.landingcontainer{
+  text-align: center;
+  margin-top: 70px;
+}
+.headings{
+  padding-top: 10px;
+}
+.visualicons{
+  padding-top: 15px;
+}
+.icon{
+  height: 8%;
+  width: 8%;
+  padding-left: 50px;
+}
+.loadingalert{
+  margin-top: 15px;
+}
+
+
 
 

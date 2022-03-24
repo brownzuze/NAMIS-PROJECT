@@ -7,13 +7,12 @@ import {PivotTable, OuRowCharts, LineChartWithpeLabel, ChartWithPeRow, StackedCh
 import styles from '../App.module.css';
 
 const Dashboards = () => {
-  const [dashboards, setDashboards] = useState([]);
-  const [indicators, setIndicators] = useState([]);
-  const [organisationUnitGroups, setOrgUnitGroup] = useState([]);
-  const [organisationUnits, setOrgUnits] = useState([]);
-  const [fetched, setFetched] =useState(false)
+  const [dashboards, setDashboards] = useState("");
+  const [indicators, setIndicators] = useState("");
+  const [organisationUnitGroups, setOrgUnitGroup] = useState("");
+  const [organisationUnits, setOrgUnits] = useState("");
   const { id } = useParams();
-  console.log(id)
+  const [fetched, setFetched] =useState(false)
 
   useEffect(() => {
     const fetchDashboards = async () => {
@@ -22,9 +21,12 @@ const Dashboards = () => {
     setOrgUnitGroup(await getorganisationUnitGroups())
     setOrgUnits(await getOrganisationUnits());
     setFetched(true)
+
     }
-      fetchDashboards();
-    }, [fetched])
+          fetchDashboards();
+    }, [])
+    
+
 
 
 const fetchAndRenderDashboardItems = () => {
@@ -32,7 +34,8 @@ const fetchAndRenderDashboardItems = () => {
     if (!dashboards || !organisationUnits || !indicators || !organisationUnitGroups) {
       return <div>Loading....</div>
     }
-  
+
+
       var dataValues = $.ajax({
       url: ADDRESS_URL + `/37/dashboards/${id}.json?fields=id,displayName,displayDescription,favorite~rename(starred),access,restrictFilters,allowedFilters,layout,itemConfig,dashboardItems%5Bid%2Ctype%2Cshape%2Cx%2Cy%2Cwidth~rename(w)%2Cheight~rename(h)%2Cmessages%2Ctext%2CappKey%2Creports%5Btype%2Cid%2CdisplayName~rename(name)%5D%2Cresources%5Bid%2CdisplayName~rename(name)%5D%2Cusers%5Bid%2CdisplayName~rename(name)%5D%2Cvisualization%5Bid%2CdisplayName~rename(name)%2Ctype%2CdisplayDescription~rename(description)%5D%2Cmap%5Bid%2CdisplayName~rename(name)%2Ctype%2CdisplayDescription~rename(description)%5D%2CeventReport%5Bid%2CdisplayName~rename(name)%2Ctype%2CdisplayDescription~rename(description)%5D%2CeventChart%5Bid%2CdisplayName~rename(name)%2Ctype%2CdisplayDescription~rename(description)%5D%5D`,
       dataType: "json",
@@ -494,13 +497,17 @@ else {
  if(dashboardItemsData[i].map){
   dashboardItemArray.push(<div className={styles.card}>{dashboardItemsData[i].map.name}<div className={styles.content}>No data</div></div>) 
  }
+ if(dashboardItemsData[i].type==="TEXT"){
+  dashboardItemArray.push(<div className={styles.card}>{dashboardItemsData[i].text}</div>) 
+ }
 }
 
   return <div className={styles.itemcontainer}>
            {dashboardItemArray}
           </div>
                  
-} 
+}
+
     return (
         <div className={styles.graphbox}> 
          {fetchAndRenderDashboardItems()}
