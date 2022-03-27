@@ -1196,6 +1196,16 @@ console.log(orgData)
      </tr>
     </thead>
     <tbody>
+    <tr>
+        <td>{OrgUnitsDispNames[0]}</td>
+        {
+          orgData[1].value.map(items =>(
+            
+            <td>{items}</td>
+           
+          ))
+        }
+        </tr>
       <tr>
         <td>{OrgUnitsDispNames[0]}</td>
         {
@@ -1268,6 +1278,16 @@ console.log(orgData)
           ))
         }
         </tr>
+        <tr>
+        <td>{OrgUnitsDispNames[6]}</td>
+        {
+          orgData[7].value6.map(items =>(
+            
+            <td>{items}</td>
+           
+          ))
+        }
+        </tr>
 
         <tr>
         <td>{OrgUnitsDispNames[7]}</td>
@@ -1278,7 +1298,64 @@ console.log(orgData)
            
           ))
         }
-        </tr>
+      </tr>
+    </tbody>
+  </Table>
+  )
+ // console.log(orgData[1].value)
+  return PivotChart
+   
+ }
+
+ export const YearlyPivotTable = (dataValues, items) => {
+  
+  const rowData = dataValues.rows;
+  const year =rowData[1][0]
+  
+  const arrayValues = []
+  const dGroupNames = []
+  
+  for(let i = 0; i<rowData.length; i++){
+    for(let j= 0; j<items.length; j++){
+      if(rowData[i][2] === items[j].id){
+        arrayValues.push(rowData[i][3])
+        dGroupNames.push(items[j].name)
+      }
+    }
+  }
+
+  console.log(arrayValues)
+  console.log(dGroupNames)
+  //obtaining json object
+  const res = [];
+  for(let i = 0; i < arrayValues.length; i++){
+     res.push({
+        name: dGroupNames[i],
+        val: arrayValues[i]
+     });
+  };
+
+  console.log(res)
+
+
+  
+  const PivotChart = (
+    <Table striped border hover responsive>
+    <thead>
+      <tr>
+        <th>New cases</th>
+        <th>{year}</th>
+     </tr>
+    </thead>
+    <tbody>
+    {res.map(( listValue, index ) => {
+          return (
+            <tr key={index}>
+              <td>{listValue.name}</td>
+              <td>{listValue.val}</td>
+            </tr>
+          );
+        })}
     </tbody>
   </Table>
   )

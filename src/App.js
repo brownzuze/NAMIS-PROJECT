@@ -5,7 +5,7 @@ import DashboardLinks from './components/DashBoardLinks'
 import AntCharts from './components/AntCharts';
 import Dashboards from './components/Dashboards'
 import TestDashboard from './components/TestDashboard'
-import Loading from "./components/Loading";
+import LandingPage from "./components/LandingPage";
 import {getDashboards} from './api';
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 
@@ -27,7 +27,7 @@ async  componentDidMount() {
 
     if (!dashboards) {
       return <div>
-               <Loading/>
+               <LandingPage/>
               </div>
     }
     return (

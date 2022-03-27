@@ -14,7 +14,7 @@
     "classnames": "^2.3.1",
     "html2canvas": "^1.4.1",
     "jquery": "^3.6.0",
-    "jspdf": "^2.5.0",
+    "jspdf": "^2.5.1",
     "leaflet": "^1.7.1",
     "react": "^17.0.2",
     "react-bootstrap": "^2.1.2",
