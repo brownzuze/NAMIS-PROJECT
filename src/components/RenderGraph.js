@@ -1067,124 +1067,35 @@ export const PivotTable = (organisationUnits, dataValues) => {
     }
   }
   console.log(sortedArr)
-let orgData = [{
-    id: '',
-    values: [],
-    periods: []
-  }]
 
-  let id = "", value = [], period = []
-
-  for (let i = 0; i < sortedArr.length; i++) {
-      
-    if ( orgIds[0]===sortedArr[i][2]) {
-      id = OrgUnitsDispNames[0]
-      value.push(parseFloat(sortedArr[i][3]))
-      period.push(sortedArr[i][1])
-
+  //looping values
+  const arrayValues = []
+  
+  for(let i = 0; i<orgIds.length; i++){
+    for(let j= 0; j<sortedArr.length; j++){
+      if(orgIds[i] === sortedArr[j][2]){
+        arrayValues.push(sortedArr[j][3])
+      }
     }
-
   }
-  orgData.push({ id, value, period })
 
-  let id1 = "", value1 = [], period1 = []
+  const arrayObject = []
+  let a = 0;
 
-  for (let i = 0; i < sortedArr.length; i++) {
-      
-    if ( orgIds[1]===sortedArr[i][2]) {
-      id1 = OrgUnitsDispNames[1]
-      value1.push(parseFloat(sortedArr[i][3]))
-      period1.push(sortedArr[i][1])
+  for(let i = 0; i < arrayValues.length; i += 4){
+    arrayObject.push({
+       name: OrgUnitsDispNames[a],
+       val: arrayValues[i],
+       val1: arrayValues[i + 1],
+       val2: arrayValues[i + 2],
+       val3: arrayValues[i + 3],
+    });
+    a++
+ };
 
-    }
+  console.log(arrayValues)
+  console.log(arrayObject)
 
-  }
-  orgData.push({ id1, value1, period1 })
-
-  let id2 = "", value2 = [], period2 = []
-
-  for (let i = 0; i < sortedArr.length; i++) {
-      
-    if ( orgIds[2]===sortedArr[i][2]) {
-      id2 = OrgUnitsDispNames[1]
-      value2.push(parseFloat(sortedArr[i][3]))
-      period2.push(sortedArr[i][1])
-
-    }
-
-  }
-  orgData.push({ id2, value2, period2 })
-
-  let id3 = "", value3 = [], period3 = []
-
-  for (let i = 0; i < sortedArr.length; i++) {
-      
-    if ( orgIds[3]===sortedArr[i][2]) {
-      id3 = OrgUnitsDispNames[1]
-      value3.push(parseFloat(sortedArr[i][3]))
-      period3.push(sortedArr[i][1])
-
-    }
-
-  }
-  orgData.push({ id3, value3, period3 })
-
-  let id4 = "", value4 = [], period4 = []
-
-  for (let i = 0; i < sortedArr.length; i++) {
-      
-    if ( orgIds[4]===sortedArr[i][2]) {
-      id4 = OrgUnitsDispNames[1]
-      value4.push(parseFloat(sortedArr[i][3]))
-      period4.push(sortedArr[i][1])
-
-    }
-
-  }
-  orgData.push({ id4, value4, period4 })
-
-  let id5 = "", value5 = [], period5 = []
-
-  for (let i = 0; i < sortedArr.length; i++) {
-      
-    if ( orgIds[5]===sortedArr[i][2]) {
-      id5 = OrgUnitsDispNames[1]
-      value5.push(parseFloat(sortedArr[i][3]))
-      period5.push(sortedArr[i][1])
-
-    }
-
-  }
-  orgData.push({ id5, value5, period5 })
-
-  let id6 = "", value6 = [], period6 = []
-
-  for (let i = 0; i < sortedArr.length; i++) {
-      
-    if ( orgIds[6]===sortedArr[i][2]) {
-      id6 = OrgUnitsDispNames[1]
-      value6.push(parseFloat(sortedArr[i][3]))
-      period6.push(sortedArr[i][1])
-
-    }
-
-  }
-  orgData.push({ id6, value6, period6 })
-
-  let id7 = "", value7 = [], period7 = []
-
-  for (let i = 0; i < sortedArr.length; i++) {
-      
-    if ( orgIds[7]===sortedArr[i][2]) {
-      id7 = OrgUnitsDispNames[1]
-      value7.push(parseFloat(sortedArr[i][3]))
-      period7.push(sortedArr[i][1])
-
-    }
-
-  }
-  orgData.push({ id7, value7, period7 })
-console.log(orgData)
   const PivotChart = (
     <Table striped border hover responsive>
     <thead>
@@ -1195,117 +1106,24 @@ console.log(orgData)
          ))}
      </tr>
     </thead>
+
     <tbody>
-    <tr>
-        <td>{OrgUnitsDispNames[0]}</td>
-        {
-          orgData[1].value.map(items =>(
-            
-            <td>{items}</td>
-           
-          ))
-        }
-        </tr>
-      <tr>
-        <td>{OrgUnitsDispNames[0]}</td>
-        {
-          orgData[1].value.map(items =>(
-            
-            <td>{items}</td>
-           
-          ))
-        }
-        </tr>
-        <tr>
-        <td>{OrgUnitsDispNames[1]}</td>
-        {
-          orgData[2].value1.map(items =>(
-            
-            <td>{items}</td>
-           
-          ))
-        }
-        </tr>
-        <tr>
-        <td>{OrgUnitsDispNames[2]}</td>
-        {
-          orgData[3].value2.map(items =>(
-            
-            <td>{items}</td>
-           
-          ))
-        }
-        </tr>
-        <tr>
-        <td>{OrgUnitsDispNames[3]}</td>
-        {
-          orgData[4].value3.map(items =>(
-            
-            <td>{items}</td>
-           
-          ))
-        }
-        </tr>
-        <tr>
-        <td>{OrgUnitsDispNames[4]}</td>
-        {
-          orgData[5].value4.map(items =>(
-            
-            <td>{items}</td>
-           
-          ))
-        }
-        </tr>
-
-        <tr>
-        <td>{OrgUnitsDispNames[5]}</td>
-        {
-          orgData[6].value5.map(items =>(
-            
-            <td>{items}</td>
-           
-          ))
-        }
-        </tr>
-
-        <tr>
-        <td>{OrgUnitsDispNames[6]}</td>
-        {
-          orgData[7].value6.map(items =>(
-            
-            <td>{items}</td>
-           
-          ))
-        }
-        </tr>
-        <tr>
-        <td>{OrgUnitsDispNames[6]}</td>
-        {
-          orgData[7].value6.map(items =>(
-            
-            <td>{items}</td>
-           
-          ))
-        }
-        </tr>
-
-        <tr>
-        <td>{OrgUnitsDispNames[7]}</td>
-        {
-          orgData[8].value7.map(items =>(
-            
-            <td>{items}</td>
-           
-          ))
-        }
-      </tr>
+    {arrayObject.map(( listValue, index ) => {
+          return (
+            <tr key={index}>
+              <td>{listValue.name}</td>
+              <td>{listValue.val}</td>
+              <td>{listValue.val1}</td>
+              <td>{listValue.val2}</td>
+              <td>{listValue.val3}</td>
+            </tr>
+          );
+        })}
     </tbody>
   </Table>
   )
- // console.log(orgData[1].value)
   return PivotChart
-   
- }
+}
 
  export const YearlyPivotTable = (dataValues, items) => {
   

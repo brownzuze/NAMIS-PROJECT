@@ -589,7 +589,7 @@ dashboardItemArray.push(
  )
 
 }
-if (actualVitualization.type==="PIVOT_TABLE" && actualVitualization.rows[0].dimension==="ou"){
+if (actualVitualization.type==="PIVOT_TABLE" && actualVitualization.rows[0].dimension==="ou" && actualVitualization.columns.length==2){
 
   const dataDimension = actualVitualization.columns[0].items.map(ids => ids.id)
   const peItem=  actualVitualization.columns[1].items
@@ -650,6 +650,7 @@ if (actualVitualization.type==="PIVOT_TABLE" && actualVitualization.rows[0].dime
          </Dropdown>
        </CardContent>
         <CardContent className = {actualVitualization.id} style = {{ height: "400px", overflow: "scroll"}}>
+           {visualisationName}
            {PivotTable(organisationUnits, dataValues)}
        </CardContent>
      </Card>
@@ -741,6 +742,7 @@ dashboardItemArray.push(
        </Dropdown>
      </CardContent>
       <CardContent className = {actualVitualization.id} style = {{ height: "400px", overflow: "scroll"}}>
+         {visualisationName}
          {YearlyPivotTable(dataValues, items)}
      </CardContent>
    </Card>
