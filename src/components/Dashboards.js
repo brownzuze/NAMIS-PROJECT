@@ -7,6 +7,7 @@ import { CardContent } from "@material-ui/core";
 import Dropdown from 'react-bootstrap/Dropdown'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import Loading from "./Loading";
+import Gauge from 'react-svg-gauge'
 import {getDashboards, getIndicators, getorganisationUnitGroups, getOrganisationUnits} from '../api';
 import {YearlyPivotTable, PivotTable, OuRowCharts, LineChartWithpeLabel, ChartWithPeRow, StackedChartWithPeRow, ChartWithPeOuRow, LineChart, BarChartsWithOuRow, PieChart} from './RenderGraph';
 import styles from '../App.module.css';
@@ -589,7 +590,7 @@ dashboardItemArray.push(
  )
 
 }
-if (actualVitualization.type==="PIVOT_TABLE" && actualVitualization.rows[0].dimension==="ou" && actualVitualization.columns.length==2){
+if (actualVitualization.type==="PIVOT_TABLE" && actualVitualization.rows[0].dimension==="ou" && actualVitualization.columns.length==2 && actualVitualization.columns[1].dimension=== "pe"){
 
   const dataDimension = actualVitualization.columns[0].items.map(ids => ids.id)
   const peItem=  actualVitualization.columns[1].items
@@ -748,6 +749,231 @@ dashboardItemArray.push(
    </Card>
  </Grid> 
 )
+}
+
+if (actualVitualization.type==="PIVOT_TABLE" && actualVitualization.columns[0].dimension==="pe"){
+
+  const peItem=  actualVitualization.columns[0].items
+  const period = peItem[0].name
+  console.log( period)
+  
+  //
+const dataElementDimension = actualVitualization.columns[1].dimension
+console.log( dataElementDimension)
+const dataElementGroup = actualVitualization.columns[1].items.map(ids => ids.id)
+console.log(dataElementGroup)
+const dataElementDx = actualVitualization.rows[0].dimension
+const dataElement = actualVitualization.rows[0].items.map(ids => ids.id)
+console.log( dataElement)
+const visualisationName = actualVitualization.name
+console.log(visualisationName)
+const items = actualVitualization.rows[0].items
+console.log(items)
+
+//adding pending dataelement group set with ;
+const dataElementDimensionString = dataElementDimension + ":"
+console.log(dataElementDimensionString)
+
+//appending the dataElement Group dimension with ; 
+var array = []
+for(var j = 0; j < dataElementGroup.length; j++){
+array.push(dataElementGroup[j]+";")
+}
+const dataEGroupString = array.join('')
+console.log(dataEGroupString)
+//concatinating the actual dataDimension
+const dataEGroupDx = dataElementDimensionString + dataEGroupString
+console.log( dataEGroupDx) 
+
+//apending dataelement sub group with :
+const dataElementSubGroup = dataElementDx + ":"
+console.log(dataElementSubGroup)
+
+//appending the data element Dimension with ;
+const dxArray = []
+for(var j = 0; j < dataElement.length; j++){
+dxArray.push(dataElement[j]+";")
+}
+const dataelementsDimensionString = dxArray.join('')
+console.log(dataelementsDimensionString)
+
+//concatinating the group dimensions
+
+const DataElementSubGroupString = dataElementSubGroup + dataelementsDimensionString
+console.log(DataElementSubGroupString)
+
+var dataValues = $.ajax({
+url: ADDRESS_URL + `/analytics.json?dimension=pe:${period}&dimension=${dataEGroupDx}&dimension=${DataElementSubGroupString}`,
+dataType: "json",
+headers: { "Authorization": "Basic " + btoa("admin" + ":" + "district") },
+success: function (data) { },
+async: false,
+error: function (err) {
+console.log(err);
+}
+}).responseJSON;
+
+console.log()
+
+console.log(dataValues.rows)
+
+dashboardItemArray.push(
+<Grid item xs={10} sm={6}>
+<Card className= {styles.minCard}>
+   <CardContent style = {{paddingBottom: 0, display:'flex', justifyContent: 'flex-end'}}>
+     <Dropdown>
+      <Dropdown.Toggle id="dropdown-basic-button" title="Dropdown button">
+        <MoreHorizIcon/>
+      </Dropdown.Toggle>
+      <Dropdown.Menu>
+       <Dropdown.Item id = {actualVitualization.id} onClick={e => chart2PDF(e)}>Save as pdf</Dropdown.Item>
+       <Dropdown.Item href="#/action-2">Export as a csv</Dropdown.Item>
+       <Dropdown.Item href="#/action-3">View in full screen</Dropdown.Item>
+      </Dropdown.Menu>
+     </Dropdown>
+   </CardContent>
+    <CardContent className = {actualVitualization.id} style = {{ height: "400px", overflow: "scroll"}}>
+       {visualisationName}
+       {YearlyPivotTable(dataValues, items)}
+   </CardContent>
+ </Card>
+</Grid> 
+)
+}
+if (actualVitualization.type==="GAUGE"){
+
+  const peItem= actualVitualization.filters[0].items
+  const period = peItem[0].name
+  console.log(peItem)
+  
+  
+const items = actualVitualization.columns[0].items
+const dataIndicators = items.map(ids => ids.id)
+console.log(dataIndicators)
+const visualisationName = actualVitualization.name
+
+//appending the dataElement Group dimension with ; 
+var array = []
+for(var j = 0; j < dataIndicators.length; j++){
+array.push(dataIndicators[j]+";")
+}
+const dataIndicatorString = array.join('')
+console.log(dataIndicatorString)
+
+var dataValues = $.ajax({
+url: ADDRESS_URL + `/analytics.json?dimension=dx:${dataIndicators}&filter=pe:${period}`,
+dataType: "json",
+headers: { "Authorization": "Basic " + btoa("admin" + ":" + "district") },
+success: function (data) { },
+async: false,
+error: function (err) {
+console.log(err);
+}
+}).responseJSON;
+
+console.log(dataValues.rows)
+
+const Value = dataValues.rows[0][1]
+console.log(Value)
+
+dashboardItemArray.push(
+<Grid item xs={10} sm={6}>
+<Card className= {styles.minCard}>
+   <CardContent style = {{paddingBottom: 0, display:'flex', justifyContent: 'flex-end'}}>
+     <Dropdown>
+      <Dropdown.Toggle id="dropdown-basic-button" title="Dropdown button">
+        <MoreHorizIcon/>
+      </Dropdown.Toggle>
+      <Dropdown.Menu>
+       <Dropdown.Item id = {actualVitualization.id} onClick={e => chart2PDF(e)}>Save as pdf</Dropdown.Item>
+       <Dropdown.Item href="#/action-2">Export as a csv</Dropdown.Item>
+       <Dropdown.Item href="#/action-3">View in full screen</Dropdown.Item>
+      </Dropdown.Menu>
+     </Dropdown>
+   </CardContent>
+    <CardContent className = {actualVitualization.id}>
+      <Gauge value={Value} width={400} height={320} fill='blue' label = {visualisationName}/>
+   </CardContent>
+ </Card>
+</Grid> 
+)
+}
+
+if (actualVitualization.type==="PIVOT_TABLE" && actualVitualization.columns[0].dimension==="dx" && actualVitualization.filters.length !== null){
+
+  const peItem= actualVitualization.filters
+  //const period = peItem[0].name
+  console.log(peItem)
+  
+  //
+/*const items = actualVitualization.columns[0].items
+const dataIndicators = items.map(ids => ids.id)
+console.log(dataIndicators)
+const orgUnits = actualVitualization.rows[0].items.map(ids => ids.id)
+console.log( orgUnits)
+const visualisationName = actualVitualization.name
+console.log(visualisationName)
+console.log(items)
+
+
+
+//appending the dataElement Group dimension with ; 
+var array = []
+for(var j = 0; j < dataIndicators.length; j++){
+array.push(dataIndicators[j]+";")
+}
+const dataIndicatorString = array.join('')
+console.log(dataIndicatorString)
+
+
+//appending the organisation unit with ;
+const ouArray = []
+for(var j = 0; j < orgUnits.length; j++){
+ouArray.push(orgUnits[j]+";")
+}
+const orgUnitDimensionString = ouArray.join('')
+console.log(orgUnitDimensionString)
+
+//concatinating the group dimensions
+
+
+var dataValues = $.ajax({
+url: ADDRESS_URL + `/analytics.json?dimension=dx:${dataIndicators}&dimension=ou:${orgUnitDimensionString}&dimension=pe:${period}`,
+dataType: "json",
+headers: { "Authorization": "Basic " + btoa("admin" + ":" + "district") },
+success: function (data) { },
+async: false,
+error: function (err) {
+console.log(err);
+}
+}).responseJSON;
+
+console.log()
+
+console.log(dataValues.rows)
+
+/*dashboardItemArray.push(
+<Grid item xs={10} sm={6}>
+<Card className= {styles.minCard}>
+   <CardContent style = {{paddingBottom: 0, display:'flex', justifyContent: 'flex-end'}}>
+     <Dropdown>
+      <Dropdown.Toggle id="dropdown-basic-button" title="Dropdown button">
+        <MoreHorizIcon/>
+      </Dropdown.Toggle>
+      <Dropdown.Menu>
+       <Dropdown.Item id = {actualVitualization.id} onClick={e => chart2PDF(e)}>Save as pdf</Dropdown.Item>
+       <Dropdown.Item href="#/action-2">Export as a csv</Dropdown.Item>
+       <Dropdown.Item href="#/action-3">View in full screen</Dropdown.Item>
+      </Dropdown.Menu>
+     </Dropdown>
+   </CardContent>
+    <CardContent className = {actualVitualization.id} style = {{ height: "400px", overflow: "scroll"}}>
+       {visualisationName}
+       {YearlyPivotTable(dataValues, items)}
+   </CardContent>
+ </Card>
+</Grid> 
+)*/
 }
   
  }

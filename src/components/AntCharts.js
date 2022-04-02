@@ -8,6 +8,7 @@ import Loading from "./Loading";
 import { CardContent } from "@material-ui/core";
 import Dropdown from 'react-bootstrap/Dropdown'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+import Gauge from 'react-svg-gauge'
 import $ from 'jquery';
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
@@ -669,6 +670,9 @@ chart2PDF = e => {
       <div className={styles.graphbox}>
       <div>
       {this.getAndRenderDashboardItems()}
+      </div>
+      <div>
+         <Gauge value={92} width={400} height={320} label = "This is my Gauge"/>
       </div>
      </div>
      );

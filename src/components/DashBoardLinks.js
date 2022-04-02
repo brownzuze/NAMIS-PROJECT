@@ -192,7 +192,7 @@ export default  function RecipeReviewCard(props) {
       {
       moreBtn.map(r=>{
        return(
-        <Link to={`/dashboards/${r.id}`} className={styles.btnprimary}  id = {r.id} style= {barId===r.id ? {backgroundColor:"#387C44", color:"#FFFFFF", fontWeight:"bold", outline: "2px solid #387C44"} : {backgroundColor:"#E5E4E2"}} onClick={(e)=>handleClick(e)}> {r.displayName}</Link>
+        <Link to={`/dashboards/${r.id}`} className={styles.btnprimary}  id = {r.id} style= {barId===r.id ? {backgroundColor:"#387C44", color:"#FFFFFF", fontWeight:"bold"} : {backgroundColor:"#E5E4E2"}} onClick={(e)=>handleClick(e)}> {r.displayName}</Link>
        )
  })}         
       </CardContent>

@@ -8,21 +8,6 @@ export const ChartWithPeRow = (organisationUnits, dataValues, visualisationName)
       const dataItems = dataValues.metaData.items;
       const peId = dataValues.metaData.dimensions.pe
 
-  
-      /*const dataItemsArr = []
-      for (var items in dataItems) {
-        var name = dataItems[items].name;
-        dataItemsArr.push(name);
-      }
-      console.log(dataItemsArr);
-      
-      //creating actual xAxisLabels
-      const XLabels = []
-      for (let i = 0; i<12; i++){
-           XLabels.push(dataItemsArr[i])
-      }
-  
-      console.log(XLabels);*/
 
       const XLabels = []
       for (var i=0; i<peId.length; i++){
