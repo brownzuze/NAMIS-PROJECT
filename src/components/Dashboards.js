@@ -892,7 +892,23 @@ dashboardItemArray.push(
      </Dropdown>
    </CardContent>
     <CardContent className = {actualVitualization.id}>
-      <Gauge value={Value} width={400} height={320} fill='blue' label = {visualisationName}/>
+      <Gauge 
+        value={Value} width={400} height={320}
+        topLabelStyle= {{
+        fill: "#222",
+        fill: "#999999",
+        fontSize: "20px"
+        }} 
+        valueLabelStyle= {{
+         textAnchor: "middle",
+         fill: "#010101",
+         stroke: "none",
+        fontSize: "30px"
+
+        }}
+        color= "#00bfff"
+
+      label = {visualisationName}/>
    </CardContent>
  </Card>
 </Grid> 
@@ -904,8 +920,7 @@ if (actualVitualization.type==="PIVOT_TABLE" && actualVitualization.columns[0].d
   const peItem= actualVitualization.filters
   //const period = peItem[0].name
   console.log(peItem)
-  
-  //
+
 /*const items = actualVitualization.columns[0].items
 const dataIndicators = items.map(ids => ids.id)
 console.log(dataIndicators)

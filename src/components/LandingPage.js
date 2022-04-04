@@ -4,10 +4,6 @@ import ico5 from "../images/ico5.png";
 import ico6 from "../images/ico6.png";
 import ico7 from "../images/ico7.png";
 import ico9 from "../images/ico9.png";
-
-
-
-
 import styles from '../App.module.css';
 
 const LandingPage = () => {
@@ -80,6 +76,7 @@ const LandingPage = () => {
                     ))}
         </div>
        <h6 className={styles.loadingalert}>Loading data Please wait....</h6>
+
        
     </div>
   );
