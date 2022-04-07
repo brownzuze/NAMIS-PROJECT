@@ -584,7 +584,7 @@ else {
   } 
                   
  }
- if(dashboardItemsData[i].map){
+ if(dashboardItemsData[i].maps){
   dashboardItemArray.push(
     <Grid item xs={10} sm={6}>
     <Card className={styles.minCard}>

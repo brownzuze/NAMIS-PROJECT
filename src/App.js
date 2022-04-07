@@ -31,7 +31,7 @@ async  componentDidMount() {
               </div>
     }
     return (
-      <Router>
+      <Router forceRefresh={true}>
       <div className={styles.container}>
         <Appbar />
         

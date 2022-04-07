@@ -24,6 +24,16 @@ const Dashboards = () => {
   const [fetched, setFetched] =useState(false)
 
   useEffect(() => {
+     if(id){
+       setDashboards("");
+       setIndicators("");
+       setOrgUnitGroup("");
+       setOrgUnits("")
+     }
+  }, [id])
+
+
+  useEffect(() => {
     const fetchDashboards = async () => {
     setDashboards(await getDashboards());
     setIndicators(await getIndicators());
@@ -33,19 +43,18 @@ const Dashboards = () => {
 
     }
           fetchDashboards();
-    }, [])
+    }, [id])
     
 
 
 
 const fetchAndRenderDashboardItems = () => {
 
-    if (!dashboards || !organisationUnits || !indicators || !organisationUnitGroups) {
-      return <div>
-             <Loading/>
-             </div>
-    }
-
+  if (!dashboards || !organisationUnits || !indicators || !organisationUnitGroups) {
+    return <div>
+          <Loading/>
+         </div>
+}
 
       var dataValues = $.ajax({
       url: ADDRESS_URL + `/37/dashboards/${id}.json?fields=id,displayName,displayDescription,favorite~rename(starred),access,restrictFilters,allowedFilters,layout,itemConfig,dashboardItems%5Bid%2Ctype%2Cshape%2Cx%2Cy%2Cwidth~rename(w)%2Cheight~rename(h)%2Cmessages%2Ctext%2CappKey%2Creports%5Btype%2Cid%2CdisplayName~rename(name)%5D%2Cresources%5Bid%2CdisplayName~rename(name)%5D%2Cusers%5Bid%2CdisplayName~rename(name)%5D%2Cvisualization%5Bid%2CdisplayName~rename(name)%2Ctype%2CdisplayDescription~rename(description)%5D%2Cmap%5Bid%2CdisplayName~rename(name)%2Ctype%2CdisplayDescription~rename(description)%5D%2CeventReport%5Bid%2CdisplayName~rename(name)%2Ctype%2CdisplayDescription~rename(description)%5D%2CeventChart%5Bid%2CdisplayName~rename(name)%2Ctype%2CdisplayDescription~rename(description)%5D%5D`,
@@ -602,10 +611,6 @@ if (actualVitualization.type==="PIVOT_TABLE" && actualVitualization.rows[0].dime
   const visualisationName = actualVitualization.name
   console.log(visualisationName)
   
-  
-  
-  
-  
   const dxArray = []
    for(var k = 0; k < dataDimension.length; k++){
      dxArray.push(dataDimension[k]+";")
@@ -840,7 +845,7 @@ dashboardItemArray.push(
 </Grid> 
 )
 }
-if (actualVitualization.type==="GAUGE"){
+if (actualVitualization.type==="GAUGE" && actualVitualization.filters[0].dimension==="pe"){
 
   const peItem= actualVitualization.filters[0].items
   const period = peItem[0].name
@@ -897,7 +902,8 @@ dashboardItemArray.push(
         topLabelStyle= {{
         fill: "#222",
         fill: "#999999",
-        fontSize: "20px"
+        fontSize: "20px",
+        fontWeight: "bold"
         }} 
         valueLabelStyle= {{
          textAnchor: "middle",
@@ -992,7 +998,7 @@ console.log(dataValues.rows)
 }
   
  }
- if(dashboardItemsData[i].map){
+ if(dashboardItemsData[i].maps){
   dashboardItemArray.push(
     <Grid item xs={10} sm={6}>
     <Card className= {styles.minCard}>
@@ -1046,6 +1052,7 @@ console.log(dataValues.rows)
 
 }
 
+
   return <Grid container spacing={1}>
            {dashboardItemArray}
          </Grid>
@@ -1077,6 +1084,7 @@ const chart2PDF = e => {
     but.style.display = "block";
   });
 };
+
     return (
         <div className={styles.graphbox}> 
          {fetchAndRenderDashboardItems()}

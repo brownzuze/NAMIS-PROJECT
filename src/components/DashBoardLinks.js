@@ -47,6 +47,14 @@ const useStyles = makeStyles((theme) => ({
 
     }
   },
+  moresecond: {
+    padding: 5,
+    "&:last-child": {
+      paddingBottom: 20,
+      paddingTop: 15,
+
+    }
+  },
   expand: {
     transform: 'rotate(0deg)',
     marginLeft: 'auto',
@@ -137,7 +145,8 @@ export default  function RecipeReviewCard(props) {
   if(!dashboards){
     return <div>Loading</div>
   }
-  const moreBtn = dashboards.slice(7, dashboards.length)
+  const moreBtn = dashboards.slice(7, 13)
+  const moresecondBtn = dashboards.slice(14, dashboards.length)
   return (
     
     <Card className={classes.root}>
@@ -154,13 +163,6 @@ export default  function RecipeReviewCard(props) {
     )
   }}
 />
-     {/*getButtonsUsingForLoop()*/}
- {/*
-  dashboards.filter((item, index) => index<7).map(r=>{
-   return(
-   <Link to={`/dashboards/${r.id}`}  style={{textDecoration: 'none'}}><Button variant="contained" className={classes.button} id = {r.id} style= {barId===r.id ? {backgroundColor:"#387C44", color:"#FFFFFF", fontWeight:"bold"} : {backgroundColor:"#E5E4E2"}} onClick={(e)=>handleClick(e)}>{r.displayName}</Button></Link>
-   )
- })*/} 
  {
   dashboards.filter((item, index) => index<7).map(r=>{
     return(
@@ -183,16 +185,18 @@ export default  function RecipeReviewCard(props) {
    </CardContent>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
       <CardContent className = {classes.more}>
-       {/*getMoreButtonsUsingForLoop()*/}
-       {/*moreBtn.map(r=>{
-        return(
-       <Link to={`/dashboards/${r.id}`}  style={{textDecoration: 'none'}}><Button variant="contained" id = {r.id} className={classes.button} style= {barId===r.id ? {backgroundColor:"green"} : {backgroundColor:"#E5E4E2"}} onClick={(e)=>handleClick(e)}>{r.displayName}</Button></Link>
-       )
-      })*/}  
       {
       moreBtn.map(r=>{
        return(
         <Link to={`/dashboards/${r.id}`} className={styles.btnprimary}  id = {r.id} style= {barId===r.id ? {backgroundColor:"#387C44", color:"#FFFFFF", fontWeight:"bold"} : {backgroundColor:"#E5E4E2"}} onClick={(e)=>handleClick(e)}> {r.displayName}</Link>
+       )
+ })}         
+      </CardContent>
+      <CardContent className = {classes.moresecond}>
+      {
+     moresecondBtn.map(r=>{
+       return(
+        <Link to={`/dashboards/${r.id}`} className={styles.btnsec}  id = {r.id} style= {barId===r.id ? {backgroundColor:"#387C44", color:"#FFFFFF", fontWeight:"bold"} : {backgroundColor:"#E5E4E2"}} onClick={(e)=>handleClick(e)}> {r.displayName}</Link>
        )
  })}         
       </CardContent>
