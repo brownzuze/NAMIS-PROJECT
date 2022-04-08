@@ -166,10 +166,10 @@ export default  function RecipeReviewCard(props) {
  {
   dashboards.filter((item, index) => index<7).map(r=>{
     return(
-      <Link to={`/dashboards/${r.id}`} className={styles.btnprimary}
+      <Link to={`/dashboards/${r.id}`} className={styles.link}><button   className={styles.btnprimary}
         id = {r.id} style= {barId===r.id ? {backgroundColor:"#387C44", 
         color:"#FFFFFF", fontWeight:"bold"} : {backgroundColor:"#E5E4E2"}} 
-        onClick={(e)=>handleClick(e)}> {r.displayName}</Link>
+        onClick={(e)=>handleClick(e)}>{r.displayName}</button></Link>
       )
  })}       
      <IconButton
@@ -188,7 +188,11 @@ export default  function RecipeReviewCard(props) {
       {
       moreBtn.map(r=>{
        return(
-        <Link to={`/dashboards/${r.id}`} className={styles.btnprimary}  id = {r.id} style= {barId===r.id ? {backgroundColor:"#387C44", color:"#FFFFFF", fontWeight:"bold"} : {backgroundColor:"#E5E4E2"}} onClick={(e)=>handleClick(e)}> {r.displayName}</Link>
+        <Link to={`/dashboards/${r.id}`} className={styles.link}>
+        <button className={styles.btnprimary} 
+         id = {r.id} style= {barId===r.id ? {backgroundColor:"#387C44", 
+         color:"#FFFFFF", fontWeight:"bold"} : {backgroundColor:"#E5E4E2"}} 
+         onClick={(e)=>handleClick(e)}>{r.displayName}</button></Link>
        )
  })}         
       </CardContent>
@@ -196,7 +200,11 @@ export default  function RecipeReviewCard(props) {
       {
      moresecondBtn.map(r=>{
        return(
-        <Link to={`/dashboards/${r.id}`} className={styles.btnsec}  id = {r.id} style= {barId===r.id ? {backgroundColor:"#387C44", color:"#FFFFFF", fontWeight:"bold"} : {backgroundColor:"#E5E4E2"}} onClick={(e)=>handleClick(e)}> {r.displayName}</Link>
+        <Link to={`/dashboards/${r.id}`} className={styles.link}>
+           <button  className={styles.btnsec}
+           id = {r.id} style= {barId===r.id ? {backgroundColor:"#387C44",
+            color:"#FFFFFF", fontWeight:"bold"} : {backgroundColor:"#E5E4E2"}} 
+            onClick={(e)=>handleClick(e)}>{r.displayName}</button></Link>
        )
  })}         
       </CardContent>

@@ -28,12 +28,12 @@ async  componentDidMount() {
     if (!dashboards) {
       return <div>
                <LandingPage/>
-              </div>
+             </div>
     }
     return (
-      <Router forceRefresh={true}>
+      <Router>
       <div className={styles.container}>
-        <Appbar />
+        <Appbar/>
         
          <Routes>
            <Route path="/" element={<AntCharts/>}/>
