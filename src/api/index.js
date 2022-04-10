@@ -1,6 +1,8 @@
 import axios from "axios";
-export const ADDRESS_URL = 'https://play.dhis2.org/dev/api';
-const OAuth2 = 'Basic '+btoa('admin:district');
+export const ADDRESS_URL = 'https://covmw.com/namis1/api';
+export const username = "portal"
+export const password = "Namis71PortaL@*" 
+const OAuth2 = 'Basic '+btoa(username + ":" + password );
 export const makeApiRequest = async (apiUrl) => {
 
 apiUrl = Object.assign({}, apiUrl);

@@ -1004,6 +1004,102 @@ console.log(organisationUnitDispNames);
     return barChart
 }
 
+export const BarChartsWithpeRow = (dataValues, peLabels, dxLabel, visualisationName, periods) => {
+   
+  //getting rows
+  const rowData = dataValues.rows
+
+let value1 = []
+for (let i=0; i<periods.length; i++){
+for (let j = 0; j < rowData.length; j++) {
+       if(periods[i] === rowData[j][2]){
+        value1.push(parseFloat(rowData[j][3]))
+       } 
+
+  }
+  value1.push("")
+
+}
+
+console.log(value1)
+
+const barChart = (
+<Bar
+  data={{
+    labels: peLabels,
+    datasets: [
+      {
+        data: value1,
+        label: dxLabel,
+        borderColor: '#3333ff',
+        backgroundColor: 'rgb(154,205,50)',
+        fill: true,
+
+      }
+  ],
+  }}
+  options = {{
+    plugins: {
+      legend: { position: "bottom" },
+      title: {
+        display: true,
+        text: visualisationName
+    }
+    },
+    responsive: true
+  }}
+/>
+)
+// console.log(orgData[1].value)
+return barChart
+
+}
+
+export const BarChartsWithdxRow = (dataValues, peLabels, dxLabel, visualisationName, periods) => {
+   
+  //getting rows
+  const rowData = dataValues.rows
+
+let value1 = []
+for (let j = 0; j < rowData.length; j++) {
+        value1.push(parseFloat(rowData[j][3]))
+}
+
+console.log(value1)
+
+const barChart = (
+<Bar
+  data={{
+    labels: dxLabel,
+    datasets: [
+      {
+        data: value1,
+        label: periods,
+        borderColor: '#3333ff',
+        backgroundColor: 'rgb(154,205,50)',
+        fill: true,
+
+      }
+  ],
+  }}
+  options = {{
+    plugins: {
+      legend: { position: "bottom" },
+      title: {
+        display: true,
+        text: visualisationName
+    }
+    },
+    responsive: true
+  }}
+/>
+)
+// console.log(orgData[1].value)
+return barChart
+
+}
+
+
 export const PivotTable = (organisationUnits, dataValues) => {
   const orgIds = dataValues.metaData.dimensions.ou
   const dataItems = dataValues.metaData.items;
@@ -1110,6 +1206,7 @@ export const PivotTable = (organisationUnits, dataValues) => {
   return PivotChart
 }
 
+
  export const YearlyPivotTable = (dataValues, items) => {
   
   const rowData = dataValues.rows;
@@ -1166,6 +1263,7 @@ export const PivotTable = (organisationUnits, dataValues) => {
   return PivotChart
    
  }
+
 
 
   
