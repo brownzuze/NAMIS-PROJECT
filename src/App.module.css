@@ -54,10 +54,8 @@ body {
   display: inline;
   letter-spacing: 0.09rem;
   border-radius: 15px;
-  outline-offset: 4px;
   border: none;
   margin-left: 9px;
-  text-decoration: none;
   cursor: pointer;
 }
 .link{
@@ -126,7 +124,7 @@ body {
   margin-top: 15px;
 }
 .minCard{
-  height: 410px !important;
+  height: 550px !important;
   padding: lem;
   box-shadow: rgba(99,99,99,02) 0px 1px 5px 0px !important; 
 }
