@@ -25,6 +25,7 @@ async  componentDidMount() {
   render(){
     const {  dashboards } = this.state
 
+    /* Checking if the state is empty. If it is empty, it will render the landing page. */
     if (!dashboards) {
       return <div>
                <LandingPage/>
@@ -35,6 +36,7 @@ async  componentDidMount() {
       <div className={styles.container}>
         <Appbar/>
         
+        { /* A react router. It is a way to navigate between pages. */}
          <Routes>
            <Route path="/" element={<AntCharts/>}/>
            <Route exact path='/dashboards/:id' element={<Dashboards/>}/>

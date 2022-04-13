@@ -6,8 +6,13 @@ import ico7 from "../images/ico7.png";
 import ico9 from "../images/ico9.png";
 import styles from '../App.module.css';
 
+/**
+ * 
+ * @returns A function that is displayed when there is no internet connection
+ */
 const LandingPage = () => {
 
+  /* An array of objects. Each object has an id and an icon. */
   const chartData = [
     {
       id: 1,
@@ -71,6 +76,7 @@ const LandingPage = () => {
       </div>
       </div>
       <div className={styles.visualicons}>
+      
         {chartData.map(item => (
                         item.icon
                     ))}

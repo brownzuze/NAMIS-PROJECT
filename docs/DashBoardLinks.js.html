@@ -1,4 +1,32 @@
-import React from 'react';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: DashBoardLinks.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: DashBoardLinks.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
@@ -37,20 +65,20 @@ const useStyles = makeStyles((theme) => ({
   },
   cardcontent: {
     padding: 0,
-    "&:last-child": {
+    "&amp;:last-child": {
       paddingBottom: 2
     }
   },
   more: {
     padding: 5,
-    "&:last-child": {
+    "&amp;:last-child": {
       paddingBottom: 20,
 
     }
   },
   moresecond: {
     padding: 5,
-    "&:last-child": {
+    "&amp;:last-child": {
       paddingBottom: 20,
       paddingTop: 15,
 
@@ -115,7 +143,7 @@ export default  function RecipeReviewCard(props) {
      setBarId(e.target.id);
   }
   if(!dashboards){
-    return <div>Loading</div>
+    return &lt;div>Loading&lt;/div>
   }
   /* Slicing the dashboards array into two arrays. */
   /* Slicing the dashboards array into two arrays. */
@@ -123,33 +151,33 @@ export default  function RecipeReviewCard(props) {
   const moresecondBtn = dashboards.slice(14, dashboards.length)
   return (
     
-    <Card className={classes.root}>
-    <CardContent className = {classes.cardcontent}>
-     <TextField className = {classes.search}
+    &lt;Card className={classes.root}>
+    &lt;CardContent className = {classes.cardcontent}>
+     &lt;TextField className = {classes.search}
       label="Search for a dashboard"
       InputProps={{
       endAdornment: (
-      <InputAdornment>
-        <IconButton>
-          <SearchIcon />
-        </IconButton>
-      </InputAdornment>
+      &lt;InputAdornment>
+        &lt;IconButton>
+          &lt;SearchIcon />
+        &lt;/IconButton>
+      &lt;/InputAdornment>
     )
   }}
 />
  {
    //filtering dashboards
   /* Filtering the dashboards array and then mapping over the filtered array. */
-  dashboards.filter((item, index) => index<3).map(r=>{
+  dashboards.filter((item, index) => index&lt;3).map(r=>{
     return(
-      <Link to={`/dashboards/${r.id}`} className={styles.link}>
-        <button className={styles.btnprimary}
+      &lt;Link to={`/dashboards/${r.id}`} className={styles.link}>
+        &lt;button className={styles.btnprimary}
         id = {r.id} style= {barId===r.id ? {backgroundColor:"#387C44", 
         color:"#FFFFFF", fontWeight:"bold"} : {backgroundColor:"#E5E4E2"}} 
-        onClick={(e)=>handleClick(e)}>{r.displayName} </button></Link>
+        onClick={(e)=>handleClick(e)}>{r.displayName} &lt;/button>&lt;/Link>
       )
  })}       
-     <IconButton
+     &lt;IconButton
           className={clsx(classes.expand, {
             [classes.expandOpen]: expanded,
           })}
@@ -157,39 +185,61 @@ export default  function RecipeReviewCard(props) {
           aria-expanded={expanded}
           aria-label="show more"
         >
-          <ExpandMoreIcon />
-        </IconButton>
-   </CardContent>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
-      <CardContent className = {classes.more}>
+          &lt;ExpandMoreIcon />
+        &lt;/IconButton>
+   &lt;/CardContent>
+      &lt;Collapse in={expanded} timeout="auto" unmountOnExit>
+      &lt;CardContent className = {classes.more}>
       {
       /* Mapping over the array and returning a button for each item in the array. */
       /* Mapping over the array and returning a button for each item in the array. */
         // adding more button
       moreBtn.map(r=>{
        return(
-        <Link to={`/dashboards/${r.id}`} className={styles.link} 
-         ><button className={styles.btnprimary} 
+        &lt;Link to={`/dashboards/${r.id}`} className={styles.link} 
+         >&lt;button className={styles.btnprimary} 
          id = {r.id} style= {barId===r.id ? {backgroundColor:"#387C44", 
          color:"#FFFFFF", fontWeight:"bold"} : {backgroundColor:"#E5E4E2"}} 
-         onClick={(e)=>handleClick(e)}>{r.displayName}</button></Link>
+         onClick={(e)=>handleClick(e)}>{r.displayName}&lt;/button>&lt;/Link>
        )
  })}         
-      </CardContent>
-      <CardContent className = {classes.moresecond}>
-     
+      &lt;/CardContent>
+      &lt;CardContent className = {classes.moresecond}>
+     /* Mapping over the array and returning a button for each item in the array. */
       {
      moresecondBtn.map(r=>{
        return(
-        <Link to={`/dashboards/${r.id}`} className={styles.link} > 
-         <button className={styles.btnsec} 
+        &lt;Link to={`/dashboards/${r.id}`} className={styles.link} > 
+         &lt;button className={styles.btnsec} 
          id = {r.id} style= {barId===r.id ? {backgroundColor:"#387C44", 
          color:"#FFFFFF", fontWeight:"bold"} : {backgroundColor:"#E5E4E2"}} 
-         onClick={(e)=>handleClick(e)}>{r.displayName}</button></Link>
+         onClick={(e)=>handleClick(e)}>{r.displayName}&lt;/button>&lt;/Link>
        )
  })}         
-      </CardContent>
-      </Collapse>
-    </Card>
+      &lt;/CardContent>
+      &lt;/Collapse>
+    &lt;/Card>
   );
-}
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AntCharts.html">AntCharts</a></li></ul><h3>Global</h3><ul><li><a href="global.html#ChartWithPeRow">ChartWithPeRow</a></li><li><a href="global.html#Dashboards">Dashboards</a></li><li><a href="global.html#LandingPage">LandingPage</a></li><li><a href="global.html#Loading">Loading</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Sun Apr 10 2022 08:14:40 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

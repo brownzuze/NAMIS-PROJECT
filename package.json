@@ -34,7 +34,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "generate-docs": "jsdoc -c I:/revised/doc.json"
+
   },
   "eslintConfig": {
     "extends": [
@@ -55,6 +57,7 @@
     ]
   },
   "devDependencies": {
-    "@types/leaflet": "^1.7.9"
+    "@types/leaflet": "^1.7.9",
+    "jsdoc": "^3.6.10"
   }
 }

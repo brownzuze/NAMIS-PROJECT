@@ -1,4 +1,32 @@
-import React from 'react';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: AntCharts.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: AntCharts.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from 'react';
 import styles from '../App.module.css';
 import { OuRowCharts, LineChartWithpeLabel, ChartWithPeRow, StackedChartWithPeRow,BarChartsWithpeRow, ChartWithPeOuRow, LineChart, BarChartsWithOuRow, PieChart} from './RenderGraph';
 import {getDashboards, getIndicators, getorganisationUnitGroups, getOrganisationUnits} from '../api';
@@ -46,9 +74,9 @@ class AntCharts extends React.Component {
     const {dashboards, organisationUnits, indicators,  organisationUnitGroups} = this.state
 
       if (!dashboards || !organisationUnits || !indicators || !organisationUnitGroups) {
-        return <div>
-                <Loading/>
-               </div>
+        return &lt;div>
+                &lt;Loading/>
+               &lt;/div>
       }
 
         const dashIds = dashboards.map(ids => ids.id)
@@ -71,7 +99,7 @@ class AntCharts extends React.Component {
         //looping dashboardItems
 
          let dashboardItemArray = []
-         for (let i=0; i < dashboardItemsData.length; i++ ) {
+         for (let i=0; i &lt; dashboardItemsData.length; i++ ) {
          if (dashboardItemsData[i].chart) {
          var visualizationId = dashboardItemsData[i].chart.id
 
@@ -88,7 +116,7 @@ class AntCharts extends React.Component {
                   
          console.log(actualVitualization)
                    
-      if (actualVitualization.type==="COLUMN" && actualVitualization.rows[0].dimension ==="ou" && actualVitualization.filters[0].dimension ==="pe" ){
+      if (actualVitualization.type==="COLUMN" &amp;&amp; actualVitualization.rows[0].dimension ==="ou" &amp;&amp; actualVitualization.filters[0].dimension ==="pe" ){
 
         const OuItems = actualVitualization.rows[0].items
         console.log()
@@ -107,7 +135,7 @@ class AntCharts extends React.Component {
       //appending the organisation unit dimension with ; 
  
         const dxArray = []
-         for(var k = 0; k < dataDimension.length; k++){
+         for(var k = 0; k &lt; dataDimension.length; k++){
          dxArray.push(dataDimension[k]+";")
         }
         const dataDimensionString = dxArray.join('')
@@ -116,14 +144,14 @@ class AntCharts extends React.Component {
 
        //appending the organisation unit dimension with ; 
        const array = []
-       for(var r = 0; r < orgUnits.length; r++){
+       for(var r = 0; r &lt; orgUnits.length; r++){
        array.push(orgUnits[r]+";")
        }
        const orgUnitsString = array.join('')
        console.log(orgUnitsString)
 
        var dataValues = $.ajax({
-       url: ADDRESS_URL + `/analytics.json?dimension=dx:${dataDimensionString}&dimension=ou:${orgUnitsString}&dimension=pe:${period}`,
+       url: ADDRESS_URL + `/analytics.json?dimension=dx:${dataDimensionString}&amp;dimension=ou:${orgUnitsString}&amp;dimension=pe:${period}`,
        dataType: "json",
        headers: { "Authorization": "Basic " + btoa(username + ":" + password) },
        success: function (data) { },
@@ -137,30 +165,30 @@ class AntCharts extends React.Component {
 
    /* Creating a card with a dropdown menu and a chart. */
     dashboardItemArray.push( 
-      <Grid item xs={10} sm={6}>
-            <Card className= {styles.cards}>
-              <CardContent style = {{paddingBottom: 0, display:'flex', justifyContent: 'flex-end'}}>
-                <Dropdown>
-                 <Dropdown.Toggle id="dropdown-basic-button" title="Dropdown button">
-                  <MoreHorizIcon/>
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu>
-                    <Dropdown.Item id = {actualVitualization.id} onClick={e => this.chart2PDF(e)}>Save as pdf</Dropdown.Item>
-                    <Dropdown.Item href="#/action-2">Export as a csv</Dropdown.Item>
-                    <Dropdown.Item href="#/action-3">View in full screen</Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-              </CardContent>
-              <CardContent className = {actualVitualization.id}>
+      &lt;Grid item xs={10} sm={6}>
+            &lt;Card className= {styles.cards}>
+              &lt;CardContent style = {{paddingBottom: 0, display:'flex', justifyContent: 'flex-end'}}>
+                &lt;Dropdown>
+                 &lt;Dropdown.Toggle id="dropdown-basic-button" title="Dropdown button">
+                  &lt;MoreHorizIcon/>
+                  &lt;/Dropdown.Toggle>
+                  &lt;Dropdown.Menu>
+                    &lt;Dropdown.Item id = {actualVitualization.id} onClick={e => this.chart2PDF(e)}>Save as pdf&lt;/Dropdown.Item>
+                    &lt;Dropdown.Item href="#/action-2">Export as a csv&lt;/Dropdown.Item>
+                    &lt;Dropdown.Item href="#/action-3">View in full screen&lt;/Dropdown.Item>
+                  &lt;/Dropdown.Menu>
+                &lt;/Dropdown>
+              &lt;/CardContent>
+              &lt;CardContent className = {actualVitualization.id}>
               {OuRowCharts(organisationUnits,indicators, dataValues, visualisationName)}
-              </CardContent>
-            </Card>
-          </Grid>)
+              &lt;/CardContent>
+            &lt;/Card>
+          &lt;/Grid>)
 
 }
 
 /* The above code is creating a stacked column chart with two filters and one row. */
-if (actualVitualization.type==="STACKED_COLUMN" && actualVitualization.filters.length == 2  && actualVitualization.rows[0].dimension ==="pe" ){
+if (actualVitualization.type==="STACKED_COLUMN" &amp;&amp; actualVitualization.filters.length == 2  &amp;&amp; actualVitualization.rows[0].dimension ==="pe" ){
 
   const chartIndicator = actualVitualization.columns[0].dimension
   console.log( chartIndicator)
@@ -181,7 +209,7 @@ console.log(ChartIndicatorString)
 
 //appending the organisation unit dimension with ; 
 var array = []
-for(var j = 0; j < orgUnitGroups.length; j++){
+for(var j = 0; j &lt; orgUnitGroups.length; j++){
   array.push(orgUnitGroups[j]+";")
 }
 const orgUnitsString = array.join('')
@@ -192,7 +220,7 @@ console.log(orgUnitGroupDx)
 
 //appending the data Dimension with ;
 const dxArray = []
-for(var j = 0; j < dataDimension.length; j++){
+for(var j = 0; j &lt; dataDimension.length; j++){
   dxArray.push(dataDimension[j]+";")
 }
 const dataDimensionString = dxArray.join('')
@@ -203,14 +231,14 @@ console.log(orgUnitGroups)
 
  //appending the organisation unit dimension with ; 
  const orgarray = []
- for(var j = 0; j < orgUnits.length; j++){
+ for(var j = 0; j &lt; orgUnits.length; j++){
    orgarray.push(orgUnits[j]+";")
  }
  const actualOrgUnitsString = orgarray.join('')
  console.log(orgUnitsString)
 
 var dataValues = $.ajax({
-  url: ADDRESS_URL + `/analytics.json?dimension=${orgUnitGroupDx}&dimension=dx:${dataDimensionString}&dimension=pe:${period}&filter=ou:${actualOrgUnitsString}`,
+  url: ADDRESS_URL + `/analytics.json?dimension=${orgUnitGroupDx}&amp;dimension=dx:${dataDimensionString}&amp;dimension=pe:${period}&amp;filter=ou:${actualOrgUnitsString}`,
   dataType: "json",
   headers: { "Authorization": "Basic " + btoa(username + ":" + password) },
   success: function (data) { },
@@ -225,31 +253,31 @@ console.log()
 console.log(dataValues.rows)
 
 dashboardItemArray.push(
-  <Grid item xs={10} sm={6}>
-            <Card className= {styles.cards}>
-              <CardContent style = {{paddingBottom: 0, display:'flex', justifyContent: 'flex-end'}}>
-                <Dropdown>
-                 <Dropdown.Toggle id="dropdown-basic-button" title="Dropdown button">
-                  <MoreHorizIcon/>
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu>
-                    <Dropdown.Item id = {actualVitualization.id} onClick={e => this.chart2PDF(e)}>Save as pdf</Dropdown.Item>
-                    <Dropdown.Item href="#/action-2">Export as a csv</Dropdown.Item>
-                    <Dropdown.Item href="#/action-3">View in full screen</Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-              </CardContent>
-              <CardContent className = {actualVitualization.id}>
+  &lt;Grid item xs={10} sm={6}>
+            &lt;Card className= {styles.cards}>
+              &lt;CardContent style = {{paddingBottom: 0, display:'flex', justifyContent: 'flex-end'}}>
+                &lt;Dropdown>
+                 &lt;Dropdown.Toggle id="dropdown-basic-button" title="Dropdown button">
+                  &lt;MoreHorizIcon/>
+                  &lt;/Dropdown.Toggle>
+                  &lt;Dropdown.Menu>
+                    &lt;Dropdown.Item id = {actualVitualization.id} onClick={e => this.chart2PDF(e)}>Save as pdf&lt;/Dropdown.Item>
+                    &lt;Dropdown.Item href="#/action-2">Export as a csv&lt;/Dropdown.Item>
+                    &lt;Dropdown.Item href="#/action-3">View in full screen&lt;/Dropdown.Item>
+                  &lt;/Dropdown.Menu>
+                &lt;/Dropdown>
+              &lt;/CardContent>
+              &lt;CardContent className = {actualVitualization.id}>
               {StackedChartWithPeRow(organisationUnitGroups, dataValues, visualisationName)}
-              </CardContent>
-            </Card>
-          </Grid>) 
+              &lt;/CardContent>
+            &lt;/Card>
+          &lt;/Grid>) 
 }
 
 /* The above code is checking if the visualization type is column and if the rows have two dimensions
 and if the first dimension is pe and the second dimension is ou. If the above conditions are met,
 then the code will execute the code below. */
-if (actualVitualization.type==="COLUMN"  && actualVitualization.rows.length == 2 && actualVitualization.rows[0].dimension ==="pe" && actualVitualization.rows[1].dimension ==="ou"){
+if (actualVitualization.type==="COLUMN"  &amp;&amp; actualVitualization.rows.length == 2 &amp;&amp; actualVitualization.rows[0].dimension ==="pe" &amp;&amp; actualVitualization.rows[1].dimension ==="ou"){
 
   const OuItems = actualVitualization.rows[1].items
    console.log()
@@ -270,7 +298,7 @@ if (actualVitualization.type==="COLUMN"  && actualVitualization.rows.length == 2
  
  
  const dxArray = []
-   for(var k = 0; k < dataDimension.length; k++){
+   for(var k = 0; k &lt; dataDimension.length; k++){
      dxArray.push(dataDimension[k]+";")
    }
    const dataDimensionString = dxArray.join('')
@@ -279,14 +307,14 @@ if (actualVitualization.type==="COLUMN"  && actualVitualization.rows.length == 2
  
  //appending the organisation unit dimension with ; 
    const array = []
-   for(var r = 0; r < orgUnits.length; r++){
+   for(var r = 0; r &lt; orgUnits.length; r++){
      array.push(orgUnits[r]+";")
    }
    const orgUnitsString = array.join('')
    console.log(orgUnitsString)
  
   var dataValues = $.ajax({
-   url: ADDRESS_URL + `/analytics.json?dimension=dx:${dataDimensionString}&dimension=ou:${orgUnitsString}&dimension=pe:${period}`,
+   url: ADDRESS_URL + `/analytics.json?dimension=dx:${dataDimensionString}&amp;dimension=ou:${orgUnitsString}&amp;dimension=pe:${period}`,
    dataType: "json",
    headers: { "Authorization": "Basic " + btoa(username + ":" + password) },
    success: function (data) { },
@@ -299,30 +327,30 @@ if (actualVitualization.type==="COLUMN"  && actualVitualization.rows.length == 2
  console.log(dataValues.rows)
  
  dashboardItemArray.push( 
-  <Grid item xs={10} sm={6}>
-  <Card className= {styles.cards}>
-    <CardContent style = {{paddingBottom: 0, display:'flex', justifyContent: 'flex-end'}}>
-      <Dropdown>
-       <Dropdown.Toggle id="dropdown-basic-button" title="Dropdown button">
-        <MoreHorizIcon/>
-        </Dropdown.Toggle>
-        <Dropdown.Menu>
-          <Dropdown.Item id = {actualVitualization.id} onClick={e => this.chart2PDF(e)}>Save as pdf</Dropdown.Item>
-          <Dropdown.Item href="#/action-2">Export as a csv</Dropdown.Item>
-          <Dropdown.Item href="#/action-3">View in full screen</Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
-    </CardContent>
-    <CardContent className = {actualVitualization.id}>
+  &lt;Grid item xs={10} sm={6}>
+  &lt;Card className= {styles.cards}>
+    &lt;CardContent style = {{paddingBottom: 0, display:'flex', justifyContent: 'flex-end'}}>
+      &lt;Dropdown>
+       &lt;Dropdown.Toggle id="dropdown-basic-button" title="Dropdown button">
+        &lt;MoreHorizIcon/>
+        &lt;/Dropdown.Toggle>
+        &lt;Dropdown.Menu>
+          &lt;Dropdown.Item id = {actualVitualization.id} onClick={e => this.chart2PDF(e)}>Save as pdf&lt;/Dropdown.Item>
+          &lt;Dropdown.Item href="#/action-2">Export as a csv&lt;/Dropdown.Item>
+          &lt;Dropdown.Item href="#/action-3">View in full screen&lt;/Dropdown.Item>
+        &lt;/Dropdown.Menu>
+      &lt;/Dropdown>
+    &lt;/CardContent>
+    &lt;CardContent className = {actualVitualization.id}>
     {ChartWithPeOuRow(organisationUnits,indicators, dataValues, visualisationName)}
-    </CardContent>
-  </Card>
-</Grid>) 
+    &lt;/CardContent>
+  &lt;/Card>
+&lt;/Grid>) 
  
  }
 
  /* The above code is creating a chart with the data from the dataValues variable. */
- if (actualVitualization.type==="COLUMN"  && actualVitualization.rows.length == 1 && actualVitualization.rows[0].dimension ==="pe" && actualVitualization.columns[0].dimension ==="ou"){
+ if (actualVitualization.type==="COLUMN"  &amp;&amp; actualVitualization.rows.length == 1 &amp;&amp; actualVitualization.rows[0].dimension ==="pe" &amp;&amp; actualVitualization.columns[0].dimension ==="ou"){
 
   const dataDimension = actualVitualization.filters[0].items.map(ids => ids.id)
   const peItem=  actualVitualization.rows[0].items
@@ -339,7 +367,7 @@ if (actualVitualization.type==="COLUMN"  && actualVitualization.rows.length == 2
  
  
  const dxArray = []
-   for(var k = 0; k < dataDimension.length; k++){
+   for(var k = 0; k &lt; dataDimension.length; k++){
      dxArray.push(dataDimension[k]+";")
    }
    const dataDimensionString = dxArray.join('')
@@ -348,14 +376,14 @@ if (actualVitualization.type==="COLUMN"  && actualVitualization.rows.length == 2
  
  //appending the organisation unit dimension with ; 
    const array = []
-   for(var r = 0; r < orgUnits.length; r++){
+   for(var r = 0; r &lt; orgUnits.length; r++){
      array.push(orgUnits[r]+";")
    }
    const orgUnitsString = array.join('')
    console.log(orgUnitsString)
  
   var dataValues = $.ajax({
-   url: ADDRESS_URL + `/analytics.json?dimension=dx:${dataDimensionString}&dimension=ou:${orgUnitsString}&dimension=pe:${period}`,
+   url: ADDRESS_URL + `/analytics.json?dimension=dx:${dataDimensionString}&amp;dimension=ou:${orgUnitsString}&amp;dimension=pe:${period}`,
    dataType: "json",
    headers: { "Authorization": "Basic " + btoa(username + ":" + password) },
    success: function (data) { },
@@ -368,31 +396,31 @@ if (actualVitualization.type==="COLUMN"  && actualVitualization.rows.length == 2
  console.log(dataValues.rows)
  
  dashboardItemArray.push( 
-  <Grid item xs={10} sm={6}>
-  <Card className= {styles.cards}>
-    <CardContent style = {{paddingBottom: 0, display:'flex', justifyContent: 'flex-end'}}>
-      <Dropdown>
-       <Dropdown.Toggle id="dropdown-basic-button" title="Dropdown button">
-        <MoreHorizIcon/>
-        </Dropdown.Toggle>
-        <Dropdown.Menu>
-          <Dropdown.Item id = {actualVitualization.id} onClick={e => this.chart2PDF(e)}>Save as pdf</Dropdown.Item>
-          <Dropdown.Item href="#/action-2">Export as a csv</Dropdown.Item>
-          <Dropdown.Item href="#/action-3">View in full screen</Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
-    </CardContent>
-    <CardContent className = {actualVitualization.id}>
+  &lt;Grid item xs={10} sm={6}>
+  &lt;Card className= {styles.cards}>
+    &lt;CardContent style = {{paddingBottom: 0, display:'flex', justifyContent: 'flex-end'}}>
+      &lt;Dropdown>
+       &lt;Dropdown.Toggle id="dropdown-basic-button" title="Dropdown button">
+        &lt;MoreHorizIcon/>
+        &lt;/Dropdown.Toggle>
+        &lt;Dropdown.Menu>
+          &lt;Dropdown.Item id = {actualVitualization.id} onClick={e => this.chart2PDF(e)}>Save as pdf&lt;/Dropdown.Item>
+          &lt;Dropdown.Item href="#/action-2">Export as a csv&lt;/Dropdown.Item>
+          &lt;Dropdown.Item href="#/action-3">View in full screen&lt;/Dropdown.Item>
+        &lt;/Dropdown.Menu>
+      &lt;/Dropdown>
+    &lt;/CardContent>
+    &lt;CardContent className = {actualVitualization.id}>
     {ChartWithPeRow(organisationUnits, dataValues, visualisationName)}
-    </CardContent>
-  </Card>
- </Grid>) 
+    &lt;/CardContent>
+  &lt;/Card>
+ &lt;/Grid>) 
  
  }
 
  /* The above code is creating a pie chart. */
  /* The above code is creating a pie chart. */
- if (actualVitualization.type==="PIE" && actualVitualization.filters[0].dimension==="pe" && actualVitualization.filters.length==3){
+ if (actualVitualization.type==="PIE" &amp;&amp; actualVitualization.filters[0].dimension==="pe" &amp;&amp; actualVitualization.filters.length==3){
 
   const chartIndicator = actualVitualization.columns.map(ids =>ids.dimension)
   const dataDimension = actualVitualization.filters[1].items.map(ids => ids.id)
@@ -409,7 +437,7 @@ if (actualVitualization.type==="COLUMN"  && actualVitualization.rows.length == 2
  
 //appending the data Dimension with ;
 const dxArray = []
-for(var j = 0; j < dataDimension.length; j++){
+for(var j = 0; j &lt; dataDimension.length; j++){
   dxArray.push(dataDimension[j]+";")
 }
 const dataDimensionString = dxArray.join('')
@@ -419,7 +447,7 @@ console.log(orgUnitGroups)
 
 //adding pending indicator with ;
 const InArray = []
-for(var j = 0; j < chartIndicator.length; j++){
+for(var j = 0; j &lt; chartIndicator.length; j++){
   InArray.push(chartIndicator[j]+":")
 }
 const ChartIndicatorString = InArray.join('')
@@ -427,7 +455,7 @@ console.log(ChartIndicatorString)
 
 //appending the organisation unit dimension with ; 
 var array = []
-for(var j = 0; j < orgUnitGroups.length; j++){
+for(var j = 0; j &lt; orgUnitGroups.length; j++){
   array.push(orgUnitGroups[j]+";")
 }
 const orgUnitsString = array.join('')
@@ -437,7 +465,7 @@ const orgUnitGroupDx = ChartIndicatorString + orgUnitsString
 console.log(orgUnitGroupDx) 
 
 var dataValues = $.ajax({
-  url: ADDRESS_URL + `/analytics.json?dimension=${orgUnitGroupDx}&filter=pe:${period}&filter=dx:${dataDimensionString}&filter=ou:${orgUnits}&includeNumDen=false&skipMeta=true&skipData=false`,
+  url: ADDRESS_URL + `/analytics.json?dimension=${orgUnitGroupDx}&amp;filter=pe:${period}&amp;filter=dx:${dataDimensionString}&amp;filter=ou:${orgUnits}&amp;includeNumDen=false&amp;skipMeta=true&amp;skipData=false`,
   dataType: "json",
   headers: { "Authorization": "Basic " + btoa(username + ":" + password) },
   success: function (data) { },
@@ -450,28 +478,28 @@ var dataValues = $.ajax({
 console.log(dataValues.rows)
 
 dashboardItemArray.push(
-  <Grid item xs={10} sm={6}>
-  <Card className= {styles.minCard}>
-    <CardContent style = {{paddingBottom: 0, display:'flex', justifyContent: 'flex-end'}}>
-      <Dropdown>
-       <Dropdown.Toggle id="dropdown-basic-button" title="Dropdown button">
-        <MoreHorizIcon/>
-        </Dropdown.Toggle>
-        <Dropdown.Menu>
-          <Dropdown.Item id = {actualVitualization.id} onClick={e => this.chart2PDF(e)}>Save as pdf</Dropdown.Item>
-          <Dropdown.Item href="#/action-2">Export as a csv</Dropdown.Item>
-          <Dropdown.Item href="#/action-3">View in full screen</Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
-    </CardContent>
-    <CardContent className = {actualVitualization.id}>
+  &lt;Grid item xs={10} sm={6}>
+  &lt;Card className= {styles.minCard}>
+    &lt;CardContent style = {{paddingBottom: 0, display:'flex', justifyContent: 'flex-end'}}>
+      &lt;Dropdown>
+       &lt;Dropdown.Toggle id="dropdown-basic-button" title="Dropdown button">
+        &lt;MoreHorizIcon/>
+        &lt;/Dropdown.Toggle>
+        &lt;Dropdown.Menu>
+          &lt;Dropdown.Item id = {actualVitualization.id} onClick={e => this.chart2PDF(e)}>Save as pdf&lt;/Dropdown.Item>
+          &lt;Dropdown.Item href="#/action-2">Export as a csv&lt;/Dropdown.Item>
+          &lt;Dropdown.Item href="#/action-3">View in full screen&lt;/Dropdown.Item>
+        &lt;/Dropdown.Menu>
+      &lt;/Dropdown>
+    &lt;/CardContent>
+    &lt;CardContent className = {actualVitualization.id}>
     {PieChart(organisationUnitGroups, dataValues, visualisationName)}
-    </CardContent>
-  </Card>
- </Grid>) 
+    &lt;/CardContent>
+  &lt;/Card>
+ &lt;/Grid>) 
 }
  
-if (actualVitualization.type==="LINE" && actualVitualization.rows[0].dimension==="pe" && actualVitualization.columns[0].dimension==="ou"){
+if (actualVitualization.type==="LINE" &amp;&amp; actualVitualization.rows[0].dimension==="pe" &amp;&amp; actualVitualization.columns[0].dimension==="ou"){
   console.log("line")
   const visualisationName = actualVitualization.name
   const period =actualVitualization.rows[0].items[0].id
@@ -485,7 +513,7 @@ if (actualVitualization.type==="LINE" && actualVitualization.rows[0].dimension==
 
   //appending the data Dimension with ;
   const dxArray = []
-  for(var j = 0; j < dataDimension.length; j++){
+  for(var j = 0; j &lt; dataDimension.length; j++){
   dxArray.push(dataDimension[j]+";")
 }
 const dataDimensionString = dxArray.join('')
@@ -494,14 +522,14 @@ console.log(dataDimensionString)
 
 //appending the organisation unit dimension with ; 
 const array = []
-for(var j = 0; j < orgUnits.length; j++){
+for(var j = 0; j &lt; orgUnits.length; j++){
 array.push(orgUnits[j]+";")
 }
 const orgUnitsString = array.join('')
 console.log(orgUnitsString)
 
 var dataValues = $.ajax({
-url: ADDRESS_URL + `/analytics.json?dimension=dx:${dataDimensionString}&dimension=ou:${orgUnitsString}&dimension=pe:${period}`,
+url: ADDRESS_URL + `/analytics.json?dimension=dx:${dataDimensionString}&amp;dimension=ou:${orgUnitsString}&amp;dimension=pe:${period}`,
 dataType: "json",
 headers: { "Authorization": "Basic " + btoa(username + ":" + password) },
 success: function (data) { },
@@ -514,25 +542,25 @@ console.log(err);
 console.log(dataValues.rows)
 
 dashboardItemArray.push(
-  <Grid item xs={10} sm={6}>
-  <Card className= {styles.cards}>
-    <CardContent style = {{paddingBottom: 0, display:'flex', justifyContent: 'flex-end'}}>
-      <Dropdown>
-       <Dropdown.Toggle id="dropdown-basic-button" title="Dropdown button">
-        <MoreHorizIcon/>
-        </Dropdown.Toggle>
-        <Dropdown.Menu>
-          <Dropdown.Item id = {actualVitualization.id} onClick={e => this.chart2PDF(e)}>Save as pdf</Dropdown.Item>
-          <Dropdown.Item href="#/action-2">Export as a csv</Dropdown.Item>
-          <Dropdown.Item href="#/action-3">View in full screen</Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
-    </CardContent>
-    <CardContent className = {actualVitualization.id}>
+  &lt;Grid item xs={10} sm={6}>
+  &lt;Card className= {styles.cards}>
+    &lt;CardContent style = {{paddingBottom: 0, display:'flex', justifyContent: 'flex-end'}}>
+      &lt;Dropdown>
+       &lt;Dropdown.Toggle id="dropdown-basic-button" title="Dropdown button">
+        &lt;MoreHorizIcon/>
+        &lt;/Dropdown.Toggle>
+        &lt;Dropdown.Menu>
+          &lt;Dropdown.Item id = {actualVitualization.id} onClick={e => this.chart2PDF(e)}>Save as pdf&lt;/Dropdown.Item>
+          &lt;Dropdown.Item href="#/action-2">Export as a csv&lt;/Dropdown.Item>
+          &lt;Dropdown.Item href="#/action-3">View in full screen&lt;/Dropdown.Item>
+        &lt;/Dropdown.Menu>
+      &lt;/Dropdown>
+    &lt;/CardContent>
+    &lt;CardContent className = {actualVitualization.id}>
     {LineChart(organisationUnits, dataValues, visualisationName)}
-    </CardContent>
-  </Card>
- </Grid>) 
+    &lt;/CardContent>
+  &lt;/Card>
+ &lt;/Grid>) 
 
 }
 
@@ -548,7 +576,7 @@ if (actualVitualization.type==="YEAR_OVER_YEAR_LINE" ){
 
 //appending the data Dimension with ;
 const dxArray = []
-for(var j = 0; j < dataDimension.length; j++){
+for(var j = 0; j &lt; dataDimension.length; j++){
 dxArray.push(dataDimension[j]+";")
 }
 const dataDimensionString = dxArray.join('')
@@ -557,14 +585,14 @@ console.log(dataDimensionString)
 
 //appending the organisation unit dimension with ; 
 const array = []
-for(var j = 0; j < orgUnits.length; j++){
+for(var j = 0; j &lt; orgUnits.length; j++){
 array.push(orgUnits[j]+";")
 }
 const orgUnitsString = array.join('')
 console.log(orgUnitsString)
 
 var dataValues = $.ajax({
-url: ADDRESS_URL + `/analytics.json?dimension=pe:${period}&dimension=ou:${orgUnitsString}&dimension=dx:${dataDimensionString}`,
+url: ADDRESS_URL + `/analytics.json?dimension=pe:${period}&amp;dimension=ou:${orgUnitsString}&amp;dimension=dx:${dataDimensionString}`,
 dataType: "json",
 headers: { "Authorization": "Basic " + btoa(username + ":" + password) },
 success: function (data) { },
@@ -577,25 +605,25 @@ console.log(err);
 console.log(dataValues.rows)
 
 dashboardItemArray.push(
-  <Grid item xs={10} sm={6}>
-  <Card className= {styles.cards}>
-    <CardContent style = {{paddingBottom: 0, display:'flex', justifyContent: 'flex-end'}}>
-      <Dropdown>
-       <Dropdown.Toggle id="dropdown-basic-button" title="Dropdown button">
-        <MoreHorizIcon/>
-        </Dropdown.Toggle>
-        <Dropdown.Menu>
-          <Dropdown.Item id = {actualVitualization.id} onClick={e => this.chart2PDF(e)}>Save as pdf</Dropdown.Item>
-          <Dropdown.Item href="#/action-2">Export as a csv</Dropdown.Item>
-          <Dropdown.Item href="#/action-3">View in full screen</Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
-    </CardContent>
-    <CardContent className = {actualVitualization.id}>
+  &lt;Grid item xs={10} sm={6}>
+  &lt;Card className= {styles.cards}>
+    &lt;CardContent style = {{paddingBottom: 0, display:'flex', justifyContent: 'flex-end'}}>
+      &lt;Dropdown>
+       &lt;Dropdown.Toggle id="dropdown-basic-button" title="Dropdown button">
+        &lt;MoreHorizIcon/>
+        &lt;/Dropdown.Toggle>
+        &lt;Dropdown.Menu>
+          &lt;Dropdown.Item id = {actualVitualization.id} onClick={e => this.chart2PDF(e)}>Save as pdf&lt;/Dropdown.Item>
+          &lt;Dropdown.Item href="#/action-2">Export as a csv&lt;/Dropdown.Item>
+          &lt;Dropdown.Item href="#/action-3">View in full screen&lt;/Dropdown.Item>
+        &lt;/Dropdown.Menu>
+      &lt;/Dropdown>
+    &lt;/CardContent>
+    &lt;CardContent className = {actualVitualization.id}>
     {LineChartWithpeLabel(dataValues, visualisationName)}
-    </CardContent>
-  </Card>
- </Grid>) 
+    &lt;/CardContent>
+  &lt;/Card>
+ &lt;/Grid>) 
 }
 
 else {
@@ -604,7 +632,7 @@ else {
   } 
                   
  }
- if (actualVitualization.type==="COLUMN"  && actualVitualization.rows[0].dimension==="pe"){
+ if (actualVitualization.type==="COLUMN"  &amp;&amp; actualVitualization.rows[0].dimension==="pe"){
 
   const dataDimension = actualVitualization.columns[0].items.map(ids => ids.id)
   const peItem=  actualVitualization.rows[0].items
@@ -623,7 +651,7 @@ else {
  
  
  const dxArray = []
-   for(var k = 0; k < dataDimension.length; k++){
+   for(var k = 0; k &lt; dataDimension.length; k++){
      dxArray.push(dataDimension[k]+";")
    }
    const dataDimensionString = dxArray.join('')
@@ -632,14 +660,14 @@ else {
  
  //appending the organisation unit dimension with ; 
    const array = []
-   for(var r = 0; r < orgUnits.length; r++){
+   for(var r = 0; r &lt; orgUnits.length; r++){
      array.push(orgUnits[r]+";")
    }
    const orgUnitsString = array.join('')
    console.log(orgUnitsString)
 
    const pearray = []
-   for(var r = 0; r < periods.length; r++){
+   for(var r = 0; r &lt; periods.length; r++){
      pearray.push(periods[r]+";")
    }
    const periodString = pearray.join('')
@@ -649,7 +677,7 @@ else {
 
  
   var dataValues = $.ajax({
-   url: ADDRESS_URL + `/analytics.json?dimension=dx:${dataDimensionString}&dimension=ou:${orgUnitsString}&dimension=pe:${periodString}`,
+   url: ADDRESS_URL + `/analytics.json?dimension=dx:${dataDimensionString}&amp;dimension=ou:${orgUnitsString}&amp;dimension=pe:${periodString}`,
    dataType: "json",
    headers: { "Authorization": "Basic " + btoa(username + ":" + password) },
    success: function (data) { },
@@ -662,78 +690,78 @@ else {
  console.log(dataValues.rows)
  
  dashboardItemArray.push( 
-  <Grid item xs={10} sm={6}>
-  <Card className= {styles.cards}>
-    <CardContent style = {{paddingBottom: 0, display:'flex', justifyContent: 'flex-end'}}>
-      <Dropdown>
-       <Dropdown.Toggle id="dropdown-basic-button" title="Dropdown button">
-        <MoreHorizIcon/>
-        </Dropdown.Toggle>
-        <Dropdown.Menu>
-          <Dropdown.Item id = {actualVitualization.id} onClick={e => this.chart2PDF(e)}>Save as pdf</Dropdown.Item>
-          <Dropdown.Item href="#/action-2">Export as a csv</Dropdown.Item>
-          <Dropdown.Item href="#/action-3">View in full screen</Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
-    </CardContent>
-    <CardContent className = {actualVitualization.id}>
+  &lt;Grid item xs={10} sm={6}>
+  &lt;Card className= {styles.cards}>
+    &lt;CardContent style = {{paddingBottom: 0, display:'flex', justifyContent: 'flex-end'}}>
+      &lt;Dropdown>
+       &lt;Dropdown.Toggle id="dropdown-basic-button" title="Dropdown button">
+        &lt;MoreHorizIcon/>
+        &lt;/Dropdown.Toggle>
+        &lt;Dropdown.Menu>
+          &lt;Dropdown.Item id = {actualVitualization.id} onClick={e => this.chart2PDF(e)}>Save as pdf&lt;/Dropdown.Item>
+          &lt;Dropdown.Item href="#/action-2">Export as a csv&lt;/Dropdown.Item>
+          &lt;Dropdown.Item href="#/action-3">View in full screen&lt;/Dropdown.Item>
+        &lt;/Dropdown.Menu>
+      &lt;/Dropdown>
+    &lt;/CardContent>
+    &lt;CardContent className = {actualVitualization.id}>
        {BarChartsWithpeRow(dataValues, peLabels, dxLabel, visualisationName, periods)} 
-    </CardContent>
-  </Card>
- </Grid>) 
+    &lt;/CardContent>
+  &lt;/Card>
+ &lt;/Grid>) 
  
  }
 
  if(dashboardItemsData[i].maps){
   dashboardItemArray.push(
-    <Grid item xs={10} sm={6}>
-    <Card className={styles.minCard}>
-      <CardContent style = {{paddingBottom: 0, display:'flex', justifyContent: 'flex-end'}}>
-        <Dropdown>
-         <Dropdown.Toggle id="dropdown-basic-button" title="Dropdown button">
-          <MoreHorizIcon/>
-          </Dropdown.Toggle>
-          <Dropdown.Menu>
-            <Dropdown.Item id = {dashboardItemsData[i].map.id} onClick={e => this.chart2PDF(e)}>Save as pdf</Dropdown.Item>
-            <Dropdown.Item href="#/action-2">Export as a csv</Dropdown.Item>
-            <Dropdown.Item href="#/action-3">View in full screen</Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
-      </CardContent>
-      <CardContent className = {dashboardItemsData[i].map.id}>
+    &lt;Grid item xs={10} sm={6}>
+    &lt;Card className={styles.minCard}>
+      &lt;CardContent style = {{paddingBottom: 0, display:'flex', justifyContent: 'flex-end'}}>
+        &lt;Dropdown>
+         &lt;Dropdown.Toggle id="dropdown-basic-button" title="Dropdown button">
+          &lt;MoreHorizIcon/>
+          &lt;/Dropdown.Toggle>
+          &lt;Dropdown.Menu>
+            &lt;Dropdown.Item id = {dashboardItemsData[i].map.id} onClick={e => this.chart2PDF(e)}>Save as pdf&lt;/Dropdown.Item>
+            &lt;Dropdown.Item href="#/action-2">Export as a csv&lt;/Dropdown.Item>
+            &lt;Dropdown.Item href="#/action-3">View in full screen&lt;/Dropdown.Item>
+          &lt;/Dropdown.Menu>
+        &lt;/Dropdown>
+      &lt;/CardContent>
+      &lt;CardContent className = {dashboardItemsData[i].map.id}>
         {dashboardItemsData[i].map.name}  
-      </CardContent>
-    </Card>
-   </Grid>) 
+      &lt;/CardContent>
+    &lt;/Card>
+   &lt;/Grid>) 
  }
  /* Pushing a react component into an array. */
  if(dashboardItemsData[i].type==="TEXTs"){
      dashboardItemArray.push(
-      <Grid item xs={10} sm={6}>
-      <Card className={styles.minCard}>
-        <CardContent style = {{paddingBottom: 0, display:'flex', justifyContent: 'flex-end'}}>
-          <Dropdown>
-           <Dropdown.Toggle id="dropdown-basic-button" title="Dropdown button">
-            <MoreHorizIcon/>
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              <Dropdown.Item id = {dashboardItemsData[i].id} onClick={e => this.chart2PDF(e)}>Save as pdf</Dropdown.Item>
-              <Dropdown.Item href="#/action-2">Export as a csv</Dropdown.Item>
-              <Dropdown.Item href="#/action-3">View in full screen</Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-        </CardContent>
-        <CardContent className = {dashboardItemsData[i].id}>
+      &lt;Grid item xs={10} sm={6}>
+      &lt;Card className={styles.minCard}>
+        &lt;CardContent style = {{paddingBottom: 0, display:'flex', justifyContent: 'flex-end'}}>
+          &lt;Dropdown>
+           &lt;Dropdown.Toggle id="dropdown-basic-button" title="Dropdown button">
+            &lt;MoreHorizIcon/>
+            &lt;/Dropdown.Toggle>
+            &lt;Dropdown.Menu>
+              &lt;Dropdown.Item id = {dashboardItemsData[i].id} onClick={e => this.chart2PDF(e)}>Save as pdf&lt;/Dropdown.Item>
+              &lt;Dropdown.Item href="#/action-2">Export as a csv&lt;/Dropdown.Item>
+              &lt;Dropdown.Item href="#/action-3">View in full screen&lt;/Dropdown.Item>
+            &lt;/Dropdown.Menu>
+          &lt;/Dropdown>
+        &lt;/CardContent>
+        &lt;CardContent className = {dashboardItemsData[i].id}>
           {dashboardItemsData[i].text}
-        </CardContent>
-      </Card>
-     </Grid>) 
+        &lt;/CardContent>
+      &lt;/Card>
+     &lt;/Grid>) 
  }
 }
 
-    return   <Grid container spacing={1}>
+    return   &lt;Grid container spacing={1}>
                {dashboardItemArray}
-            </Grid>
+            &lt;/Grid>
                    
 } 
 //download function
@@ -765,18 +793,40 @@ chart2PDF = e => {
     render(){
       const dashboards = this.state.dashboards
       if(!dashboards){
-        return <div>Loading</div>
+        return &lt;div>Loading&lt;/div>
       }
       return (
-      <div className={styles.graphbox}>
-      <div>
+      &lt;div className={styles.graphbox}>
+      &lt;div>
       {this.getAndRenderDashboardItems()}
-      </div>
-     </div>
+      &lt;/div>
+     &lt;/div>
      );
      }
     }
   
   
   export default AntCharts;
-  
+  </code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AntCharts.html">AntCharts</a></li></ul><h3>Global</h3><ul><li><a href="global.html#ChartWithPeRow">ChartWithPeRow</a></li><li><a href="global.html#Dashboards">Dashboards</a></li><li><a href="global.html#LandingPage">LandingPage</a></li><li><a href="global.html#Loading">Loading</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Sun Apr 10 2022 08:14:40 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

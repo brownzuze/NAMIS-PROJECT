@@ -1,8 +1,14 @@
 import axios from "axios";
+
+// link for namis portal
 export const ADDRESS_URL = 'https://covmw.com/namis1/api';
+//username
 export const username = "portal"
+//password
 export const password = "Namis71PortaL@*" 
 const OAuth2 = 'Basic '+btoa(username + ":" + password );
+//function to get data from dhis2
+
 export const makeApiRequest = async (apiUrl) => {
 
 apiUrl = Object.assign({}, apiUrl);
@@ -29,12 +35,14 @@ export const getDataElements = async () => {
     })
     return elementsData.dataElements;
 }
+
 export const getIndicators = async () => {
     const indicatorData = await makeApiRequest({
         url: ADDRESS_URL + '/indicators.json?fields=*&paging=false'
     })
     return indicatorData.indicators;
 }
+
 export const getOrganisationUnits = async () => {
     const orgData = await makeApiRequest({
         url: ADDRESS_URL + "/organisationUnits?fields=displayName, id&paging=false"
@@ -53,12 +61,14 @@ export const getVisualizations = async () => {
     })
     return visualData.visualizations;
 }
+
 export const getMaps = async () => {
     const dashData = await makeApiRequest({
         url: ADDRESS_URL + '/maps.json?fields=*&paging=false'
     })
     return dashData.maps;
 }
+
 
 export const getorganisationUnitGroups = async () => {
     const orgGroups = await makeApiRequest({
