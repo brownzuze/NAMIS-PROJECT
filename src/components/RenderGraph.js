@@ -1224,14 +1224,14 @@ export const PivotTable = (organisationUnits, dataValues) => {
   const rowData = dataValues.rows;
  const arrayValues = []
   for(let i = 0; i<rowData.length; i++){
-        arrayValues.push(rowData[i][3])
+      arrayValues.push(rowData[i][3])
   }
 
   console.log(arrayValues)
   
   //obtaining json object
   const res = [];
-  for(let i = 0; i < arrayValues.length; i++){
+  for(let i = 0; i < rowName.length; i++){
      res.push({
         name: rowName[i],
         val: arrayValues[i]

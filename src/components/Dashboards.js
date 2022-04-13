@@ -1209,6 +1209,7 @@ console.log(reportData)
  const dxLabel = reportData.rows[0].items.map(ids => ids.name)
  const rowName = reportData.rows[0].items.map(ids => ids.name)
  const columnName = reportData.columns[0].items.map(ids => ids.name)
+ console.log(rowName)
 
 
  console.log( periods)
