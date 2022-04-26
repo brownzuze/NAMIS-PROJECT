@@ -9,7 +9,7 @@ import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import Loading from "./Loading";
 import Gauge from 'react-svg-gauge'
 import {getDashboards, getIndicators, getorganisationUnitGroups, getOrganisationUnits} from '../api';
-import {YearlyPivotTable, PivotTable, OuRowCharts, reportTable, BarChartsWithdxRow, LineChartWithpeLabel, BarChartsWithpeRow, ChartWithPeRow, StackedChartWithPeRow, ChartWithPeOuRow, LineChart, BarChartsWithOuRow, PieChart} from './RenderGraph';
+import {YearlyPivotTable, PivotTable, OuRowCharts, reportTable, BarChartsWithdxRow, YearlyreportTable, LineChartWithpeLabel, BarChartsWithpeRow, ChartWithPeRow, dxColumnreportTable, StackedChartWithPeRow, ChartWithPeOuRow, LineChart, BarChartsWithOuRow, PieChart, secondBarChartsWithpeRow} from './RenderGraph';
 import styles from '../App.module.css';
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
@@ -62,7 +62,6 @@ const fetchAndRenderDashboardItems = () => {
           <Loading/>
          </div>
 }
-
       /* Getting the dashboard items from the dashboard. */
       var dataValues = $.ajax({
       url: ADDRESS_URL + `/dashboards/${id}`,
@@ -104,7 +103,7 @@ const fetchAndRenderDashboardItems = () => {
     if (actualVitualization.type==="COLUMN" && actualVitualization.rows[0].dimension ==="ou" && actualVitualization.filters[0].dimension ==="pe" ){
 
       const OuItems = actualVitualization.rows[0].items
-      console.log()
+      console.log(OuItems)
       const orgUnits =  OuItems.map(ids => ids.id)
       console.log( orgUnits)
       const peItem= actualVitualization.filters[0].items
@@ -118,10 +117,16 @@ const fetchAndRenderDashboardItems = () => {
       console.log(visualisationName)
 
     //appending the organisation unit dimension with ; 
-
+      var unique = []
+      dataDimension.forEach(element => {
+        if(!unique.includes(element)){
+          unique.push(element);
+        }
+      })
+      console.log(unique)
       const dxArray = []
-       for(var k = 0; k < dataDimension.length; k++){
-       dxArray.push(dataDimension[k]+";")
+       for(var k = 0; k < unique.length; k++){
+       dxArray.push(unique[k]+";")
       }
       const dataDimensionString = dxArray.join('')
       console.log(dataDimensionString)
@@ -164,7 +169,7 @@ const fetchAndRenderDashboardItems = () => {
               </Dropdown>
            </CardContent>
            <CardContent className = {actualVitualization.id}>
-            {OuRowCharts(organisationUnits,indicators, dataValues, visualisationName)}
+            {OuRowCharts(OuItems,dimensionItems, dataValues, visualisationName)}
            </CardContent>
        </Card>
       </Grid>
@@ -947,13 +952,10 @@ if (actualVitualization.type==="COLUMN"  && actualVitualization.columns[0].dimen
   const dxLabel = actualVitualization.rows[0].items.map(ids => ids.name)
   console.log( periods)
   const orgUnits =  OuItems.map(ids => ids.id)
+  const orgName =  OuItems[0].name
   console.log(dataDimension)
   const visualisationName = actualVitualization.name
   console.log(visualisationName)
- 
- 
- 
- 
  
  const dxArray = []
    for(var k = 0; k < dataDimension.length; k++){
@@ -995,9 +997,26 @@ if (actualVitualization.type==="COLUMN"  && actualVitualization.columns[0].dimen
  console.log(dataValues.rows)
  
  dashboardItemArray.push( 
-       <div className= {styles.card}>
-       {BarChartsWithdxRow(dataValues, peLabels, dxLabel, visualisationName, periods)} 
-       </div>
+  <Grid item xs={10} sm={12}>
+  <Card className= {styles.cards}>
+    <CardContent style = {{paddingBottom: 0, display:'flex', justifyContent: 'flex-end'}}>
+      <Dropdown>
+       <Dropdown.Toggle id="dropdown-basic-button" title="Dropdown button">
+        <MoreHorizIcon/>
+        </Dropdown.Toggle>
+        <Dropdown.Menu>
+          <Dropdown.Item id = {actualVitualization.id} onClick={e => chart2PDF(e)}>Save as pdf</Dropdown.Item>
+          <Dropdown.Item href="#/action-2">Export as a csv</Dropdown.Item>
+          <Dropdown.Item href="#/action-3">View in full screen</Dropdown.Item>
+        </Dropdown.Menu>
+      </Dropdown>
+    </CardContent>
+    <CardContent className = {actualVitualization.id}>
+        {orgName}
+       {BarChartsWithdxRow(dataValues, dataDimension, dxLabel, visualisationName, periods)} 
+       </CardContent>
+  </Card>
+ </Grid>
     ) 
  
  }
@@ -1012,10 +1031,12 @@ if (actualVitualization.type==="COLUMN"  && actualVitualization.columns[0].dimen
   const dxLabel = actualVitualization.columns[0].items.map(ids => ids.name)
   console.log( periods)
   const orgUnits =  OuItems.map(ids => ids.id)
+  const orgName =  OuItems[0].name
   console.log(dataDimension)
   const visualisationName = actualVitualization.name
   console.log(visualisationName)
- 
+
+
  
  
  
@@ -1059,6 +1080,7 @@ if (actualVitualization.type==="COLUMN"  && actualVitualization.columns[0].dimen
  
  console.log(dataValues.rows)
  
+ if(periods.length == 12){
  dashboardItemArray.push( 
   <Grid item xs={10} sm={6}>
   <Card className= {styles.cards}>
@@ -1068,97 +1090,44 @@ if (actualVitualization.type==="COLUMN"  && actualVitualization.columns[0].dimen
         <MoreHorizIcon/>
         </Dropdown.Toggle>
         <Dropdown.Menu>
-          <Dropdown.Item id = {actualVitualization.id} onClick={e => this.chart2PDF(e)}>Save as pdf</Dropdown.Item>
+          <Dropdown.Item id = {actualVitualization.id} onClick={e => chart2PDF(e)}>Save as pdf</Dropdown.Item>
           <Dropdown.Item href="#/action-2">Export as a csv</Dropdown.Item>
           <Dropdown.Item href="#/action-3">View in full screen</Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
     </CardContent>
     <CardContent className = {actualVitualization.id}>
+       {orgName}
        {BarChartsWithpeRow(dataValues, peLabels, dxLabel, visualisationName, periods)} 
     </CardContent>
   </Card>
  </Grid>) 
- 
  }
 
+ else{
+  dashboardItemArray.push( 
+    <Grid item xs={10} sm={6}>
+    <Card className= {styles.cards}>
+      <CardContent style = {{paddingBottom: 0, display:'flex', justifyContent: 'flex-end'}}>
+        <Dropdown>
+         <Dropdown.Toggle id="dropdown-basic-button" title="Dropdown button">
+          <MoreHorizIcon/>
+          </Dropdown.Toggle>
+          <Dropdown.Menu>
+            <Dropdown.Item id = {actualVitualization.id} onClick={e => chart2PDF(e)}>Save as pdf</Dropdown.Item>
+            <Dropdown.Item href="#/action-2">Export as a csv</Dropdown.Item>
+            <Dropdown.Item href="#/action-3">View in full screen</Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
+      </CardContent>
+      <CardContent className = {actualVitualization.id}>
+         {orgName}
+         {secondBarChartsWithpeRow(dataValues, peLabels, dxLabel, visualisationName, dataDimension)} 
+      </CardContent>
+    </Card>
+   </Grid>) 
+ }
  
-
-
-if (actualVitualization.type==="PIVOT_TABLE" && actualVitualization.columns[0].dimension==="dx" && actualVitualization.filters.length !== null){
-
-  const peItem= actualVitualization.filters
-  //const period = peItem[0].name
-  console.log(peItem)
-
-/*const items = actualVitualization.columns[0].items
-const dataIndicators = items.map(ids => ids.id)
-console.log(dataIndicators)
-const orgUnits = actualVitualization.rows[0].items.map(ids => ids.id)
-console.log( orgUnits)
-const visualisationName = actualVitualization.name
-console.log(visualisationName)
-console.log(items)
-
-
-
-//appending the dataElement Group dimension with ; 
-var array = []
-for(var j = 0; j < dataIndicators.length; j++){
-array.push(dataIndicators[j]+";")
-}
-const dataIndicatorString = array.join('')
-console.log(dataIndicatorString)
-
-
-//appending the organisation unit with ;
-const ouArray = []
-for(var j = 0; j < orgUnits.length; j++){
-ouArray.push(orgUnits[j]+";")
-}
-const orgUnitDimensionString = ouArray.join('')
-console.log(orgUnitDimensionString)
-
-//concatinating the group dimensions
-
-
-var dataValues = $.ajax({
-url: ADDRESS_URL + `/analytics.json?dimension=dx:${dataIndicators}&dimension=ou:${orgUnitDimensionString}&dimension=pe:${period}`,
-dataType: "json",
-headers: { "Authorization": "Basic " + btoa("admin" + ":" + "district") },
-success: function (data) { },
-async: false,
-error: function (err) {
-console.log(err);
-}
-}).responseJSON;
-
-console.log()
-
-console.log(dataValues.rows)
-
-/*dashboardItemArray.push(
-<Grid item xs={10} sm={6}>
-<Card className= {styles.minCard}>
-   <CardContent style = {{paddingBottom: 0, display:'flex', justifyContent: 'flex-end'}}>
-     <Dropdown>
-      <Dropdown.Toggle id="dropdown-basic-button" title="Dropdown button">
-        <MoreHorizIcon/>
-      </Dropdown.Toggle>
-      <Dropdown.Menu>
-       <Dropdown.Item id = {actualVitualization.id} onClick={e => chart2PDF(e)}>Save as pdf</Dropdown.Item>
-       <Dropdown.Item href="#/action-2">Export as a csv</Dropdown.Item>
-       <Dropdown.Item href="#/action-3">View in full screen</Dropdown.Item>
-      </Dropdown.Menu>
-     </Dropdown>
-   </CardContent>
-    <CardContent className = {actualVitualization.id} style = {{ height: "400px", overflow: "scroll"}}>
-       {visualisationName}
-       {YearlyPivotTable(dataValues, items)}
-   </CardContent>
- </Card>
-</Grid> 
-)*/
 }
   
  }
@@ -1187,7 +1156,7 @@ console.log(dataValues.rows)
   ) 
  }
  if (dashboardItemsData[i].type==="REPORT_TABLE"){
-  console.log("yes")
+   console.log(dashboardItemsData[i])
  const reportTableId = dashboardItemsData[i].reportTable.id
  var reportData = $.ajax({
    url: ADDRESS_URL + `/reportTables/${reportTableId}.json?fields=id%2CdisplayName~rename(name)%2Ctype%2CdisplayDescription~rename(description)%2Ccolumns%5Bdimension%2ClegendSet%5Bid%5D%2Cfilter%2CprogramStage%2Citems%5BdimensionItem~rename(id)%2CdisplayName~rename(name)%2CdimensionItemType%5D%5D%2Crows%5Bdimension%2ClegendSet%5Bid%5D%2Cfilter%2CprogramStage%2Citems%5BdimensionItem~rename(id)%2CdisplayName~rename(name)%2CdimensionItemType%5D%5D%2Cfilters%5Bdimension%2ClegendSet%5Bid%5D%2Cfilter%2CprogramStage%2Citems%5BdimensionItem~rename(id)%2CdisplayName~rename(name)%2CdimensionItemType%5D%5D%2C*%2C!attributeDimensions%2C!attributeValues%2C!category%2C!categoryDimensions%2C!categoryOptionGroupSetDimensions%2C!columnDimensions%2C!dataDimensionItems%2C!dataElementDimensions%2C!dataElementGroupSetDimensions%2C!filterDimensions%2C!itemOrganisationUnitGroups%2C!lastUpdatedBy%2C!organisationUnitGroupSetDimensions%2C!organisationUnitLevels%2C!organisationUnits%2C!programIndicatorDimensions%2C!relativePeriods%2C!reportParams%2C!rowDimensions%2C!translations%2C!userOrganisationUnit%2C!userOrganisationUnitChildren%2C!userOrganisationUnitGrandChildren`,
@@ -1199,7 +1168,8 @@ console.log(dataValues.rows)
    console.log(err);
  }
 }).responseJSON;
-
+console.log(reportData)
+if(reportData.columns[0].items.length==1){
 console.log(reportData)
  const dataDimension = reportData.rows[0].items.map(ids => ids.id)
  const peItem=  reportData.columns[0].items
@@ -1214,6 +1184,7 @@ console.log(reportData)
 
  console.log( periods)
  const orgUnits =  OuItems.map(ids => ids.id)
+ const orgName =  OuItems[0].name
  console.log(dataDimension)
  const visualisationName = reportData.name
  console.log(visualisationName)
@@ -1270,17 +1241,121 @@ dashboardItemArray.push(
        <MoreHorizIcon/>
        </Dropdown.Toggle>
        <Dropdown.Menu>
-         <Dropdown.Item id = {actualVitualization.id} onClick={e => this.chart2PDF(e)}>Save as pdf</Dropdown.Item>
+         <Dropdown.Item id = {reportTableId} onClick={e => chart2PDF(e)}>Save as pdf</Dropdown.Item>
          <Dropdown.Item href="#/action-2">Export as a csv</Dropdown.Item>
          <Dropdown.Item href="#/action-3">View in full screen</Dropdown.Item>
        </Dropdown.Menu>
      </Dropdown>
    </CardContent>
-   <CardContent className = {actualVitualization.id}>
+   <CardContent>{visualisationName}</CardContent>
+   <CardContent className = {reportTableId}>
+      {orgName}
       {reportTable(dataValues, rowName, columnName)}
    </CardContent>
  </Card>
 </Grid>) 
+}
+}
+
+if (dashboardItemsData[i].type==="REPORT_TABLE"){
+  console.log(dashboardItemsData[i])
+const reportTableId = dashboardItemsData[i].reportTable.id
+var reportData = $.ajax({
+  url: ADDRESS_URL + `/reportTables/${reportTableId}.json?fields=id%2CdisplayName~rename(name)%2Ctype%2CdisplayDescription~rename(description)%2Ccolumns%5Bdimension%2ClegendSet%5Bid%5D%2Cfilter%2CprogramStage%2Citems%5BdimensionItem~rename(id)%2CdisplayName~rename(name)%2CdimensionItemType%5D%5D%2Crows%5Bdimension%2ClegendSet%5Bid%5D%2Cfilter%2CprogramStage%2Citems%5BdimensionItem~rename(id)%2CdisplayName~rename(name)%2CdimensionItemType%5D%5D%2Cfilters%5Bdimension%2ClegendSet%5Bid%5D%2Cfilter%2CprogramStage%2Citems%5BdimensionItem~rename(id)%2CdisplayName~rename(name)%2CdimensionItemType%5D%5D%2C*%2C!attributeDimensions%2C!attributeValues%2C!category%2C!categoryDimensions%2C!categoryOptionGroupSetDimensions%2C!columnDimensions%2C!dataDimensionItems%2C!dataElementDimensions%2C!dataElementGroupSetDimensions%2C!filterDimensions%2C!itemOrganisationUnitGroups%2C!lastUpdatedBy%2C!organisationUnitGroupSetDimensions%2C!organisationUnitLevels%2C!organisationUnits%2C!programIndicatorDimensions%2C!relativePeriods%2C!reportParams%2C!rowDimensions%2C!translations%2C!userOrganisationUnit%2C!userOrganisationUnitChildren%2C!userOrganisationUnitGrandChildren`,
+  dataType: "json",
+  headers: { "Authorization": "Basic " + btoa(username + ":" + password) },
+  success: function (data) { },
+  async: false,
+  error: function (err) {
+  console.log(err);
+}
+}).responseJSON;
+if(reportData.columns[0].items.length==12){
+console.log(reportData)
+const dataDimension = reportData.rows[0].items.map(ids => ids.id)
+const peItem=  reportData.columns[0].items
+const OuItems=  reportData.filters[0].items
+const periods = peItem.map(ids => ids.id)
+const peLabels = peItem.map(ids => ids.name)
+const dxLabel = reportData.rows[0].items.map(ids => ids.name)
+const rowName = reportData.rows[0].items.map(ids => ids.name)
+const columnName = reportData.columns[0].items.map(ids => ids.name)
+console.log(rowName)
+
+
+console.log( periods)
+const orgUnits =  OuItems.map(ids => ids.id)
+const orgName =  OuItems[0].name
+console.log(dataDimension)
+const visualisationName = reportData.name
+console.log(visualisationName)
+
+
+
+
+
+const dxArray = []
+ for(var k = 0; k < dataDimension.length; k++){
+   dxArray.push(dataDimension[k]+";")
+ }
+ const dataDimensionString = dxArray.join('')
+ console.log(dataDimensionString)
+
+
+//appending the organisation unit dimension with ; 
+ const array = []
+ for(var r = 0; r < orgUnits.length; r++){
+   array.push(orgUnits[r]+";")
+ }
+ const orgUnitsString = array.join('')
+ console.log(orgUnitsString)
+
+ const pearray = []
+ for(var r = 0; r < periods.length; r++){
+   pearray.push(periods[r]+";")
+ }
+ const periodString = pearray.join('')
+ console.log(periodString)
+
+
+
+
+var dataValues = $.ajax({
+ url: ADDRESS_URL + `/analytics.json?dimension=dx:${dataDimensionString}&dimension=ou:${orgUnitsString}&dimension=pe:${periodString}`,
+ dataType: "json",
+ headers: { "Authorization": "Basic " + btoa(username + ":" + password) },
+ success: function (data) { },
+ async: false,
+ error: function (err) {
+   console.log(err);
+ }
+}).responseJSON;
+
+console.log(dataValues.rows)
+
+dashboardItemArray.push( 
+<Grid item xs={10} sm={6}>
+<Card className= {styles.cards}>
+  <CardContent style = {{paddingBottom: 0, display:'flex', justifyContent: 'flex-end'}}>
+    <Dropdown>
+     <Dropdown.Toggle id="dropdown-basic-button" title="Dropdown button">
+      <MoreHorizIcon/>
+      </Dropdown.Toggle>
+      <Dropdown.Menu>
+        <Dropdown.Item id = {reportTableId} onClick={e => chart2PDF(e)}>Save as pdf</Dropdown.Item>
+        <Dropdown.Item href="#/action-2">Export as a csv</Dropdown.Item>
+        <Dropdown.Item href="#/action-3">View in full screen</Dropdown.Item>
+      </Dropdown.Menu>
+    </Dropdown>
+  </CardContent>
+  <CardContent>{visualisationName}</CardContent>
+  <CardContent className = {reportTableId}>
+     {orgName}
+     {YearlyreportTable(dataValues, rowName, columnName, periods, dataDimension)}
+  </CardContent>
+</Card>
+</Grid>) 
+}
 
 }
  if(dashboardItemsData[i].type==="TEXTs"){
@@ -1347,8 +1422,10 @@ const chart2PDF = e => {
 };
 
     return (
-        <div className={styles.graphbox}> 
+        <div> 
+         <div className={styles.graphbox}>
          {fetchAndRenderDashboardItems()}
+         </div>
         </div>
     );
 }

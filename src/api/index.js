@@ -45,7 +45,7 @@ export const getIndicators = async () => {
 
 export const getOrganisationUnits = async () => {
     const orgData = await makeApiRequest({
-        url: ADDRESS_URL + "/organisationUnits?fields=displayName, id&paging=false"
+        url: ADDRESS_URL + "/organisationUnits.json"
     })
     return orgData.organisationUnits;
 }

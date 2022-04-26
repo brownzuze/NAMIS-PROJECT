@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './App.module.css';
 import Appbar from './components/Appbar';
 import DashboardLinks from './components/DashBoardLinks'
+import Visualization from './components/Visualiser/Visualization'
 import AntCharts from './components/AntCharts';
 import Dashboards from './components/Dashboards'
 import TestDashboard from './components/TestDashboard'
@@ -39,6 +40,7 @@ async  componentDidMount() {
         { /* A react router. It is a way to navigate between pages. */}
          <Routes>
            <Route path="/" element={<AntCharts/>}/>
+           <Route exact path='/visualization' element={<Visualization/>}/>
            <Route exact path='/dashboards/:id' element={<Dashboards/>}/>
          </Routes>
     </div>

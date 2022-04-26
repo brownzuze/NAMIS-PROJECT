@@ -6,6 +6,7 @@ import ico7 from "../images/ico7.png";
 import ico9 from "../images/ico9.png";
 import styles from '../App.module.css';
 
+
 /**
  * 
  * @returns A function that is displayed when there is no internet connection
@@ -35,6 +36,7 @@ const LandingPage = () => {
       icon: <img className={styles.icon} src={ico9} alt="" />
     }
   ];
+
   return (
     <div  className={styles.landingcontainer}>
       <h2>WELCOME TO NAMIS WEB PORTAL</h2>
@@ -47,29 +49,27 @@ const LandingPage = () => {
        <h4>NAMIS indicators</h4>
        <p>
          Visualise NAMIS indicators for
-         antenatal care, ANC integration, labor
-         and delivery, newborn care, postnatal create
-         and cervical cancer
-        </p>
+         Horticulture-Banana and pineapple,
+         Horticulture-vegetables, and
+         Carryover stocks
+       </p>
 
       </div>
       <div className={styles.info}>
        <h4>Program indicators</h4>
        <p>
          Visualise program indicators for
-         Malaria, Vaccine, Nutrition,
-         Non communicable disease, Tracer medicine,
-         TB and Leprocy, Family planning
-        </p>
+         Fruits, vegetables, food assessment
+         and household registrations
+       </p>
 
       </div>
       <div className={styles.info}>
        <h4>Resources</h4>
        <p>
          Get resources like cesors data, 
-         Community survey, Facility Surveys,
-         Healthy program reports,
-         NAMIS annual reports, policies, 
+         Agricultural production estimate 
+         survey,NAMIS annual reports, policies, 
          Guidelines and Strategy
         </p>
 
@@ -83,7 +83,9 @@ const LandingPage = () => {
         </div>
        <h6 className={styles.loadingalert}>Loading data Please wait....</h6>
 
-       
+       <div>
+      
+    </div> 
     </div>
   );
 };

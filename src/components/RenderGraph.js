@@ -888,11 +888,13 @@ console.log(OrgUnitsDispNames);
     return lineChartTwo
   }
 
-  export const OuRowCharts = (organisationUnits,indicators, dataValues, visualisationName) => {
+  export const OuRowCharts = (OuItems,dimensionItems, dataValues, visualisationName) => {
 
     const indicatorIds = dataValues.metaData.dimensions.dx
     const orgIds = dataValues.metaData.dimensions.ou
     console.log(indicatorIds)
+    console.log(OuItems)
+    console.log(dimensionItems)
 
    //get the rows aggregated data
     const rowData = dataValues.rows
@@ -902,10 +904,10 @@ console.log(OrgUnitsDispNames);
 
   const indicatorDispNames = []
   for (let i = 0; i < indicatorIds.length; i++) {
-   for (let j = 0; j < indicators.length; j++) {
+   for (let j = 0; j < dimensionItems.length; j++) {
    
-   if (indicatorIds[i] === indicators[j].id) {
-    indicatorDispNames.push(indicators[j].displayName)
+   if (indicatorIds[i] === dimensionItems[j].id) {
+    indicatorDispNames.push(dimensionItems[j].name)
 
 }
 }
@@ -915,10 +917,10 @@ console.log(indicatorDispNames);
 //get Orgunitsnames
 const organisationUnitDispNames = []
 for (let i = 0; i < orgIds.length; i++) {
-for (let j = 0; j < organisationUnits.length; j++) {
+for (let j = 0; j < OuItems.length; j++) {
    
-   if (orgIds[i] ===  organisationUnits[j].id) {
-    organisationUnitDispNames.push( organisationUnits[j].displayName)
+   if (orgIds[i] ===  OuItems[j].id) {
+    organisationUnitDispNames.push( OuItems[j].name)
 
 }
 }
@@ -1021,19 +1023,17 @@ export const BarChartsWithpeRow = (dataValues, peLabels, dxLabel, visualisationN
   //getting rows
   const rowData = dataValues.rows
 
-let value1 = []
-for (let i=0; i<periods.length; i++){
-for (let j = 0; j < rowData.length; j++) {
-       if(periods[i] === rowData[j][2]){
-        value1.push(parseFloat(rowData[j][3]))
-       } 
-
+  
+  let value1 = []
+  for (let i = 0; i< periods.length; i++){
+    for (let j=0; j<rowData.length; j++){
+      if(periods[i]===rowData[j][2]){
+        value1.push(parseFloat(rowData[j][3]))        
+      }
+    }
+      typeof(value1[i]) === 'undefined' ? value1.push("") : console.log(i)
   }
-  value1.push("")
-
-}
-
-console.log(value1)
+  console.log(value1)
 
 const barChart = (
 <Bar
@@ -1066,29 +1066,46 @@ const barChart = (
 return barChart
 
 }
-// Creating barChart with indicators label
-export const BarChartsWithdxRow = (dataValues, peLabels, dxLabel, visualisationName, periods) => {
+
+export const secondBarChartsWithpeRow = (dataValues, peLabels, dxLabel, visualisationName, dataDimension) => {
    
   //getting rows
   const rowData = dataValues.rows
 
-let value1 = []
-for (let j = 0; j < rowData.length; j++) {
-        value1.push(parseFloat(rowData[j][3]))
-}
-
-console.log(value1)
+  
+  let value1 = []
+    for (let j=0; j<rowData.length; j++){
+      if(dataDimension[0]===rowData[j][0]){
+        value1.push(parseFloat(rowData[j][3]))        
+      }
+    }
+    let value2 = []
+    for (let j=0; j<rowData.length; j++){
+      if(dataDimension[1]===rowData[j][0]){
+        value2.push(parseFloat(rowData[j][3]))        
+      }
+    }
+  
+  console.log(value1)
 
 const barChart = (
 <Bar
   data={{
-    labels: dxLabel,
+    labels: peLabels,
     datasets: [
       {
         data: value1,
-        label: periods,
+        label: dxLabel[0],
         borderColor: '#3333ff',
         backgroundColor: 'rgb(154,205,50)',
+        fill: true,
+
+      },
+      {
+        data: value2,
+        label: dxLabel[1],
+        borderColor: '#3333ff',
+        backgroundColor: 'rgb(30,144,255)',
         fill: true,
 
       }
@@ -1105,6 +1122,117 @@ const barChart = (
     responsive: true
   }}
 />
+)
+// console.log(orgData[1].value)
+return barChart
+
+}
+// Creating barChart with indicators label
+export const BarChartsWithdxRow = (dataValues, dataDimension, dxLabel, visualisationName, periods) => {
+   
+  //getting rows
+  const rowData = dataValues.rows
+
+let value1 = []
+for (let j = 0; j < rowData.length; j++) {
+      if(periods[0]===rowData[j][2]){
+        value1.push({id:rowData[j][0], value:rowData[j][3]})
+      }
+}
+
+console.log(value1)
+
+let value2 = []
+for (let j = 0; j < rowData.length; j++) {
+      if(periods[1]===rowData[j][2]){
+        value2.push({id:rowData[j][0], value:rowData[j][3]})
+      }
+}
+
+let value3 = []
+for (let j = 0; j < rowData.length; j++) {
+      if(periods[2]===rowData[j][2]){
+        value3.push({id:rowData[j][0], value:rowData[j][3]})
+      }
+}
+let realValue1 = []
+
+for (let i = 0; i < dataDimension.length; i++) {
+    for (let j = 0; j < value1.length; j++){
+      if(dataDimension[i]===value1[j].id){
+        realValue1.push(value1[j].value)
+      }
+    }
+    typeof(realValue1[i]) === 'undefined' ? realValue1.push("") : console.log(i)
+
+}
+
+let realValue2 = []
+
+for (let i = 0; i < dataDimension.length; i++) {
+    for (let j = 0; j < value2.length; j++){
+      if(dataDimension[i]===value2[j].id){
+        realValue2.push(value2[j].value)
+      }
+    }
+    typeof(realValue2[i]) === 'undefined' ? realValue2.push("") : console.log(i)
+
+}
+
+let realValue3 = []
+
+for (let i = 0; i < dataDimension.length; i++) {
+    for (let j = 0; j < value3.length; j++){
+      if(dataDimension[i]===value3[j].id){
+        realValue3.push(value3[j].value)
+      }
+    }
+    typeof(realValue3[i]) === 'undefined' ? realValue3.push("") : console.log(i)
+
+}
+
+
+const barChart = (
+     <Bar
+        data={{
+          labels: dxLabel,
+          datasets: [
+            {
+              data: realValue1,
+              label: periods[0],
+              borderColor: '#3333ff',
+              backgroundColor: 'rgb(154,205,50)',
+              fill: true,
+
+            },
+            {
+              data: realValue2,
+              label: periods[1],
+              fill: true,
+              borderColor: 'blue',
+              backgroundColor: 'rgb(30,144,255)' 
+          },
+          {
+            data: realValue3,
+            label: periods[2],
+            fill: true,
+            backgroundColor: "rgba(178,34,34)",
+            
+
+          },
+        ],
+        }}
+        options = {{
+          plugins: {
+            legend: { position: "bottom" },
+            title: {
+              display: true,
+              text: visualisationName
+          }
+          },
+          responsive: true
+        }}
+      />
 )
 // console.log(orgData[1].value)
 return barChart
@@ -1245,9 +1373,11 @@ export const PivotTable = (organisationUnits, dataValues) => {
   const PivotChart = (
     <Table striped border hover responsive>
     <thead>
-      <tr>
-        <th>Indicator</th>
-        <th>{columnName}</th>
+    <tr>
+        <th>Data/period</th>
+         {columnName.map(name => (
+            <th>{name}</th>
+         ))}
      </tr>
     </thead>
     <tbody>
@@ -1266,6 +1396,257 @@ export const PivotTable = (organisationUnits, dataValues) => {
   return PivotChart
    
  }
+
+ // creating a report table
+ export const YearlyreportTable = (dataValues, rowName, columnName, periods, dataDimension) => {
+  
+  const rowData = dataValues.rows;
+
+  
+ const arrayValues = []
+  for(let i = 0; i<rowData.length; i++){
+      arrayValues.push(rowData[i][3])
+  }
+
+
+
+  console.log(arrayValues)
+  var sortedArr = []
+
+  for (var i=0; i<periods.length; i++){
+    for(var j=0; j<rowData.length; j++){
+      if(periods[i]===rowData[j][2]){
+        sortedArr.push(rowData[j])
+      }
+    }
+  }
+  console.log(sortedArr)
+  //looping values
+  const newarrayValues = []
+
+  for(let i = 0; i<dataDimension.length; i++){
+
+     newarrayValues.push([])
+    for(let j = 0; j<periods.length; j++){
+        for (let k = 0; k < sortedArr.length; k++){
+
+         if(periods[j] === sortedArr[k][2] && dataDimension[i]===sortedArr[k][0]){
+           newarrayValues[i].push(sortedArr[k][3])  
+    }
+  }
+  typeof(newarrayValues[i][j]) === 'undefined' ? newarrayValues[i].push("") : console.log(i)
+
+ }
+}
+  console.log(newarrayValues)
+
+  var merged = [].concat.apply([], newarrayValues)
+  console.log(merged)
+
+  const arrayObject = []
+   let a = 0;
+  for(let i = 0; i < merged.length; i += 12){
+    arrayObject.push({
+       name: rowName[a],
+       val: merged[i],
+       val1: merged[i + 1],
+       val2: merged[i + 2],
+       val3: merged[i + 3],
+       val4: merged[i + 4],
+       val5: merged[i + 5],
+       val6: merged[i + 6],
+       val7: merged[i + 7],
+       val8: merged[i + 8],
+       val9: merged[i + 9],
+       val10: merged[i + 10],
+       val11: merged[i + 11]
+    });
+    a++
+ };
+ console.log(a)
+  
+  //obtaining json object
+  const res = [];
+  for(let i = 0; i < rowName.length; i++){
+     res.push({
+        name: rowName[i],
+        val: arrayValues[i]
+     });
+  };
+
+  console.log(res)
+
+
+  
+  const PivotChart = (
+    <Table striped border hover responsive>
+    <thead>
+    <tr>
+        <th>Data/period</th>
+         {columnName.map(name => (
+            <th>{name}</th>
+         ))}
+     </tr>
+    </thead>
+    <tbody>
+    {arrayObject.map(( listValue, index ) => {
+          return (
+            <tr key={index}>
+            <td>{listValue.name}</td>
+            <td>{listValue.val}</td>
+            <td>{listValue.val1}</td>
+            <td>{listValue.val2}</td>
+            <td>{listValue.val3}</td>
+            <td>{listValue.val4}</td>
+            <td>{listValue.val5}</td>
+            <td>{listValue.val6}</td>
+            <td>{listValue.val7}</td>
+            <td>{listValue.val8}</td>
+            <td>{listValue.val9}</td>
+            <td>{listValue.val10}</td>
+            <td>{listValue.val11}</td>
+
+
+            </tr>
+          );
+        })}
+    </tbody>
+  </Table>
+  )
+  return PivotChart
+   
+ }
+
+ // creating a report table
+ export const dxColumnreportTable = (dataValues, rowName, columnName, periods, dataDimension) => {
+  
+  const rowData = dataValues.rows;
+  console.log(rowData)
+//sorting the rowData array
+  var sortedArr = []
+
+  for (var i=0; i<periods.length; i++){
+    for(var j=0; j<rowData.length; j++){
+      if(periods[i]===rowData[j][2]){
+        sortedArr.push(rowData[j])
+      }
+    }
+  }
+  console.log(sortedArr)
+  //looping values
+  const newarrayValues = []
+
+  for(let i = 0; i<periods.length; i++){
+
+     newarrayValues.push([])
+    for(let j = 0; j<dataDimension.length; j++){
+        for (let k = 0; k < sortedArr.length; k++){
+
+         if( dataDimension[j]===sortedArr[k][0] && periods[i] === sortedArr[k][2]){
+           newarrayValues[i].push(parseFloat(sortedArr[k][3]))  
+    }
+  }
+  typeof(newarrayValues[i][j]) === 'undefined' ? newarrayValues[i].push("") : console.log(i)
+
+ }
+}
+  console.log(newarrayValues)
+
+  const PivotChart = (
+    <Table striped border hover responsive>
+    <thead>
+    <tr>
+        <th>Data/period</th>
+         {columnName.map(name => (
+            <th>{name}</th>
+         ))}
+     </tr>
+    </thead>
+    <tbody>
+    
+            <tr>
+            <td>{rowName[0]}</td>
+            {newarrayValues[0].map(value => (
+              <td>{value}</td>
+            ))}
+            </tr>
+            <tr>
+            <td>{rowName[1]}</td>
+            {newarrayValues[1].map(value => (
+              <td>{value}</td>
+            ))}
+            </tr>
+            <tr>
+            <td>{rowName[2]}</td>
+            {newarrayValues[2].map(value => (
+              <td>{value}</td>
+            ))}
+            </tr>
+            <tr>
+            <td>{rowName[3]}</td>
+            {newarrayValues[3].map(value => (
+              <td>{value}</td>
+            ))}
+            </tr>
+
+            <tr>
+            <td>{rowName[4]}</td>
+            {newarrayValues[4].map(value => (
+              <td>{value}</td>
+            ))}
+            </tr>
+
+            <tr>
+            <td>{rowName[5]}</td>
+            {newarrayValues[5].map(value => (
+              <td>{value}</td>
+            ))}
+            </tr>
+            <tr>
+            <td>{rowName[6]}</td>
+            {newarrayValues[6].map(value => (
+              <td>{value}</td>
+            ))}
+            </tr>
+            <tr>
+            <td>{rowName[7]}</td>
+            {newarrayValues[7].map(value => (
+              <td>{value}</td>
+            ))}
+            </tr>
+            <tr>
+            <td>{rowName[8]}</td>
+            {newarrayValues[8].map(value => (
+              <td>{value}</td>
+            ))}
+            </tr>
+            <tr>
+            <td>{rowName[9]}</td>
+            {newarrayValues[9].map(value => (
+              <td>{value}</td>
+            ))}
+            </tr>
+            <tr>
+            <td>{rowName[10]}</td>
+            {newarrayValues[10].map(value => (
+              <td>{value}</td>
+            ))}
+            </tr>
+            <tr>
+            <td>{rowName[11]}</td>
+            {newarrayValues[11].map(value => (
+              <td>{value}</td>
+            ))}
+            </tr>
+            
+          
+    </tbody>
+  </Table>
+  )
+  return PivotChart
+   
+ }
+
  export const YearlyPivotTable = (dataValues, items) => {
   
   const rowData = dataValues.rows;

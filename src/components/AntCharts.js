@@ -614,6 +614,7 @@ else {
   const dxLabel = actualVitualization.columns[0].items.map(ids => ids.name)
   console.log( periods)
   const orgUnits =  OuItems.map(ids => ids.id)
+  const orgName =  OuItems[0].name
   console.log(dataDimension)
   const visualisationName = actualVitualization.name
   console.log(visualisationName)
@@ -677,6 +678,7 @@ else {
       </Dropdown>
     </CardContent>
     <CardContent className = {actualVitualization.id}>
+       {orgName}
        {BarChartsWithpeRow(dataValues, peLabels, dxLabel, visualisationName, periods)} 
     </CardContent>
   </Card>
@@ -768,10 +770,10 @@ chart2PDF = e => {
         return <div>Loading</div>
       }
       return (
-      <div className={styles.graphbox}>
       <div>
+      <div className={styles.graphbox}>
       {this.getAndRenderDashboardItems()}
-      </div>
+     </div>
      </div>
      );
      }

@@ -4,6 +4,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import logo from '../logo.png';
+import { Link } from 'react-router-dom';
 import DashBoardLinks from './DashBoardLinks'
 
 /* A function that returns an object. */
@@ -44,10 +45,15 @@ export default function Appbar() {
         <Toolbar variant="dense">
           <img src= {logo}  className = {classes.logo}/>
           <Typography variant="h6" color="inherit">
-            NAMIS Web Portal
+            <Link to="/" style = {{textDecoration: 'none', color:"#FFFFFF"}}>NAMIS Web Portal</Link>
+          </Typography>
+          <Typography variant="h6" color="inherit" style = {{paddingLeft: '60%'}}>
+          <Link to='/visualization'  style = {{textDecoration: 'none', color:"#FFFFFF"}}>Data Visualizer</Link>
           </Typography>
         </Toolbar>
-        <DashBoardLinks/>
+        {window.location.pathname === '/visualization' ? null : (
+          <DashBoardLinks/>
+        )}
       </AppBar>
     </div>
   );
