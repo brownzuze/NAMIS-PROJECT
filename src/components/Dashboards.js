@@ -1356,6 +1356,104 @@ dashboardItemArray.push(
 </Card>
 </Grid>) 
 }
+if (dashboardItemsData[i].type==="REPORT_TABLE"){
+  console.log(dashboardItemsData[i])
+const reportTableId = dashboardItemsData[i].reportTable.id
+var reportData = $.ajax({
+  url: ADDRESS_URL + `/reportTables/${reportTableId}.json?fields=id%2CdisplayName~rename(name)%2Ctype%2CdisplayDescription~rename(description)%2Ccolumns%5Bdimension%2ClegendSet%5Bid%5D%2Cfilter%2CprogramStage%2Citems%5BdimensionItem~rename(id)%2CdisplayName~rename(name)%2CdimensionItemType%5D%5D%2Crows%5Bdimension%2ClegendSet%5Bid%5D%2Cfilter%2CprogramStage%2Citems%5BdimensionItem~rename(id)%2CdisplayName~rename(name)%2CdimensionItemType%5D%5D%2Cfilters%5Bdimension%2ClegendSet%5Bid%5D%2Cfilter%2CprogramStage%2Citems%5BdimensionItem~rename(id)%2CdisplayName~rename(name)%2CdimensionItemType%5D%5D%2C*%2C!attributeDimensions%2C!attributeValues%2C!category%2C!categoryDimensions%2C!categoryOptionGroupSetDimensions%2C!columnDimensions%2C!dataDimensionItems%2C!dataElementDimensions%2C!dataElementGroupSetDimensions%2C!filterDimensions%2C!itemOrganisationUnitGroups%2C!lastUpdatedBy%2C!organisationUnitGroupSetDimensions%2C!organisationUnitLevels%2C!organisationUnits%2C!programIndicatorDimensions%2C!relativePeriods%2C!reportParams%2C!rowDimensions%2C!translations%2C!userOrganisationUnit%2C!userOrganisationUnitChildren%2C!userOrganisationUnitGrandChildren`,
+  dataType: "json",
+  headers: { "Authorization": "Basic " + btoa(username + ":" + password) },
+  success: function (data) { },
+  async: false,
+  error: function (err) {
+  console.log(err);
+}
+}).responseJSON;
+console.log(reportData)
+if(reportData.columns[0].dimension==='dx'){
+console.log(reportData)
+const dataDimension = reportData.columns[0].items.map(ids => ids.id)
+const peItem=  reportData.rows[0].items
+const OuItems=  reportData.filters[0].items
+const periods = peItem.map(ids => ids.id)
+const peLabels = peItem.map(ids => ids.name)
+const dxLabel = reportData.rows[0].items.map(ids => ids.name)
+const rowName = reportData.rows[0].items.map(ids => ids.name)
+const columnName = reportData.columns[0].items.map(ids => ids.name)
+console.log(rowName)
+
+
+console.log( periods)
+const orgUnits =  OuItems.map(ids => ids.id)
+const orgName =  OuItems[0].name
+console.log(dataDimension)
+const visualisationName = reportData.name
+console.log(visualisationName)
+
+
+const dxArray = []
+ for(var k = 0; k < dataDimension.length; k++){
+   dxArray.push(dataDimension[k]+";")
+ }
+ const dataDimensionString = dxArray.join('')
+ console.log(dataDimensionString)
+
+
+//appending the organisation unit dimension with ; 
+ const array = []
+ for(var r = 0; r < orgUnits.length; r++){
+   array.push(orgUnits[r]+";")
+ }
+ const orgUnitsString = array.join('')
+ console.log(orgUnitsString)
+
+ const pearray = []
+ for(var r = 0; r < periods.length; r++){
+   pearray.push(periods[r]+";")
+ }
+ const periodString = pearray.join('')
+ console.log(periodString)
+
+
+
+
+var dataValues = $.ajax({
+ url: ADDRESS_URL + `/analytics.json?dimension=dx:${dataDimensionString}&dimension=ou:${orgUnitsString}&dimension=pe:${periodString}`,
+ dataType: "json",
+ headers: { "Authorization": "Basic " + btoa(username + ":" + password) },
+ success: function (data) { },
+ async: false,
+ error: function (err) {
+   console.log(err);
+ }
+}).responseJSON;
+
+console.log(dataValues.rows)
+
+dashboardItemArray.push( 
+<Grid item xs={10} sm={12}>
+<Card className= {styles.cards}>
+  <CardContent style = {{paddingBottom: 0, display:'flex', justifyContent: 'flex-end'}}>
+    <Dropdown>
+     <Dropdown.Toggle id="dropdown-basic-button" title="Dropdown button">
+      <MoreHorizIcon/>
+      </Dropdown.Toggle>
+      <Dropdown.Menu>
+        <Dropdown.Item id = {reportTableId} onClick={e => chart2PDF(e)}>Save as pdf</Dropdown.Item>
+        <Dropdown.Item href="#/action-2">Export as a csv</Dropdown.Item>
+        <Dropdown.Item href="#/action-3">View in full screen</Dropdown.Item>
+      </Dropdown.Menu>
+    </Dropdown>
+  </CardContent>
+  <CardContent>{visualisationName}</CardContent>
+  <CardContent className = {reportTableId}>
+     {orgName}
+     {dxColumnreportTable(dataValues, rowName, columnName, periods, dataDimension)}
+  </CardContent>
+</Card>
+</Grid>) 
+}
+}
 
 }
  if(dashboardItemsData[i].type==="TEXTs"){
